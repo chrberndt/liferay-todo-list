@@ -11,6 +11,7 @@ dependencies {
 
 buildService {
 	apiDir = "../liferay-todo-list-api/src/main/java"
+	testDir = "../liferay-todo-list-test/src/testIntegration/java"
 }
 
 group = "com.chberndt.liferay.todo.list"
