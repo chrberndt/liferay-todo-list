@@ -14,9 +14,14 @@
 
 package com.chberndt.liferay.todo.list.service.impl;
 
+import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskLocalServiceBaseImpl;
-
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.ServiceContext;
+
+import java.util.Date;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -52,4 +57,71 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 	 * injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use
 	 * <code>com.chberndt.liferay.todo.list.service.TaskLocalServiceUtil</code>.
 	 */
+	
+	
+	@Override
+	public Task addTask(long userId, String title, String description, boolean completed, Date dueDate,
+			ServiceContext serviceContext) throws PortalException {
+
+		// Task
+
+		User user = userLocalService.getUser(userId);
+		long groupId = serviceContext.getScopeGroupId();
+
+		// TODO: validate
+
+		long taskId = counterLocalService.increment();
+
+		// TODO: friendlyURL validation
+
+		Task task = taskPersistence.create(taskId);
+
+		task.setUuid(serviceContext.getUuid());
+		task.setGroupId(groupId);
+		task.setCompanyId(user.getCompanyId());
+		task.setUserId(user.getUserId());
+		task.setUserName(user.getFullName());
+		task.setTitle(title);
+		task.setDescription(description);
+		task.setCompleted(completed);
+		task.setDueDate(dueDate);
+		
+		taskPersistence.update(task);
+		
+		// TODO: Resources
+		
+		// TODO: Asset
+		
+		// TODO: Workflow
+
+		return task;
+	}
+	
+	@Override
+	public Task deleteTask(Task task) throws PortalException {
+
+		// Task
+		
+		taskPersistence.remove(task);
+
+		// TODO: Resources
+
+		// TODO: Subscriptions
+
+		// TODO: Asset
+
+		// TODO: Expando
+
+		// TODO: Trash
+
+		// TODO: Workflow
+
+		return task;
+	}
+	
+	@Override
+	public Task getTask(long taskId) throws PortalException {
+		return taskPersistence.findByPrimaryKey(taskId);
+	}
+	
 }
