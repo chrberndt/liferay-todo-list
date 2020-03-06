@@ -2,6 +2,7 @@ package com.chberndt.liferay.todo.list.service.persistence.test;
 
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
+
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
@@ -28,25 +29,22 @@ import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
 public class TaskLocalServiceTest {
-	
+
 	@ClassRule
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
 		new LiferayIntegrationTestRule();
-	
+
 	@Before
 	public void setUp() throws Exception {
-		
 		_group = GroupTestUtil.addGroup();
 		_user = TestPropsValues.getUser();
 
 		ServiceTestUtil.setUser(TestPropsValues.getUser());
-
 	}
-	
+
 	@Test
 	public void testAddTask() throws Exception {
-		
 		int initialCount = _taskLocalService.getTasksCount();
 
 		addTask(false);
@@ -55,33 +53,32 @@ public class TaskLocalServiceTest {
 
 		Assert.assertEquals(initialCount + 1, actualCount);
 	}
-	
-	
+
 	protected Task addTask(boolean completed) throws Exception {
-		
 		return addTask(_user.getUserId(), completed);
-		
 	}
 
 	protected Task addTask(long userId, boolean completed) throws Exception {
-
-		ServiceContext serviceContext = ServiceContextTestUtil.getServiceContext(_group.getGroupId(), userId);
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext(
+				_group.getGroupId(), userId);
 
 		Calendar dueDate = CalendarFactoryUtil.getCalendar(2020, 1, 1);
 
-		Task task = _taskLocalService.addTask(userId, RandomTestUtil.randomString(), RandomTestUtil.randomString(),
-				completed, dueDate.getTime(), serviceContext);
+		Task task = _taskLocalService.addTask(
+			userId, RandomTestUtil.randomString(),
+			RandomTestUtil.randomString(), completed, dueDate.getTime(),
+			serviceContext);
 
 		return task;
 	}
-	
-	@Inject
-	private TaskLocalService _taskLocalService;
-	
+
 	@DeleteAfterTestRun
 	private Group _group;
 
-	private User _user;
+	@Inject
+	private TaskLocalService _taskLocalService;
 
+	private User _user;
 
 }

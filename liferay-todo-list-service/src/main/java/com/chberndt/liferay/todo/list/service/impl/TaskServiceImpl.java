@@ -24,27 +24,34 @@ import org.osgi.service.component.annotations.Component;
  * The implementation of the task remote service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the <code>com.chberndt.liferay.todo.list.service.TaskService</code> interface.
+ * All custom service methods should be put in this class. Whenever methods are
+ * added, rerun ServiceBuilder to copy their definitions into the
+ * <code>com.chberndt.liferay.todo.list.service.TaskService</code> interface.
  *
  * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
+ * This is a remote service. Methods of this service are expected to have
+ * security checks based on the propagated JAAS credentials because this service
+ * can be accessed remotely.
  * </p>
  *
  * @author Christian Berndt
  * @see TaskServiceBaseImpl
  */
 @Component(
-	property = {
+	property = { 
 		"json.web.service.context.name=custom",
-		"json.web.service.context.path=Task"
-	},
+		"json.web.service.context.path=Task" 
+	}, 
 	service = AopService.class
 )
 public class TaskServiceImpl extends TaskServiceBaseImpl {
 
-	/*
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this class directly. Always use <code>com.chberndt.liferay.todo.list.service.TaskServiceUtil</code> to access the task remote service.
+	 * Never reference this class directly. Always use
+	 * <code>com.chberndt.liferay.todo.list.service.TaskServiceUtil</code> to access
+	 * the task remote service.
 	 */
+
 }

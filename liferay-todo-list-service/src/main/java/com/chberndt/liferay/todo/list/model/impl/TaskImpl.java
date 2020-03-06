@@ -28,7 +28,7 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public class TaskImpl extends TaskBaseImpl {
 
-	/*
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. All methods that expect a task model instance should use the {@link com.chberndt.liferay.todo.list.model.Task} interface instead.

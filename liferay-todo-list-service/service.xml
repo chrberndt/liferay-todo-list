@@ -29,7 +29,7 @@
 		<column name="completed" type="boolean" />
 		<column name="dueDate" type="Date" />
 
-		<!-- Order -->	
+		<!-- Order -->
 
 		<order by="asc">
 			<order-column name="dueDate" />
@@ -39,7 +39,7 @@
 		<finder name="GroupId" return-type="Collection">
 			<finder-column name="groupId" />
 		</finder>
-		
+
 		<finder name="userId" return-type="Collection">
 			<finder-column name="userId" />
 		</finder>
@@ -48,7 +48,7 @@
 
 		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
 		<reference entity="AssetTag" package-path="com.liferay.portlet.asset" />
-		
+
 	</entity>
-	
+
 </service-builder>

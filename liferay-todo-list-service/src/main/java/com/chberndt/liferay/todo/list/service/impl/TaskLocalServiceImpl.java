@@ -16,6 +16,7 @@ package com.chberndt.liferay.todo.list.service.impl;
 
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskLocalServiceBaseImpl;
+
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
@@ -49,7 +50,7 @@ import org.osgi.service.component.annotations.Component;
 )
 public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
-	/*
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Use
@@ -57,11 +58,11 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 	 * injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use
 	 * <code>com.chberndt.liferay.todo.list.service.TaskLocalServiceUtil</code>.
 	 */
-	
-	
 	@Override
-	public Task addTask(long userId, String title, String description, boolean completed, Date dueDate,
-			ServiceContext serviceContext) throws PortalException {
+	public Task addTask(
+			long userId, String title, String description, boolean completed,
+			Date dueDate, ServiceContext serviceContext)
+		throws PortalException {
 
 		// Task
 
@@ -85,23 +86,23 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		task.setDescription(description);
 		task.setCompleted(completed);
 		task.setDueDate(dueDate);
-		
+
 		taskPersistence.update(task);
-		
+
 		// TODO: Resources
-		
+
 		// TODO: Asset
-		
+
 		// TODO: Workflow
 
 		return task;
 	}
-	
+
 	@Override
 	public Task deleteTask(Task task) throws PortalException {
 
 		// Task
-		
+
 		taskPersistence.remove(task);
 
 		// TODO: Resources
@@ -118,10 +119,10 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		return task;
 	}
-	
+
 	@Override
 	public Task getTask(long taskId) throws PortalException {
 		return taskPersistence.findByPrimaryKey(taskId);
 	}
-	
+
 }
