@@ -124,10 +124,9 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 	public Task getTask(long taskId) throws PortalException {
 		return taskPersistence.findByPrimaryKey(taskId);
 	}
-	
-	
+
 	public Task getTask(long groupId, String title) throws PortalException {
-		return taskPersistence.fetchByG_T_First(groupId, title, null); 
+		return taskPersistence.fetchByG_T_First(groupId, title, null);
 	}
 
 }
