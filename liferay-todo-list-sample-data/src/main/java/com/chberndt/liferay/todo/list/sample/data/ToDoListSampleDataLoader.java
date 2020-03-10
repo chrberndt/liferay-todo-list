@@ -1,4 +1,4 @@
-package com.chberndt.liferay.todo.list.sample.data.api;
+package com.chberndt.liferay.todo.list.sample.data;
 
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
 
