@@ -54,19 +54,35 @@ public class ToDoListSampleDataLoader {
 
 		ServiceContext serviceContext = getServiceContext();
 
-		_taskLocalService.addTask(
-			serviceContext.getUserId(), "Meet Robert", "At Harry's Bar", false,
-			new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 5),
-			serviceContext);
-		_taskLocalService.addTask(
-			serviceContext.getUserId(), "Catherine's birthday", "Buy flowers",
-			false, new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 2),
-			serviceContext);
-		_taskLocalService.addTask(
-			serviceContext.getUserId(), "Pick up Rosalind",
-			"Kindergarten closes at 5pm", false,
-			new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 3),
-			serviceContext);
+		if (_taskLocalService.getTask(
+				serviceContext.getScopeGroupId(), "Meet Robert") == null) {
+
+			_taskLocalService.addTask(
+				serviceContext.getUserId(), "Meet Robert", "At Harry's Bar",
+				false, new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 5),
+				serviceContext);
+		}
+
+		if (_taskLocalService.getTask(
+				serviceContext.getScopeGroupId(), "Catherine's birthday") ==
+					null) {
+
+			_taskLocalService.addTask(
+				serviceContext.getUserId(), "Catherine's birthday",
+				"Buy flowers", false,
+				new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 2),
+				serviceContext);
+		}
+
+		if (_taskLocalService.getTask(
+				serviceContext.getScopeGroupId(), "Pick up Rosalind") == null) {
+
+			_taskLocalService.addTask(
+				serviceContext.getUserId(), "Pick up Rosalind",
+				"Kindergarten closes at 5pm", false,
+				new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 3),
+				serviceContext);
+		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
