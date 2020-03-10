@@ -20,8 +20,6 @@ public class TaskVerticalCard extends BaseVerticalCard {
 
 		super(task, renderRequest, rowChecker);
 
-		// TODO Auto-generated constructor stub
-
 		_task = task;
 
 		// TODO
