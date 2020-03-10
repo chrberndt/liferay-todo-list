@@ -1,6 +1,7 @@
 package com.chberndt.liferay.todo.list.internal.portlet;
 
 import com.chberndt.liferay.todo.list.web.constants.ToDoListPortletKeys;
+
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import javax.portlet.Portlet;
