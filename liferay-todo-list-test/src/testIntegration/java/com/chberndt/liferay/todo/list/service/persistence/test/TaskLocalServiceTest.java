@@ -27,6 +27,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * @author Christian Berndt
+ */
 @RunWith(Arquillian.class)
 public class TaskLocalServiceTest {
 
