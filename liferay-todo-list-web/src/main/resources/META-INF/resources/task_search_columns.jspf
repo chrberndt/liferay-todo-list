@@ -1,3 +1,5 @@
+<%@ page import="com.chberndt.liferay.todo.list.internal.servlet.taglib.clay.TaskVerticalCard" %>
+
 <c:choose>
 	<c:when test='<%= displayStyle.equals("descriptive") %>'>
 		<liferay-ui:search-container-column-user
@@ -21,27 +23,17 @@
 			</span>
 			<span class="text-default">
 				<aui:workflow-status markupView="lexicon" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= 0 %>" />
-				<%--
-				<aui:workflow-status markupView="lexicon" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= task.getStatus() %>" />
-				--%>
-
 			</span>
-
 		</liferay-ui:search-container-column-text>
 
 		<liferay-ui:search-container-column-text>
 
 			<%
+
 			// TaskActionDropdownItemsProvider taskActionDropdownItemsProvider = new TaskActionDropdownItemsProvider(task, renderRequest, renderResponse, permissionChecker, resourceBundle, trashHelper);
 
 			%>
 
-			<%--
-			<clay:dropdown-actions
-				defaultEventHandler="<%= BlogsWebConstants.BLOGS_ELEMENTS_DEFAULT_EVENT_HANDLER %>"
-				dropdownItems="<%= taskActionDropdownItemsProvider.getActionDropdownItems() %>"
-			/>
-			--%>
 		</liferay-ui:search-container-column-text>
 	</c:when>
 	<c:when test='<%= displayStyle.equals("icon") %>'>
@@ -51,21 +43,25 @@
 		%>
 
 		<liferay-ui:search-container-column-text>
-			<clay:vertical-card title="<%= task.getTitle() %>" />
-			<%--
 			<clay:vertical-card
-				verticalCard="<%= new TaskVerticalCard(task, renderRequest, renderResponse, searchContainer.getRowChecker(), trashHelper, rowURL.toString(), permissionChecker, resourceBundle) %>"
+				verticalCard="<%= new TaskVerticalCard(task, renderRequest, renderResponse, searchContainer.getRowChecker(), rowURL.toString()) %>"
 			/>
-			--%>
 		</liferay-ui:search-container-column-text>
 	</c:when>
 	<c:otherwise>
 		<liferay-ui:search-container-column-text
-			cssClass="table-cell-expand table-cell-minw-200 table-title"
-			href="<%= null %>"
+			cssClass="table-cell-expand table-cell-minw-150 table-title"
+			href="<%= rowURL.toString() %>"
 			name="title"
 			orderable="<%= false %>"
 			value="<%= task.getTitle() %>"
+		/>
+
+		<liferay-ui:search-container-column-date
+			cssClass="table-cell-expand-smallest table-cell-ws-nowrap"
+			name="due-date"
+			orderable="<%= false %>"
+			property="dueDate"
 		/>
 
 		<liferay-ui:search-container-column-text
@@ -82,13 +78,6 @@
 			property="createDate"
 		/>
 
-		<liferay-ui:search-container-column-date
-			cssClass="table-cell-expand-smallest table-cell-ws-nowrap"
-			name="display-date"
-			orderable="<%= false %>"
-			property="modifiedDate"
-		/>
-
 		<%--
 		<liferay-ui:search-container-column-status
 			name="status"
@@ -98,17 +87,11 @@
 		<liferay-ui:search-container-column-text>
 
 			<%
+
 			// TaskActionDropdownItemsProvider taskActionDropdownItemsProvider = new TaskActionDropdownItemsProvider(task, renderRequest, renderResponse, permissionChecker, resourceBundle, trashHelper);
 
 			%>
 
-			<%--
-
-			<clay:dropdown-actions
-				defaultEventHandler="<%= BlogsWebConstants.BLOGS_ELEMENTS_DEFAULT_EVENT_HANDLER %>"
-				dropdownItems="<%= taskActionDropdownItemsProvider.getActionDropdownItems() %>"
-			/>
-			--%>
 		</liferay-ui:search-container-column-text>
 	</c:otherwise>
 </c:choose>

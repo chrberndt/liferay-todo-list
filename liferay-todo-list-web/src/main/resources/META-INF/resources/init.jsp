@@ -10,6 +10,7 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="com.chberndt.liferay.todo.list.internal.display.context.TasksDisplayContext" %><%@
 page import="com.chberndt.liferay.todo.list.internal.display.context.TasksManagementToolbarDisplayContext" %><%@
+page import="com.chberndt.liferay.todo.list.internal.servlet.taglib.clay.TaskVerticalCard" %><%@
 page import="com.chberndt.liferay.todo.list.web.constants.ToDoListWebKeys" %>
 
 <%@ page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
