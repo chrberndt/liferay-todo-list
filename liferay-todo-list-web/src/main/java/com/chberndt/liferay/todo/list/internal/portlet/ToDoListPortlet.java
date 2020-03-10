@@ -8,7 +8,7 @@ import javax.portlet.Portlet;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * @author berndt
+ * @author Christian Berndt
  */
 @Component(
 	immediate = true,
@@ -19,7 +19,7 @@ import org.osgi.service.component.annotations.Component;
 		"javax.portlet.display-name=ToDoList",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",
-		"javax.portlet.name=" + ToDoListPortletKeys.TODOLIST,
+		"javax.portlet.name=" + ToDoListPortletKeys.TODO_LIST,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},
