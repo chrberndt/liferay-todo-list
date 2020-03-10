@@ -210,10 +210,10 @@ public class TaskPersistenceTest {
 	}
 
 	@Test
-	public void testCountByuserId() throws Exception {
-		_persistence.countByuserId(RandomTestUtil.nextLong());
+	public void testCountByUserId() throws Exception {
+		_persistence.countByUserId(RandomTestUtil.nextLong());
 
-		_persistence.countByuserId(0L);
+		_persistence.countByUserId(0L);
 	}
 
 	@Test
