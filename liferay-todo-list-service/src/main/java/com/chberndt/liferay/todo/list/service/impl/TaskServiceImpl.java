@@ -38,10 +38,10 @@ import org.osgi.service.component.annotations.Component;
  * @see TaskServiceBaseImpl
  */
 @Component(
-	property = { 
+	property = {
 		"json.web.service.context.name=custom",
-		"json.web.service.context.path=Task" 
-	}, 
+		"json.web.service.context.path=Task"
+	},
 	service = AopService.class
 )
 public class TaskServiceImpl extends TaskServiceBaseImpl {
