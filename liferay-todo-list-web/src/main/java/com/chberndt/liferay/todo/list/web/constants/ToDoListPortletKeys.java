@@ -1,4 +1,4 @@
-package com.chberndt.liferay.todo.list.portlet.constants;
+package com.chberndt.liferay.todo.list.web.constants;
 
 /**
  * @author berndt
