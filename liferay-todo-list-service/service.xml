@@ -40,7 +40,7 @@
 			<finder-column name="groupId" />
 		</finder>
 
-		<finder name="userId" return-type="Collection">
+		<finder name="UserId" return-type="Collection">
 			<finder-column name="userId" />
 		</finder>
 
