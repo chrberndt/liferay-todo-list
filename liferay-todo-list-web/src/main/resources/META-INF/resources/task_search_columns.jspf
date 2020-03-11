@@ -8,7 +8,21 @@
 		<liferay-ui:search-container-column-text
 			colspan="<%= 2 %>"
 		>
-			<h5><%= task.getTitle() %></h5>
+			<h2 class="h5">
+				<aui:a href="<%= rowURL.toString() %>">
+					<%= task.getTitle() %>
+				</aui:a>
+			</h2>
+
+			<%
+			Date dueDate = task.getDueDate();
+
+			String dueDateDescription = LanguageUtil.getTimeDescription(request, dueDate.getTime() - System.currentTimeMillis(), true);
+			%>
+
+			<span class="text-default">
+				<liferay-ui:message arguments="<%= new String[] {dueDateDescription} %>" key="due-in-x" />
+			</span>
 
 			<%
 			Date modifiedDate = task.getModifiedDate();

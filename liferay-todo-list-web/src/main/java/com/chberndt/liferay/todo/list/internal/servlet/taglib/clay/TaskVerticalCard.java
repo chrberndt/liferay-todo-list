@@ -6,9 +6,12 @@ import com.chberndt.liferay.todo.list.model.Task;
 import com.liferay.frontend.taglib.clay.servlet.taglib.soy.BaseVerticalCard;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.portal.kernel.dao.search.RowChecker;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -68,15 +71,19 @@ public class TaskVerticalCard extends BaseVerticalCard {
 
 	@Override
 	public String getSubtitle() {
-		return "TODO: sub-title";
+		Date dueDate = _task.getDueDate();
+
+		String dueDateDescription = LanguageUtil.getTimeDescription(
+			PortalUtil.getHttpServletRequest(renderRequest),
+			dueDate.getTime() - System.currentTimeMillis(), true);
+
+		return LanguageUtil.format(
+			_resourceBundle, "due-in-x", new Object[] {dueDateDescription});
 	}
 
 	@Override
 	public String getTitle() {
 		return HtmlUtil.unescape(_task.getTitle());
-
-		// return _task.getTitle();
-
 	}
 
 	private final PermissionChecker _permissionChecker;
