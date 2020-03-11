@@ -1,5 +1,3 @@
-<%@ page import="com.chberndt.liferay.todo.list.internal.servlet.taglib.clay.TaskVerticalCard" %>
-
 <c:choose>
 	<c:when test='<%= displayStyle.equals("descriptive") %>'>
 		<liferay-ui:search-container-column-user
@@ -29,11 +27,12 @@
 		<liferay-ui:search-container-column-text>
 
 			<%
-
-			// TaskActionDropdownItemsProvider taskActionDropdownItemsProvider = new TaskActionDropdownItemsProvider(task, renderRequest, renderResponse, permissionChecker, resourceBundle, trashHelper);
-
+			TaskActionDropdownItemsProvider taskActionDropdownItemsProvider = new TaskActionDropdownItemsProvider(task, renderRequest, renderResponse, permissionChecker, resourceBundle);
 			%>
 
+			<clay:dropdown-actions
+				dropdownItems="<%= taskActionDropdownItemsProvider.getActionDropdownItems() %>"
+			/>
 		</liferay-ui:search-container-column-text>
 	</c:when>
 	<c:when test='<%= displayStyle.equals("icon") %>'>
@@ -44,7 +43,7 @@
 
 		<liferay-ui:search-container-column-text>
 			<clay:vertical-card
-				verticalCard="<%= new TaskVerticalCard(task, renderRequest, renderResponse, searchContainer.getRowChecker(), rowURL.toString()) %>"
+				verticalCard="<%= new TaskVerticalCard(task, renderRequest, renderResponse, searchContainer.getRowChecker(), rowURL.toString(), permissionChecker, resourceBundle) %>"
 			/>
 		</liferay-ui:search-container-column-text>
 	</c:when>
@@ -87,11 +86,12 @@
 		<liferay-ui:search-container-column-text>
 
 			<%
-
-			// TaskActionDropdownItemsProvider taskActionDropdownItemsProvider = new TaskActionDropdownItemsProvider(task, renderRequest, renderResponse, permissionChecker, resourceBundle, trashHelper);
-
+			TaskActionDropdownItemsProvider taskActionDropdownItemsProvider = new TaskActionDropdownItemsProvider(task, renderRequest, renderResponse, permissionChecker, resourceBundle);
 			%>
 
+			<clay:dropdown-actions
+				dropdownItems="<%= taskActionDropdownItemsProvider.getActionDropdownItems() %>"
+			/>
 		</liferay-ui:search-container-column-text>
 	</c:otherwise>
 </c:choose>

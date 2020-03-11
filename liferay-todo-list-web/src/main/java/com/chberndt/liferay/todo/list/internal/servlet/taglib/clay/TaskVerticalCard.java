@@ -1,10 +1,16 @@
 package com.chberndt.liferay.todo.list.internal.servlet.taglib.clay;
 
+import com.chberndt.liferay.todo.list.internal.servlet.taglib.util.TaskActionDropdownItemsProvider;
 import com.chberndt.liferay.todo.list.model.Task;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.soy.BaseVerticalCard;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.portal.kernel.dao.search.RowChecker;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.util.HtmlUtil;
+
+import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -16,7 +22,8 @@ public class TaskVerticalCard extends BaseVerticalCard {
 
 	public TaskVerticalCard(
 		Task task, RenderRequest renderRequest, RenderResponse renderResponse,
-		RowChecker rowChecker, String taskURL) {
+		RowChecker rowChecker, String taskURL,
+		PermissionChecker permissionChecker, ResourceBundle resourceBundle) {
 
 		super(task, renderRequest, rowChecker);
 
@@ -25,17 +32,21 @@ public class TaskVerticalCard extends BaseVerticalCard {
 		// TODO
 		// _trashHelper = trashHelper;
 
+		_renderResponse = renderResponse;
+
 		_taskURL = taskURL;
-
-		// TODO
-		// _permissionChecker = permissionChecker;
-
+		_permissionChecker = permissionChecker;
+		_resourceBundle = resourceBundle;
 	}
 
-	// TODO
+	public List<DropdownItem> getActionDropdownItems() {
+		TaskActionDropdownItemsProvider blogsEntryActionDropdownItemsProvider =
+			new TaskActionDropdownItemsProvider(
+				_task, renderRequest, _renderResponse, _permissionChecker,
+				_resourceBundle);
 
-	//	public List<DropdownItem> getActionDropdownItems() {
-	//	}
+		return blogsEntryActionDropdownItemsProvider.getActionDropdownItems();
+	}
 
 	// TODO
 
@@ -68,11 +79,12 @@ public class TaskVerticalCard extends BaseVerticalCard {
 
 	}
 
+	private final PermissionChecker _permissionChecker;
+	private final RenderResponse _renderResponse;
+	private final ResourceBundle _resourceBundle;
 	private final Task _task;
 	private final String _taskURL;
 
-	// TODO: Add permission support
-	// private final PermissionChecker _permissionChecker;
 	// TODO: Add TrashHelper support
 	// private final TrashHelper _trashHelper;
 
