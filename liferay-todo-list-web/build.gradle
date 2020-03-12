@@ -1,4 +1,5 @@
 dependencies {
+	compileOnly group: "com.liferay", name: "com.liferay.application.list.api"
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib"
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.clay"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.function"
