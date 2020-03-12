@@ -49,8 +49,10 @@ public class ToDoListSampleDataLoader {
 	}
 
 	@Activate
-	private void activate() throws Exception {
-		_log.info("activate()");
+	private void _loadSampleData() throws Exception {
+		if (_log.isInfoEnabled()) {
+			_log.info("Loading sample data.");
+		}
 
 		ServiceContext serviceContext = getServiceContext();
 
