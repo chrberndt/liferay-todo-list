@@ -2,6 +2,7 @@ Bundle-Name: liferay-todo-list-api
 Bundle-SymbolicName: com.chberndt.liferay.todo.list.api
 Bundle-Version: 1.0.0
 Export-Package:\
+	com.chberndt.liferay.todo.list.constants,\
 	com.chberndt.liferay.todo.list.exception,\
 	com.chberndt.liferay.todo.list.model,\
 	com.chberndt.liferay.todo.list.service,\
