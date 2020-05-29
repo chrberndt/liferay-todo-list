@@ -87,7 +87,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		task.setCompleted(completed);
 		task.setDueDate(dueDate);
 
-		taskPersistence.update(task);
+		task = taskPersistence.update(task);
 
 		// TODO: Resources
 
