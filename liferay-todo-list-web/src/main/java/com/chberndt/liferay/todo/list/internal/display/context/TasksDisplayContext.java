@@ -1,5 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.display.context;
 
+import com.chberndt.liferay.todo.list.internal.security.permission.resource.TaskPermission;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalServiceUtil;
 import com.chberndt.liferay.todo.list.web.constants.ToDoListPortletKeys;
@@ -12,10 +13,13 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.portlet.PortletException;
@@ -44,12 +48,19 @@ public class TasksDisplayContext {
 		_httpServletRequest = _liferayPortletRequest.getHttpServletRequest();
 	}
 
-	// TODO
+	public List<String> getAvailableActions(Task task) throws PortalException {
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)_httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
 
-	//	public List<String> getAvailableActions(Tasks blogsEntry)
-	//			throws PortalException {
-	//
-	//	}
+		if (TaskPermission.contains(
+				themeDisplay.getPermissionChecker(), task, ActionKeys.DELETE)) {
+
+			return Collections.singletonList("deleteTasks");
+		}
+
+		return Collections.emptyList();
+	}
 
 	public String getDisplayStyle() {
 		String displayStyle = ParamUtil.getString(
