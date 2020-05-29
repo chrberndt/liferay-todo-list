@@ -68,12 +68,10 @@ public class TaskLocalServiceTest {
 
 		Calendar dueDate = CalendarFactoryUtil.getCalendar(2020, 1, 1);
 
-		Task task = _taskLocalService.addTask(
+		return _taskLocalService.addTask(
 			userId, RandomTestUtil.randomString(),
 			RandomTestUtil.randomString(), completed, dueDate.getTime(),
 			serviceContext);
-
-		return task;
 	}
 
 	@DeleteAfterTestRun
