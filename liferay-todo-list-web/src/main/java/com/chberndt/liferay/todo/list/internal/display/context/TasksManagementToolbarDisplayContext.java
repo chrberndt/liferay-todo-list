@@ -3,9 +3,12 @@ package com.chberndt.liferay.todo.list.internal.display.context;
 import com.chberndt.liferay.todo.list.model.Task;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.display.context.SearchContainerManagementToolbarDisplayContext;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.ViewTypeItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.ViewTypeItemList;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -42,11 +45,36 @@ public class TasksManagementToolbarDisplayContext
 			WebKeys.THEME_DISPLAY);
 	}
 
-	// TODO:
+	@Override
+	public List<DropdownItem> getActionDropdownItems() {
+		return new DropdownItemList() {
+			{
+				add(
+					dropdownItem -> {
+						dropdownItem.putData("action", "deleteEntries");
 
-	//	public List<DropdownItem> getActionDropdownItems() {
-	//		return null;
-	//	}
+						// TODO
+
+						boolean trashEnabled = false;
+						//						boolean trashEnabled = _trashHelper.isTrashEnabled(
+						//							_themeDisplay.getScopeGroupId());
+
+						dropdownItem.setIcon(
+							trashEnabled ? "trash" : "times-circle");
+
+						String label = "delete";
+
+						if (trashEnabled) {
+							label = "move-to-recycle-bin";
+						}
+
+						dropdownItem.setLabel(LanguageUtil.get(request, label));
+
+						dropdownItem.setQuickAction(true);
+					});
+			}
+		};
+	}
 
 	// TODO:
 
