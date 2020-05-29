@@ -51,7 +51,7 @@ public class TasksManagementToolbarDisplayContext
 			{
 				add(
 					dropdownItem -> {
-						dropdownItem.putData("action", "deleteEntries");
+						dropdownItem.putData("action", "deleteTasks");
 
 						// TODO
 
