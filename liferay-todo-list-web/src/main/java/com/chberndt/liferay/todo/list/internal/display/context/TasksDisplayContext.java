@@ -4,6 +4,7 @@ import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalServiceUtil;
 import com.chberndt.liferay.todo.list.web.constants.ToDoListPortletKeys;
 
+import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
@@ -104,8 +105,8 @@ public class TasksDisplayContext {
 
 		// TODO
 
-		//			tasksSearchContainer.setRowChecker(
-		//				new EmptyOnClickRowChecker(_liferayPortletResponse));
+		tasksSearchContainer.setRowChecker(
+			new EmptyOnClickRowChecker(_liferayPortletResponse));
 
 		_populateResults(tasksSearchContainer);
 
