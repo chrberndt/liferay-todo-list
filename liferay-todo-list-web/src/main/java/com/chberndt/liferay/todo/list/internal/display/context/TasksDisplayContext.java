@@ -70,7 +70,7 @@ public class TasksDisplayContext {
 		return displayStyle;
 	}
 
-	public SearchContainer getSearchContainer()
+	public SearchContainer<Task> getSearchContainer()
 		throws PortalException, PortletException {
 
 		PortletURL portletURL = _liferayPortletResponse.createRenderURL();
@@ -134,10 +134,10 @@ public class TasksDisplayContext {
 	//		return _status;
 	//	}
 
-	private void _populateResults(SearchContainer searchContainer)
+	private void _populateResults(SearchContainer<Task> searchContainer)
 		throws PortalException {
 
-		List tasksResults = null;
+		List<Task> tasksResults = null;
 
 		// TODO: filter tasks by keyword
 
