@@ -19,8 +19,10 @@ import com.chberndt.liferay.todo.list.service.base.TaskLocalServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.permission.ModelPermissions;
 
 import java.util.Date;
 
@@ -89,7 +91,18 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		task = taskPersistence.update(task);
 
-		// TODO: Resources
+		// Resources
+
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
+
+			addTaskResources(
+				task, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
+		}
+		else {
+			addTaskResources(task, serviceContext.getModelPermissions());
+		}
 
 		// TODO: Asset
 
@@ -99,13 +112,57 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 	}
 
 	@Override
+	public void addTaskResources(
+			long taskId, boolean addGroupPermissions,
+			boolean addGuestPermissions)
+		throws PortalException {
+
+		Task task = taskPersistence.findByPrimaryKey(taskId);
+
+		addTaskResources(task, addGroupPermissions, addGuestPermissions);
+	}
+
+	@Override
+	public void addTaskResources(long taskId, ModelPermissions modelPermissions)
+		throws PortalException {
+
+		Task task = taskPersistence.findByPrimaryKey(taskId);
+
+		addTaskResources(task, modelPermissions);
+	}
+
+	@Override
+	public void addTaskResources(
+			Task task, boolean addGroupPermissions, boolean addGuestPermissions)
+		throws PortalException {
+
+		resourceLocalService.addResources(
+			task.getCompanyId(), task.getGroupId(), task.getUserId(),
+			Task.class.getName(), task.getTaskId(), false, addGroupPermissions,
+			addGuestPermissions);
+	}
+
+	@Override
+	public void addTaskResources(Task task, ModelPermissions modelPermissions)
+		throws PortalException {
+
+		resourceLocalService.addModelResources(
+			task.getCompanyId(), task.getGroupId(), task.getUserId(),
+			Task.class.getName(), task.getTaskId(), modelPermissions);
+	}
+
+	@Override
 	public Task deleteTask(Task task) throws PortalException {
 
 		// Task
 
 		taskPersistence.remove(task);
 
-		// TODO: Resources
+		// Resources
+
+		resourceLocalService.deleteResource(
+			task.getCompanyId(), Task.class.getName(),
+			ResourceConstants.SCOPE_INDIVIDUAL, task.getTaskId());
 
 		// TODO: Subscriptions
 
@@ -128,5 +185,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 	public Task getTask(long groupId, String title) throws PortalException {
 		return taskPersistence.fetchByG_T_First(groupId, title, null);
 	}
+
+	// TODO: updateTask
 
 }
