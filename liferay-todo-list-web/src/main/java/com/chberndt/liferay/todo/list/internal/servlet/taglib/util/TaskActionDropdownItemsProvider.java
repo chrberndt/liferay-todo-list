@@ -1,5 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.servlet.taglib.util;
 
+import com.chberndt.liferay.todo.list.internal.security.permission.resource.TaskPermission;
 import com.chberndt.liferay.todo.list.model.Task;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
@@ -7,8 +8,10 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -58,15 +61,16 @@ public class TaskActionDropdownItemsProvider {
 				}
 
 				if (_hasDeletePermission()) {
+					if (_isTrashEnabled()) {
 
-					// TODO
+						// TODO
 
-					//					if (_isTrashEnabled()) {
-					//						add(_getMoveTaskToTrashActionUnsafeConsumer());
-					//					}
-					//					else {
-					add(_getDeleteTaskActionUnsafeConsumer());
-					//					}
+						// add(_getMoveTaskToTrashActionUnsafeConsumer());
+
+					}
+					else {
+						add(_getDeleteTaskActionUnsafeConsumer());
+					}
 				}
 			}
 		};
@@ -143,45 +147,50 @@ public class TaskActionDropdownItemsProvider {
 	}
 
 	private boolean _hasDeletePermission() {
-		return true;
-
-		// TODO: implement permission checking
-
-		//		try {
-		//			return TaskPermission.contains(_permissionChecker, _task, ActionKeys.DELETE);
-		//		} catch (PortalException pe) {
-		//			return ReflectionUtil.throwException(pe);
-		//		}
+		try {
+			return TaskPermission.contains(
+				_permissionChecker, _task, ActionKeys.DELETE);
+		}
+		catch (PortalException pe) {
+			return ReflectionUtil.throwException(pe);
+		}
 	}
 
 	private boolean _hasPermissionsPermission() {
-		return true;
-
-		// TODO: implement permission checking
-
-		//		try {
-		//			return TaskPermission.contains(_permissionChecker, _task, ActionKeys.PERMISSIONS);
-		//		} catch (PortalException pe) {
-		//			return ReflectionUtil.throwException(pe);
-		//		}
+		try {
+			return TaskPermission.contains(
+				_permissionChecker, _task, ActionKeys.PERMISSIONS);
+		}
+		catch (PortalException pe) {
+			return ReflectionUtil.throwException(pe);
+		}
 	}
 
 	private boolean _hasUpdatePermission() {
-		return true;
+		try {
+			return TaskPermission.contains(
+				_permissionChecker, _task, ActionKeys.UPDATE);
+		}
+		catch (PortalException pe) {
+			return ReflectionUtil.throwException(pe);
+		}
+	}
 
-		// TODO: implement permission checking
+	private boolean _isTrashEnabled() {
+		return false;
+
+		// TODO
 
 		//		try {
-		//			return TaskPermission.contains(_permissionChecker, _task, ActionKeys.UPDATE);
-		//		} catch (PortalException pe) {
+		//			return _trashHelper.isTrashEnabled(
+		//				PortalUtil.getScopeGroupId(_httpServletRequest));
+		//		}
+		//		catch (PortalException pe) {
 		//			return ReflectionUtil.throwException(pe);
 		//		}
 	}
 
 	private final HttpServletRequest _httpServletRequest;
-
-	// TODO: implement permission checking
-
 	private final PermissionChecker _permissionChecker;
 	private final RenderResponse _renderResponse;
 	private final ResourceBundle _resourceBundle;
