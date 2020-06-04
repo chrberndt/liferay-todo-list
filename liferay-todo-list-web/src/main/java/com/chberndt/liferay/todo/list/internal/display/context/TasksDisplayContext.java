@@ -4,6 +4,7 @@ import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.internal.security.permission.resource.TaskPermission;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalServiceUtil;
+
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -148,14 +150,19 @@ public class TasksDisplayContext {
 			return _status;
 		}
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) _httpServletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)_httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
 
-		PermissionChecker permissionChecker = themeDisplay.getPermissionChecker();
+		PermissionChecker permissionChecker =
+			themeDisplay.getPermissionChecker();
 
-		if (permissionChecker.isContentReviewer(themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId())) {
+		if (permissionChecker.isContentReviewer(
+				themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId())) {
 
 			_status = WorkflowConstants.STATUS_ANY;
-		} else {
+		}
+		else {
 			_status = WorkflowConstants.STATUS_APPROVED;
 		}
 
@@ -185,9 +192,9 @@ public class TasksDisplayContext {
 	private final LiferayPortletRequest _liferayPortletRequest;
 	private final LiferayPortletResponse _liferayPortletResponse;
 	private final PortalPreferences _portalPreferences;
+	private Integer _status;
 
-	 private Integer _status;
-		// TODO
+	// TODO
 	// private final TrashHelper _trashHelper;
 
 }
