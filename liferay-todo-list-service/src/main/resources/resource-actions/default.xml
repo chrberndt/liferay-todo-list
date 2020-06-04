@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE resource-action-mapping PUBLIC "-//Liferay//DTD Resource Action
+Mapping 7.2.0//EN" "http://www.liferay.com/dtd/liferay-resource-action-mapping_7_2_0.dtd">
+
+<resource-action-mapping>
+<model-resource>
+	<model-name>com.chberndt.liferay.todo.list</model-name>
+	<portlet-ref>
+		<portlet-name>com_chberndt_liferay_todo_list_internal_portlet_ToDoListPortlet</portlet-name>
+	</portlet-ref>
+	<root>true</root>
+	<permissions>
+		<supports>
+			<action-key>ADD_TASK</action-key>
+			<action-key>PERMISSIONS</action-key>
+			<action-key>SUBSCRIBE</action-key>
+		</supports>
+		<site-member-defaults>
+			<action-key>SUBSCRIBE</action-key>
+		</site-member-defaults>
+		<guest-defaults />
+		<guest-unsupported>
+			<action-key>ADD_TASK</action-key>
+			<action-key>PERMISSIONS</action-key>
+			<action-key>SUBSCRIBE</action-key>
+		</guest-unsupported>
+	</permissions>
+</model-resource>
+<model-resource>
+	<model-name>com.chberndt.liferay.todo.list.model.Task</model-name>
+	<portlet-ref>
+		<portlet-name>com_chberndt_liferay_todo_list_internal_portlet_ToDoListPortlet</portlet-name>
+	</portlet-ref>
+	<permissions>
+		<supports>
+			<action-key>DELETE</action-key>
+			<action-key>PERMISSIONS</action-key>
+			<action-key>UPDATE</action-key>
+			<action-key>VIEW</action-key>
+		</supports>
+		<site-member-defaults>
+			<action-key>VIEW</action-key>
+		</site-member-defaults>
+		<guest-defaults />
+		<guest-unsupported>
+			<action-key>DELETE</action-key>
+			<action-key>PERMISSIONS</action-key>
+			<action-key>UPDATE</action-key>
+		</guest-unsupported>
+	</permissions>
+</model-resource>
+</resource-action-mapping>
