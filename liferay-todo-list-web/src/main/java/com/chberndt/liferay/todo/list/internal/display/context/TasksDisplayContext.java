@@ -1,10 +1,9 @@
 package com.chberndt.liferay.todo.list.internal.display.context;
 
+import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.internal.security.permission.resource.TaskPermission;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalServiceUtil;
-import com.chberndt.liferay.todo.list.web.constants.ToDoListPortletKeys;
-
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -14,17 +13,20 @@ import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -60,6 +62,23 @@ public class TasksDisplayContext {
 		}
 
 		return Collections.emptyList();
+	}
+
+	public Map<String, Object> getComponentContext() throws PortalException {
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)_httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		return new HashMap<String, Object>() {
+			{
+				put("trashEnabled", false);
+
+				// TODO
+
+				//					_trashHelper.isTrashEnabled(
+				//						themeDisplay.getScopeGroupId()));
+			}
+		};
 	}
 
 	public String getDisplayStyle() {
@@ -109,12 +128,12 @@ public class TasksDisplayContext {
 
 		tasksSearchContainer.setOrderByType(orderByType);
 
+		// TODO
+
 		//			tasksSearchContainer.setOrderByComparator(
 		//				BlogsUtil.getOrderByComparator(
 		//					tasksSearchContainer.getOrderByCol(),
 		//					tasksSearchContainer.getOrderByType()));
-
-		// TODO
 
 		tasksSearchContainer.setRowChecker(
 			new EmptyOnClickRowChecker(_liferayPortletResponse));
@@ -124,27 +143,24 @@ public class TasksDisplayContext {
 		return tasksSearchContainer;
 	}
 
-	// TODO: support workflows
+	private int _getStatus() {
+		if (_status != null) {
+			return _status;
+		}
 
-	//	private int _getStatus() {
-	//		if (_status != null) {
-	//			return _status;
-	//		}
-	//
-	//		ThemeDisplay themeDisplay = (ThemeDisplay) _httpServletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay) _httpServletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-	//
-	//		PermissionChecker permissionChecker = themeDisplay.getPermissionChecker();
-	//
-	//		if (permissionChecker.isContentReviewer(themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId())) {
-	//
-	//			_status = WorkflowConstants.STATUS_ANY;
-	//		} else {
-	//			_status = WorkflowConstants.STATUS_APPROVED;
-	//		}
-	//
-	//		return _status;
-	//	}
+		PermissionChecker permissionChecker = themeDisplay.getPermissionChecker();
+
+		if (permissionChecker.isContentReviewer(themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId())) {
+
+			_status = WorkflowConstants.STATUS_ANY;
+		} else {
+			_status = WorkflowConstants.STATUS_APPROVED;
+		}
+
+		return _status;
+	}
 
 	private void _populateResults(SearchContainer<Task> searchContainer)
 		throws PortalException {
@@ -170,8 +186,8 @@ public class TasksDisplayContext {
 	private final LiferayPortletResponse _liferayPortletResponse;
 	private final PortalPreferences _portalPreferences;
 
-	// TODO
-	// private Integer _status;
+	 private Integer _status;
+		// TODO
 	// private final TrashHelper _trashHelper;
 
 }
