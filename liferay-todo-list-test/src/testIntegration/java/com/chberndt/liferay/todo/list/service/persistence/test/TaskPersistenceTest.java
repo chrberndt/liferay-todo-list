@@ -148,6 +148,14 @@ public class TaskPersistenceTest {
 
 		newTask.setDueDate(RandomTestUtil.nextDate());
 
+		newTask.setStatus(RandomTestUtil.nextInt());
+
+		newTask.setStatusByUserId(RandomTestUtil.nextLong());
+
+		newTask.setStatusByUserName(RandomTestUtil.randomString());
+
+		newTask.setStatusDate(RandomTestUtil.nextDate());
+
 		_tasks.add(_persistence.update(newTask));
 
 		Task existingTask = _persistence.findByPrimaryKey(
@@ -173,6 +181,14 @@ public class TaskPersistenceTest {
 		Assert.assertEquals(
 			Time.getShortTimestamp(existingTask.getDueDate()),
 			Time.getShortTimestamp(newTask.getDueDate()));
+		Assert.assertEquals(existingTask.getStatus(), newTask.getStatus());
+		Assert.assertEquals(
+			existingTask.getStatusByUserId(), newTask.getStatusByUserId());
+		Assert.assertEquals(
+			existingTask.getStatusByUserName(), newTask.getStatusByUserName());
+		Assert.assertEquals(
+			Time.getShortTimestamp(existingTask.getStatusDate()),
+			Time.getShortTimestamp(newTask.getStatusDate()));
 	}
 
 	@Test
@@ -248,12 +264,20 @@ public class TaskPersistenceTest {
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS, getOrderByComparator());
 	}
 
+	@Test
+	public void testFilterFindByGroupId() throws Exception {
+		_persistence.filterFindByGroupId(
+			0, QueryUtil.ALL_POS, QueryUtil.ALL_POS, getOrderByComparator());
+	}
+
 	protected OrderByComparator<Task> getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create(
 			"Custom_Task", "uuid", true, "taskId", true, "groupId", true,
 			"companyId", true, "userId", true, "userName", true, "createDate",
 			true, "modifiedDate", true, "title", true, "description", true,
-			"completed", true, "dueDate", true);
+			"completed", true, "dueDate", true, "status", true,
+			"statusByUserId", true, "statusByUserName", true, "statusDate",
+			true);
 	}
 
 	@Test
@@ -500,6 +524,14 @@ public class TaskPersistenceTest {
 		task.setCompleted(RandomTestUtil.randomBoolean());
 
 		task.setDueDate(RandomTestUtil.nextDate());
+
+		task.setStatus(RandomTestUtil.nextInt());
+
+		task.setStatusByUserId(RandomTestUtil.nextLong());
+
+		task.setStatusByUserName(RandomTestUtil.randomString());
+
+		task.setStatusDate(RandomTestUtil.nextDate());
 
 		_tasks.add(_persistence.update(task));
 
