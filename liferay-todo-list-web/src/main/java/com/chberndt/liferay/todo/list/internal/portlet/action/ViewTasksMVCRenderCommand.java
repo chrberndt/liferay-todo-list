@@ -1,7 +1,7 @@
 package com.chberndt.liferay.todo.list.internal.portlet.action;
 
+import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.internal.display.context.TasksDisplayContext;
-import com.chberndt.liferay.todo.list.web.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.web.constants.ToDoListWebKeys;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
