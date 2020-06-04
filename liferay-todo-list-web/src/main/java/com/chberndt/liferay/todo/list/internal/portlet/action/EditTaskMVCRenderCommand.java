@@ -1,10 +1,10 @@
 package com.chberndt.liferay.todo.list.internal.portlet.action;
 
+import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.exception.NoSuchTaskException;
 import com.chberndt.liferay.todo.list.internal.util.WebKeys;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
-import com.chberndt.liferay.todo.list.web.constants.ToDoListPortletKeys;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;

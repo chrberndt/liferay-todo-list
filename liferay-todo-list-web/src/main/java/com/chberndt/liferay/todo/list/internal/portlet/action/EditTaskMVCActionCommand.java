@@ -1,8 +1,8 @@
 package com.chberndt.liferay.todo.list.internal.portlet.action;
 
+import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.exception.NoSuchTaskException;
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
-import com.chberndt.liferay.todo.list.web.constants.ToDoListPortletKeys;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -31,12 +31,12 @@ import org.osgi.service.component.annotations.Reference;
 public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 	protected void deleteTask(ActionRequest actionRequest) throws Exception {
-		long entryId = ParamUtil.getLong(actionRequest, "entryId");
+		long taskId = ParamUtil.getLong(actionRequest, "taskId");
 
 		long[] deleteTaskIds = null;
 
-		if (entryId > 0) {
-			deleteTaskIds = new long[] {entryId};
+		if (taskId > 0) {
+			deleteTaskIds = new long[] {taskId};
 		}
 		else {
 			deleteTaskIds = ParamUtil.getLongValues(
@@ -75,7 +75,7 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 		//		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 		//			WebKeys.THEME_DISPLAY);
 
-		long entryId = ParamUtil.getLong(actionRequest, "entryId");
+		long taskId = ParamUtil.getLong(actionRequest, "taskId");
 
 		//		String[] distributionScopeParts = StringUtil.split(
 		//			ParamUtil.getString(actionRequest, "distributionScope"));
@@ -126,7 +126,7 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 		//		int priority = ParamUtil.getInteger(actionRequest, "priority");
 
-		if (entryId <= 0) {
+		if (taskId <= 0) {
 			//			boolean alert = ParamUtil.getBoolean(actionRequest, "alert");
 
 			// TODO

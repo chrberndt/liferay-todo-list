@@ -1,6 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.application.list;
 
-import com.chberndt.liferay.todo.list.web.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 
 import com.liferay.application.list.BasePanelApp;
 import com.liferay.application.list.PanelApp;
