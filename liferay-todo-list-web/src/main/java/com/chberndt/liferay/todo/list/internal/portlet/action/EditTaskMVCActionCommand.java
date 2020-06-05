@@ -39,8 +39,7 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 			deleteTaskIds = new long[] {taskId};
 		}
 		else {
-			deleteTaskIds = ParamUtil.getLongValues(
-				actionRequest, "rowIdsAnnouncementsTask");
+			deleteTaskIds = ParamUtil.getLongValues(actionRequest, "rowIds");
 		}
 
 		for (long deleteTaskId : deleteTaskIds) {
