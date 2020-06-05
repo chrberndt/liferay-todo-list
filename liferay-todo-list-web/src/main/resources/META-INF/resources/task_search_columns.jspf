@@ -38,16 +38,9 @@
 			</span>
 		</liferay-ui:search-container-column-text>
 
-		<liferay-ui:search-container-column-text>
-
-			<%
-			TaskActionDropdownItemsProvider taskActionDropdownItemsProvider = new TaskActionDropdownItemsProvider(task, renderRequest, renderResponse, permissionChecker, resourceBundle);
-			%>
-
-			<clay:dropdown-actions
-				dropdownItems="<%= taskActionDropdownItemsProvider.getActionDropdownItems() %>"
-			/>
-		</liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-jsp
+			path="/task_action.jsp"
+		/>
 	</c:when>
 	<c:when test='<%= displayStyle.equals("icon") %>'>
 
@@ -97,15 +90,8 @@
 		/>
 		--%>
 
-		<liferay-ui:search-container-column-text>
-
-			<%
-			TaskActionDropdownItemsProvider taskActionDropdownItemsProvider = new TaskActionDropdownItemsProvider(task, renderRequest, renderResponse, permissionChecker, resourceBundle);
-			%>
-
-			<clay:dropdown-actions
-				dropdownItems="<%= taskActionDropdownItemsProvider.getActionDropdownItems() %>"
-			/>
-		</liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-jsp
+			path="/task_action.jsp"
+		/>
 	</c:otherwise>
 </c:choose>
