@@ -42,7 +42,7 @@ TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new 
 				<%
 				Map<String, Object> rowData = new HashMap<>();
 
-				// rowData.put("actions", StringUtil.merge(tasksDisplayContext.getAvailableActions(task)));
+				rowData.put("actions", StringUtil.merge(tasksDisplayContext.getAvailableActions(task)));
 
 				row.setData(rowData);
 				%>
@@ -57,3 +57,49 @@ TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new 
 		</liferay-ui:search-container>
 	</aui:form>
 </div>
+
+<aui:script>
+	var deleteTasks = function() {
+
+		if (
+			confirm(
+				'<liferay-ui:message key="are-you-sure-you-want-to-delete-the-selected-tasks" />'
+			)
+		) {
+			var form = document.getElementById('<portlet:namespace />fm');
+
+			if (form) {
+				form.setAttribute('method', 'post');
+
+				var cmd = form.querySelector(
+					'#<portlet:namespace /><%= Constants.CMD %>'
+				);
+
+				if (cmd) {
+					cmd.setAttribute('value', '<%= Constants.DELETE %>');
+				}
+
+				submitForm(
+					form,
+					'<portlet:actionURL name="/edit_task" />'
+				);
+			}
+		}
+	};
+
+	var ACTIONS = {
+		deleteTasks: deleteTasks
+	};
+
+	Liferay.componentReady('tasksManagementToolbar').then(function(
+		managementToolbar
+	) {
+		managementToolbar.on('actionItemClicked', function(event) {
+			var itemData = event.data.item.data;
+
+			if (itemData && itemData.action && ACTIONS[itemData.action]) {
+				ACTIONS[itemData.action]();
+			}
+		});
+	});
+</aui:script>
