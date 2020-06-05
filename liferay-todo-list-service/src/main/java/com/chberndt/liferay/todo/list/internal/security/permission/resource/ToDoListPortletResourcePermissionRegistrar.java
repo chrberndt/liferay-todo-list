@@ -20,7 +20,7 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Christian Berndt
+ * @author Christian Berndt
  */
 @Component(immediate = true, service = {})
 public class ToDoListPortletResourcePermissionRegistrar {
