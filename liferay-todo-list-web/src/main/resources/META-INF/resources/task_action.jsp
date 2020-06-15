@@ -24,11 +24,23 @@ Task task = (Task)row.getObject();
 		url="<%= editURL %>"
 	/>
 
-	<%--
+	<%
 	 	// TODO: add permissions menu item
-	--%>
+	%>
 
-	<portlet:actionURL name="deleteTag" var="deleteURL">
+	<portlet:actionURL name="/edit_task" var="deleteURL">
+		<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
+
+		<%
+
+		// TODO: Add trashHelper support
+
+		%>
+
+		<%--
+		<portlet:param name="<%= Constants.CMD %>" value="<%= trashHelper.isTrashEnabled(scopeGroupId) ? Constants.MOVE_TO_TRASH : Constants.DELETE %>" />
+		--%>
+
 		<portlet:param name="redirect" value="<%= currentURL %>" />
 		<portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
 	</portlet:actionURL>
