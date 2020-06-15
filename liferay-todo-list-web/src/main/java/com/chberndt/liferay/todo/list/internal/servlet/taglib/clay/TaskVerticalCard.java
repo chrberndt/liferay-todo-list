@@ -43,12 +43,12 @@ public class TaskVerticalCard extends BaseVerticalCard {
 	}
 
 	public List<DropdownItem> getActionDropdownItems() {
-		TaskActionDropdownItemsProvider blogsEntryActionDropdownItemsProvider =
+		TaskActionDropdownItemsProvider taskActionDropdownItemsProvider =
 			new TaskActionDropdownItemsProvider(
 				_task, renderRequest, _renderResponse, _permissionChecker,
 				_resourceBundle);
 
-		return blogsEntryActionDropdownItemsProvider.getActionDropdownItems();
+		return taskActionDropdownItemsProvider.getActionDropdownItems();
 	}
 
 	// TODO
