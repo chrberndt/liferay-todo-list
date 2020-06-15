@@ -14,7 +14,7 @@ Task task = (Task)row.getObject();
 	showWhenSingleIcon="<%= true %>"
 >
 	<portlet:renderURL var="editURL">
-		<portlet:param name="mvcPath" value="/edit_task.jsp" />
+		<portlet:param name="mvcRenderCommandName" value="/edit_task" />
 		<portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
 	</portlet:renderURL>
 
