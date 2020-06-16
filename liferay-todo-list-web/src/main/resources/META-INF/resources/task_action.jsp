@@ -15,6 +15,7 @@ Task task = (Task)row.getObject();
 >
 	<portlet:renderURL var="editURL">
 		<portlet:param name="mvcRenderCommandName" value="/edit_task" />
+		<portlet:param name="redirect" value="<%= currentURL %>" />
 		<portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
 	</portlet:renderURL>
 
