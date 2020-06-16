@@ -25,9 +25,20 @@ Task task = (Task)row.getObject();
 		url="<%= editURL %>"
 	/>
 
-	<%
-	 	// TODO: add permissions menu item
-	%>
+	<liferay-security:permissionsURL
+		modelResource="<%= Task.class.getName() %>"
+		modelResourceDescription="<%= task.getTitle() %>"
+		resourcePrimKey="<%= String.valueOf(task.getTaskId()) %>"
+		var="permissionsTaskURL"
+		windowState="<%= LiferayWindowState.POP_UP.toString() %>"
+	/>
+
+	<liferay-ui:icon
+		message="permissions"
+		method="get"
+		url="<%= permissionsTaskURL %>"
+		useDialog="<%= true %>"
+	/>
 
 	<portlet:actionURL name="/edit_task" var="deleteURL">
 		<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
