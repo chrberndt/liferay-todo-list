@@ -21,8 +21,11 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.Date;
 
@@ -186,6 +189,60 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		return taskPersistence.fetchByG_T_First(groupId, title, null);
 	}
 
-	// TODO: updateTask
+	@Indexable(type = IndexableType.REINDEX)
+	@Override
+	public Task updateTask(
+			long userId, long taskId, String title, String description,
+			Date dueDate, ServiceContext serviceContext)
+		throws PortalException {
+
+		// Task
+
+		Task task = taskPersistence.findByPrimaryKey(taskId);
+
+		int status = task.getStatus();
+
+		if (!task.isPending() && !task.isDraft()) {
+			status = WorkflowConstants.STATUS_DRAFT;
+		}
+
+		// TODO: validate
+
+		task.setTitle(title);
+		task.setDescription(description);
+		task.setDueDate(dueDate);
+
+		task.setStatus(status);
+
+		task.setExpandoBridgeAttributes(serviceContext);
+
+		// TODO: Asset
+
+		task = taskPersistence.update(task);
+
+		// TODO: Workflow
+
+		return task;
+	}
+
+	@Override
+	public void updateTaskResources(
+			Task entry, ModelPermissions modelPermissions)
+		throws PortalException {
+
+		resourceLocalService.updateResources(
+			entry.getCompanyId(), entry.getGroupId(), Task.class.getName(),
+			entry.getTaskId(), modelPermissions);
+	}
+
+	@Override
+	public void updateTaskResources(
+			Task entry, String[] groupPermissions, String[] guestPermissions)
+		throws PortalException {
+
+		resourceLocalService.updateResources(
+			entry.getCompanyId(), entry.getGroupId(), Task.class.getName(),
+			entry.getTaskId(), groupPermissions, guestPermissions);
+	}
 
 }
