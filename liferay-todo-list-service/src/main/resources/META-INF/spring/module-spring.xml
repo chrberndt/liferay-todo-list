@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<beans
+	default-destroy-method="destroy"
+	default-init-method="afterPropertiesSet"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+	<bean class="com.chberndt.liferay.todo.list.service.impl.TaskLocalServiceImpl" id="com.chberndt.liferay.todo.list.service.TaskLocalService" />
+	<bean class="com.chberndt.liferay.todo.list.service.impl.TaskServiceImpl" id="com.chberndt.liferay.todo.list.service.TaskService" />
+	<bean class="com.chberndt.liferay.todo.list.service.persistence.impl.TaskPersistenceImpl" id="com.chberndt.liferay.todo.list.service.persistence.TaskPersistence" parent="basePersistence" />
+</beans>

@@ -21,6 +21,7 @@ import com.chberndt.liferay.todo.list.service.persistence.TaskPersistence;
 import com.chberndt.liferay.todo.list.service.persistence.TaskUtil;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -39,6 +40,15 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PersistenceTestRule;
 import com.liferay.portal.test.rule.TransactionalTestRule;
 
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+
+import org.junit.runner.RunWith;
+
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -49,27 +59,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 /**
  * @generated
  */
 @RunWith(Arquillian.class)
 public class TaskPersistenceTest {
-
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(), PersistenceTestRule.INSTANCE,
-			new TransactionalTestRule(
-				Propagation.REQUIRED,
+	public static final AggregateTestRule aggregateTestRule = new AggregateTestRule(new LiferayIntegrationTestRule(),
+			PersistenceTestRule.INSTANCE,
+			new TransactionalTestRule(Propagation.REQUIRED,
 				"com.chberndt.liferay.todo.list.service"));
 
 	@Before
@@ -109,8 +108,7 @@ public class TaskPersistenceTest {
 
 		_persistence.remove(newTask);
 
-		Task existingTask = _persistence.fetchByPrimaryKey(
-			newTask.getPrimaryKey());
+		Task existingTask = _persistence.fetchByPrimaryKey(newTask.getPrimaryKey());
 
 		Assert.assertNull(existingTask);
 	}
@@ -158,36 +156,31 @@ public class TaskPersistenceTest {
 
 		_tasks.add(_persistence.update(newTask));
 
-		Task existingTask = _persistence.findByPrimaryKey(
-			newTask.getPrimaryKey());
+		Task existingTask = _persistence.findByPrimaryKey(newTask.getPrimaryKey());
 
 		Assert.assertEquals(existingTask.getUuid(), newTask.getUuid());
 		Assert.assertEquals(existingTask.getTaskId(), newTask.getTaskId());
 		Assert.assertEquals(existingTask.getGroupId(), newTask.getGroupId());
-		Assert.assertEquals(
-			existingTask.getCompanyId(), newTask.getCompanyId());
+		Assert.assertEquals(existingTask.getCompanyId(), newTask.getCompanyId());
 		Assert.assertEquals(existingTask.getUserId(), newTask.getUserId());
 		Assert.assertEquals(existingTask.getUserName(), newTask.getUserName());
-		Assert.assertEquals(
-			Time.getShortTimestamp(existingTask.getCreateDate()),
+		Assert.assertEquals(Time.getShortTimestamp(existingTask.getCreateDate()),
 			Time.getShortTimestamp(newTask.getCreateDate()));
-		Assert.assertEquals(
-			Time.getShortTimestamp(existingTask.getModifiedDate()),
+		Assert.assertEquals(Time.getShortTimestamp(
+				existingTask.getModifiedDate()),
 			Time.getShortTimestamp(newTask.getModifiedDate()));
 		Assert.assertEquals(existingTask.getTitle(), newTask.getTitle());
-		Assert.assertEquals(
-			existingTask.getDescription(), newTask.getDescription());
+		Assert.assertEquals(existingTask.getDescription(),
+			newTask.getDescription());
 		Assert.assertEquals(existingTask.isCompleted(), newTask.isCompleted());
-		Assert.assertEquals(
-			Time.getShortTimestamp(existingTask.getDueDate()),
+		Assert.assertEquals(Time.getShortTimestamp(existingTask.getDueDate()),
 			Time.getShortTimestamp(newTask.getDueDate()));
 		Assert.assertEquals(existingTask.getStatus(), newTask.getStatus());
-		Assert.assertEquals(
-			existingTask.getStatusByUserId(), newTask.getStatusByUserId());
-		Assert.assertEquals(
-			existingTask.getStatusByUserName(), newTask.getStatusByUserName());
-		Assert.assertEquals(
-			Time.getShortTimestamp(existingTask.getStatusDate()),
+		Assert.assertEquals(existingTask.getStatusByUserId(),
+			newTask.getStatusByUserId());
+		Assert.assertEquals(existingTask.getStatusByUserName(),
+			newTask.getStatusByUserName());
+		Assert.assertEquals(Time.getShortTimestamp(existingTask.getStatusDate()),
 			Time.getShortTimestamp(newTask.getStatusDate()));
 	}
 
@@ -245,8 +238,7 @@ public class TaskPersistenceTest {
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		Task newTask = addTask();
 
-		Task existingTask = _persistence.findByPrimaryKey(
-			newTask.getPrimaryKey());
+		Task existingTask = _persistence.findByPrimaryKey(newTask.getPrimaryKey());
 
 		Assert.assertEquals(existingTask, newTask);
 	}
@@ -260,32 +252,30 @@ public class TaskPersistenceTest {
 
 	@Test
 	public void testFindAll() throws Exception {
-		_persistence.findAll(
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, getOrderByComparator());
+		_persistence.findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			getOrderByComparator());
 	}
 
 	@Test
 	public void testFilterFindByGroupId() throws Exception {
-		_persistence.filterFindByGroupId(
-			0, QueryUtil.ALL_POS, QueryUtil.ALL_POS, getOrderByComparator());
+		_persistence.filterFindByGroupId(0, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, getOrderByComparator());
 	}
 
 	protected OrderByComparator<Task> getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create(
-			"Custom_Task", "uuid", true, "taskId", true, "groupId", true,
-			"companyId", true, "userId", true, "userName", true, "createDate",
-			true, "modifiedDate", true, "title", true, "description", true,
-			"completed", true, "dueDate", true, "status", true,
-			"statusByUserId", true, "statusByUserName", true, "statusDate",
-			true);
+		return OrderByComparatorFactoryUtil.create("Custom_Task", "uuid", true,
+			"taskId", true, "groupId", true, "companyId", true, "userId", true,
+			"userName", true, "createDate", true, "modifiedDate", true,
+			"title", true, "description", true, "completed", true, "dueDate",
+			true, "status", true, "statusByUserId", true, "statusByUserName",
+			true, "statusDate", true);
 	}
 
 	@Test
 	public void testFetchByPrimaryKeyExisting() throws Exception {
 		Task newTask = addTask();
 
-		Task existingTask = _persistence.fetchByPrimaryKey(
-			newTask.getPrimaryKey());
+		Task existingTask = _persistence.fetchByPrimaryKey(newTask.getPrimaryKey());
 
 		Assert.assertEquals(existingTask, newTask);
 	}
@@ -302,7 +292,6 @@ public class TaskPersistenceTest {
 	@Test
 	public void testFetchByPrimaryKeysWithMultiplePrimaryKeysWhereAllPrimaryKeysExist()
 		throws Exception {
-
 		Task newTask1 = addTask();
 		Task newTask2 = addTask();
 
@@ -311,8 +300,7 @@ public class TaskPersistenceTest {
 		primaryKeys.add(newTask1.getPrimaryKey());
 		primaryKeys.add(newTask2.getPrimaryKey());
 
-		Map<Serializable, Task> tasks = _persistence.fetchByPrimaryKeys(
-			primaryKeys);
+		Map<Serializable, Task> tasks = _persistence.fetchByPrimaryKeys(primaryKeys);
 
 		Assert.assertEquals(2, tasks.size());
 		Assert.assertEquals(newTask1, tasks.get(newTask1.getPrimaryKey()));
@@ -322,7 +310,6 @@ public class TaskPersistenceTest {
 	@Test
 	public void testFetchByPrimaryKeysWithMultiplePrimaryKeysWhereNoPrimaryKeysExist()
 		throws Exception {
-
 		long pk1 = RandomTestUtil.nextLong();
 
 		long pk2 = RandomTestUtil.nextLong();
@@ -332,8 +319,7 @@ public class TaskPersistenceTest {
 		primaryKeys.add(pk1);
 		primaryKeys.add(pk2);
 
-		Map<Serializable, Task> tasks = _persistence.fetchByPrimaryKeys(
-			primaryKeys);
+		Map<Serializable, Task> tasks = _persistence.fetchByPrimaryKeys(primaryKeys);
 
 		Assert.assertTrue(tasks.isEmpty());
 	}
@@ -341,7 +327,6 @@ public class TaskPersistenceTest {
 	@Test
 	public void testFetchByPrimaryKeysWithMultiplePrimaryKeysWhereSomePrimaryKeysExist()
 		throws Exception {
-
 		Task newTask = addTask();
 
 		long pk = RandomTestUtil.nextLong();
@@ -351,33 +336,32 @@ public class TaskPersistenceTest {
 		primaryKeys.add(newTask.getPrimaryKey());
 		primaryKeys.add(pk);
 
-		Map<Serializable, Task> tasks = _persistence.fetchByPrimaryKeys(
-			primaryKeys);
+		Map<Serializable, Task> tasks = _persistence.fetchByPrimaryKeys(primaryKeys);
 
 		Assert.assertEquals(1, tasks.size());
 		Assert.assertEquals(newTask, tasks.get(newTask.getPrimaryKey()));
 	}
 
 	@Test
-	public void testFetchByPrimaryKeysWithNoPrimaryKeys() throws Exception {
+	public void testFetchByPrimaryKeysWithNoPrimaryKeys()
+		throws Exception {
 		Set<Serializable> primaryKeys = new HashSet<Serializable>();
 
-		Map<Serializable, Task> tasks = _persistence.fetchByPrimaryKeys(
-			primaryKeys);
+		Map<Serializable, Task> tasks = _persistence.fetchByPrimaryKeys(primaryKeys);
 
 		Assert.assertTrue(tasks.isEmpty());
 	}
 
 	@Test
-	public void testFetchByPrimaryKeysWithOnePrimaryKey() throws Exception {
+	public void testFetchByPrimaryKeysWithOnePrimaryKey()
+		throws Exception {
 		Task newTask = addTask();
 
 		Set<Serializable> primaryKeys = new HashSet<Serializable>();
 
 		primaryKeys.add(newTask.getPrimaryKey());
 
-		Map<Serializable, Task> tasks = _persistence.fetchByPrimaryKeys(
-			primaryKeys);
+		Map<Serializable, Task> tasks = _persistence.fetchByPrimaryKeys(primaryKeys);
 
 		Assert.assertEquals(1, tasks.size());
 		Assert.assertEquals(newTask, tasks.get(newTask.getPrimaryKey()));
@@ -387,19 +371,15 @@ public class TaskPersistenceTest {
 	public void testActionableDynamicQuery() throws Exception {
 		final IntegerWrapper count = new IntegerWrapper();
 
-		ActionableDynamicQuery actionableDynamicQuery =
-			TaskLocalServiceUtil.getActionableDynamicQuery();
+		ActionableDynamicQuery actionableDynamicQuery = TaskLocalServiceUtil.getActionableDynamicQuery();
 
-		actionableDynamicQuery.setPerformActionMethod(
-			new ActionableDynamicQuery.PerformActionMethod<Task>() {
-
+		actionableDynamicQuery.setPerformActionMethod(new ActionableDynamicQuery.PerformActionMethod<Task>() {
 				@Override
 				public void performAction(Task task) {
 					Assert.assertNotNull(task);
 
 					count.increment();
 				}
-
 			});
 
 		actionableDynamicQuery.performActions();
@@ -408,14 +388,15 @@ public class TaskPersistenceTest {
 	}
 
 	@Test
-	public void testDynamicQueryByPrimaryKeyExisting() throws Exception {
+	public void testDynamicQueryByPrimaryKeyExisting()
+		throws Exception {
 		Task newTask = addTask();
 
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Task.class, _dynamicQueryClassLoader);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Task.class,
+				_dynamicQueryClassLoader);
 
-		dynamicQuery.add(
-			RestrictionsFactoryUtil.eq("taskId", newTask.getTaskId()));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("taskId",
+				newTask.getTaskId()));
 
 		List<Task> result = _persistence.findWithDynamicQuery(dynamicQuery);
 
@@ -428,11 +409,11 @@ public class TaskPersistenceTest {
 
 	@Test
 	public void testDynamicQueryByPrimaryKeyMissing() throws Exception {
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Task.class, _dynamicQueryClassLoader);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Task.class,
+				_dynamicQueryClassLoader);
 
-		dynamicQuery.add(
-			RestrictionsFactoryUtil.eq("taskId", RandomTestUtil.nextLong()));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("taskId",
+				RandomTestUtil.nextLong()));
 
 		List<Task> result = _persistence.findWithDynamicQuery(dynamicQuery);
 
@@ -440,18 +421,19 @@ public class TaskPersistenceTest {
 	}
 
 	@Test
-	public void testDynamicQueryByProjectionExisting() throws Exception {
+	public void testDynamicQueryByProjectionExisting()
+		throws Exception {
 		Task newTask = addTask();
 
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Task.class, _dynamicQueryClassLoader);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Task.class,
+				_dynamicQueryClassLoader);
 
 		dynamicQuery.setProjection(ProjectionFactoryUtil.property("taskId"));
 
 		Object newTaskId = newTask.getTaskId();
 
-		dynamicQuery.add(
-			RestrictionsFactoryUtil.in("taskId", new Object[] {newTaskId}));
+		dynamicQuery.add(RestrictionsFactoryUtil.in("taskId",
+				new Object[] { newTaskId }));
 
 		List<Object> result = _persistence.findWithDynamicQuery(dynamicQuery);
 
@@ -464,14 +446,13 @@ public class TaskPersistenceTest {
 
 	@Test
 	public void testDynamicQueryByProjectionMissing() throws Exception {
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Task.class, _dynamicQueryClassLoader);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Task.class,
+				_dynamicQueryClassLoader);
 
 		dynamicQuery.setProjection(ProjectionFactoryUtil.property("taskId"));
 
-		dynamicQuery.add(
-			RestrictionsFactoryUtil.in(
-				"taskId", new Object[] {RandomTestUtil.nextLong()}));
+		dynamicQuery.add(RestrictionsFactoryUtil.in("taskId",
+				new Object[] { RandomTestUtil.nextLong() }));
 
 		List<Object> result = _persistence.findWithDynamicQuery(dynamicQuery);
 
@@ -484,18 +465,14 @@ public class TaskPersistenceTest {
 
 		_persistence.clearCache();
 
-		Task existingTask = _persistence.findByPrimaryKey(
-			newTask.getPrimaryKey());
+		Task existingTask = _persistence.findByPrimaryKey(newTask.getPrimaryKey());
 
-		Assert.assertTrue(
-			Objects.equals(
-				existingTask.getUuid(),
-				ReflectionTestUtil.invoke(
-					existingTask, "getOriginalUuid", new Class<?>[0])));
-		Assert.assertEquals(
-			Long.valueOf(existingTask.getGroupId()),
-			ReflectionTestUtil.<Long>invoke(
-				existingTask, "getOriginalGroupId", new Class<?>[0]));
+		Assert.assertTrue(Objects.equals(existingTask.getUuid(),
+				ReflectionTestUtil.invoke(existingTask, "getOriginalUuid",
+					new Class<?>[0])));
+		Assert.assertEquals(Long.valueOf(existingTask.getGroupId()),
+			ReflectionTestUtil.<Long>invoke(existingTask, "getOriginalGroupId",
+				new Class<?>[0]));
 	}
 
 	protected Task addTask() throws Exception {
@@ -541,5 +518,4 @@ public class TaskPersistenceTest {
 	private List<Task> _tasks = new ArrayList<Task>();
 	private TaskPersistence _persistence;
 	private ClassLoader _dynamicQueryClassLoader;
-
 }
