@@ -49,9 +49,40 @@
 		%>
 
 		<liferay-ui:search-container-column-text>
+			<liferay-frontend:icon-vertical-card
+				actionJsp="/task_action.jsp"
+				actionJspServletContext="<%= application %>"
+				icon="check-circle"
+				resultRow="<%= row %>"
+				rowChecker="<%= new EmptyOnClickRowChecker(renderResponse) %>"
+				title="<%= task.getTitle() %>"
+				url="<%= (rowURL != null) ? rowURL.toString() : null %>"
+			>
+				<liferay-frontend:vertical-card-sticker-bottom>
+					<clay:sticker elementClasses='<%= "sticker-bottom-left sticker-circle sticker-primary sticker-user-icon " + LexiconUtil.getUserColorCssClass(user) %>' icon="user" />
+				</liferay-frontend:vertical-card-sticker-bottom>
+
+				<liferay-frontend:vertical-card-header>
+					<%= LanguageUtil.format(request, "due-in-x", new String[] {LanguageUtil.getTimeDescription(locale, task.getDueDate().getTime() - System.currentTimeMillis(), true), HtmlUtil.escape(task.getUserName())}, false) %>
+				</liferay-frontend:vertical-card-header>
+
+				<liferay-frontend:vertical-card-footer>
+					<aui:workflow-status showIcon="<%= false %>" showLabel="<%= false %>" status="<%= task.getStatus() %>" />
+				</liferay-frontend:vertical-card-footer>
+			</liferay-frontend:icon-vertical-card>
+
+			<%
+
+			// TODO: use clay:vertical-card
+
+			%>
+
+			<%--
 			<clay:vertical-card
 				verticalCard="<%= new TaskVerticalCard(task, renderRequest, renderResponse, searchContainer.getRowChecker(), rowURL.toString(), permissionChecker, resourceBundle) %>"
 			/>
+			--%>
+
 		</liferay-ui:search-container-column-text>
 	</c:when>
 	<c:otherwise>
