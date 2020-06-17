@@ -2,15 +2,24 @@ package com.chberndt.liferay.todo.list.internal.portlet.action;
 
 import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.exception.NoSuchTaskException;
+import com.chberndt.liferay.todo.list.exception.TaskDueDateException;
+import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.WebKeys;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -71,79 +80,58 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	protected void updateTask(ActionRequest actionRequest) throws Exception {
-		//		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-		//			WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
 		long taskId = ParamUtil.getLong(actionRequest, "taskId");
 
-		//		String[] distributionScopeParts = StringUtil.split(
-		//			ParamUtil.getString(actionRequest, "distributionScope"));
+		String title = ParamUtil.getString(actionRequest, "title");
+		String description = ParamUtil.getString(actionRequest, "description");
+		boolean completed = ParamUtil.getBoolean(actionRequest, "completed");
 
-		//		long classNameId = 0;
-		//		long classPK = 0;
+		Date dueDate = new Date();
 
-		//		if (distributionScopeParts.length == 2) {
-		//			classNameId = GetterUtil.getLong(distributionScopeParts[0]);
-		//
-		//			if (classNameId > 0) {
-		//				classPK = GetterUtil.getLong(distributionScopeParts[1]);
-		//			}
-		//		}
+		int dueDateMonth = ParamUtil.getInteger(actionRequest, "dueDateMonth");
+		int dueDateDay = ParamUtil.getInteger(actionRequest, "dueDateDay");
+		int dueDateYear = ParamUtil.getInteger(actionRequest, "dueDateYear");
+		int dueDateHour = ParamUtil.getInteger(actionRequest, "dueDateHour");
+		int dueDateMinute = ParamUtil.getInteger(
+			actionRequest, "dueDateMinute");
+		int dueDateAmPm = ParamUtil.getInteger(actionRequest, "dueDateAmPm");
 
-		//		String title = ParamUtil.getString(actionRequest, "title");
-		//		String content = ParamUtil.getString(actionRequest, "content");
-		//		String url = ParamUtil.getString(actionRequest, "url");
-		//		String type = ParamUtil.getString(actionRequest, "type");
-		//
-		//		Date dueDate = new Date();
-
-		boolean displayImmediately = ParamUtil.getBoolean(
-			actionRequest, "displayImmediately");
-
-		if (!displayImmediately) {
-			//			int dueDateMonth = ParamUtil.getInteger(
-			//				actionRequest, "dueDateMonth");
-			//			int dueDateDay = ParamUtil.getInteger(actionRequest, "dueDateDay");
-			//			int dueDateYear = ParamUtil.getInteger(
-			//				actionRequest, "dueDateYear");
-			//			int dueDateHour = ParamUtil.getInteger(
-			//				actionRequest, "dueDateHour");
-			//			int dueDateMinute = ParamUtil.getInteger(
-			//				actionRequest, "dueDateMinute");
-			//			int dueDateAmPm = ParamUtil.getInteger(
-			//				actionRequest, "dueDateAmPm");
-			//
-			//			if (dueDateAmPm == Calendar.PM) {
-			//				dueDateHour += 12;
-			//			}
-
-			//			dueDate = _portal.getDate(
-			//				dueDateMonth, dueDateDay, dueDateYear,
-			//				dueDateHour, dueDateMinute, themeDisplay.getTimeZone(),
-			//				TaskDueDateExceptionClass.class);
+		if (dueDateAmPm == Calendar.PM) {
+			dueDateHour += 12;
 		}
 
-		//		int priority = ParamUtil.getInteger(actionRequest, "priority");
+		dueDate = _portal.getDate(
+			dueDateMonth, dueDateDay, dueDateYear, dueDateHour, dueDateMinute,
+			themeDisplay.getTimeZone(), TaskDueDateException.class);
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			Task.class.getName(), actionRequest);
 
 		if (taskId <= 0) {
-			//			boolean alert = ParamUtil.getBoolean(actionRequest, "alert");
 
-			// TODO
+			// TODO: use remote service
 
-			//_taskLocalService.addTask();
+			_taskLocalService.addTask(
+				serviceContext.getGuestOrUserId(), title, description,
+				completed, dueDate, serviceContext);
 		}
 		else {
 
-			// TODO
-			// _taskLocalService.updateTask();
+			// TODO: use remote service
 
+			_taskLocalService.updateTask(
+				serviceContext.getGuestOrUserId(), taskId, title, description,
+				dueDate, serviceContext);
 		}
 	}
 
-	// TODO: use remote service
-
 	@Reference
 	private Portal _portal;
+
+	// TODO: use remote service
 
 	@Reference
 	private TaskLocalService _taskLocalService;
