@@ -62,5 +62,7 @@
 		<reference entity="AssetTag" package-path="com.liferay.portlet.asset" />
 
 	</entity>
-
+	<exceptions>
+		<exception>TaskDueDate</exception>
+	</exceptions>
 </service-builder>
