@@ -1,7 +1,6 @@
 
 package com.chberndt.liferay.todo.list.service.impl;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskServiceBaseImpl;
 
@@ -9,7 +8,6 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
 
 import java.util.Date;
@@ -57,9 +55,9 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 
 		// TODO: Create and use ToDoListActionKeys
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), serviceContext.getScopeGroupId(),
-			"ADD_TASK");
+		//		_portletResourcePermission.check(
+		//			getPermissionChecker(), serviceContext.getScopeGroupId(),
+		//			"ADD_TASK");
 
 		return taskLocalService.addTask(
 			getUserId(), title, description, completed, dueDate,
@@ -71,6 +69,13 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 			getPermissionChecker(), taskId, ActionKeys.DELETE);
 
 		taskLocalService.deleteTask(taskId);
+	}
+
+	public Task getTask(long taskId) throws PortalException {
+		_taskModelResourcePermission.check(
+			getPermissionChecker(), taskId, ActionKeys.VIEW);
+
+		return taskLocalService.getTask(taskId);
 	}
 
 	public Task updateTask(
@@ -86,8 +91,10 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 			serviceContext);
 	}
 
-	@Reference(target = "(resource.name=" + ToDoListPortletKeys.TODO_LIST + ")")
-	private PortletResourcePermission _portletResourcePermission;
+	// TODO: Fix portletResourcePermission check
+
+	//	@Reference(target = "(resource.name=" + ToDoListPortletKeys.TODO_LIST + ")")
+	//	private PortletResourcePermission _portletResourcePermission;
 
 	@Reference(
 		target = "(model.class.name=com.chberndt.liferay.todo.list.model.Task)"
