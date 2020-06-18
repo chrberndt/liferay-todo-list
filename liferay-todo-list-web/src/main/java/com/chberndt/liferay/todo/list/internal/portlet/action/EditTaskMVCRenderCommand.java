@@ -4,22 +4,16 @@ import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.exception.NoSuchTaskException;
 import com.chberndt.liferay.todo.list.internal.util.WebKeys;
 import com.chberndt.liferay.todo.list.model.Task;
-import com.chberndt.liferay.todo.list.service.TaskLocalService;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Portal;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Christian Berndt
@@ -39,49 +33,24 @@ public class EditTaskMVCRenderCommand implements MVCRenderCommand {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws PortletException {
 
-		long taskId = ParamUtil.getLong(renderRequest, "taskId");
-
 		try {
+			Task task = ActionUtil.getTask(renderRequest);
 
-			// TODO: use remote service
+			renderRequest.setAttribute(WebKeys.TASK, task);
+		}
+		catch (NoSuchTaskException | PrincipalException e) {
+			SessionErrors.add(renderRequest, e.getClass());
 
-			Task task = _taskLocalService.getTask(taskId);
-
-			if (task != null) {
-
-				// TODO: Add permission checks
-
-				//				_taskModelResourcePermission.check(
-				//					themeDisplay.getPermissionChecker(), task,
-				//					ActionKeys.UPDATE);
-			}
-
-			HttpServletRequest httpServletRequest =
-				_portal.getHttpServletRequest(renderRequest);
-
-			httpServletRequest.setAttribute(WebKeys.TASK, task);
+			return "/error.jsp";
+		}
+		catch (RuntimeException re) {
+			throw re;
 		}
 		catch (Exception e) {
-			if (e instanceof NoSuchTaskException ||
-				e instanceof PrincipalException) {
-
-				SessionErrors.add(renderRequest, e.getClass());
-
-				return "/error.jsp";
-			}
-
 			throw new PortletException(e);
 		}
 
 		return "/edit_task.jsp";
 	}
-
-	@Reference
-	private Portal _portal;
-
-	// TODO: use remote service
-
-	@Reference
-	private TaskLocalService _taskLocalService;
 
 }
