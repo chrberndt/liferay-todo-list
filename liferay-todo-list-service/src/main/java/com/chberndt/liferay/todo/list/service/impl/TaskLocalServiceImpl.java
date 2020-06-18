@@ -192,7 +192,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public Task updateTask(
-			long userId, long taskId, String title, String description,
+			long userId, long taskId, String title, String description, boolean completed,
 			Date dueDate, ServiceContext serviceContext)
 		throws PortalException {
 
@@ -210,6 +210,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		task.setTitle(title);
 		task.setDescription(description);
+		task.setCompleted(completed);
 		task.setDueDate(dueDate);
 
 		task.setStatus(status);
