@@ -112,11 +112,13 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 		if (taskId <= 0) {
 			_taskService.addTask(
-				serviceContext.getUserId(), title, description, completed, dueDate, serviceContext);
+				serviceContext.getUserId(), title, description, completed,
+				dueDate, serviceContext);
 		}
 		else {
 			_taskService.updateTask(
-					serviceContext.getUserId(), taskId, title, description, completed, dueDate, serviceContext);
+				serviceContext.getUserId(), taskId, title, description,
+				completed, dueDate, serviceContext);
 		}
 	}
 
@@ -124,7 +126,7 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 	private Portal _portal;
 
 	// TODO: Use remote service
-	
+
 	@Reference
 	private TaskLocalService _taskService;
 
