@@ -4,7 +4,7 @@ import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.exception.NoSuchTaskException;
 import com.chberndt.liferay.todo.list.exception.TaskDueDateException;
 import com.chberndt.liferay.todo.list.model.Task;
-import com.chberndt.liferay.todo.list.service.TaskLocalService;
+import com.chberndt.liferay.todo.list.service.TaskService;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -52,7 +52,7 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 		}
 
 		for (long deleteTaskId : deleteTaskIds) {
-			_taskLocalService.deleteTask(deleteTaskId);
+			_taskService.deleteTask(deleteTaskId);
 		}
 	}
 
@@ -111,29 +111,19 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 			Task.class.getName(), actionRequest);
 
 		if (taskId <= 0) {
-
-			// TODO: use remote service
-
-			_taskLocalService.addTask(
-				serviceContext.getGuestOrUserId(), title, description,
-				completed, dueDate, serviceContext);
+			_taskService.addTask(
+				title, description, completed, dueDate, serviceContext);
 		}
 		else {
-
-			// TODO: use remote service
-
-			_taskLocalService.updateTask(
-				serviceContext.getGuestOrUserId(), taskId, title, description,
-				completed, dueDate, serviceContext);
+			_taskService.updateTask(
+				taskId, title, description, completed, dueDate, serviceContext);
 		}
 	}
 
 	@Reference
 	private Portal _portal;
 
-	// TODO: use remote service
-
 	@Reference
-	private TaskLocalService _taskLocalService;
+	private TaskService _taskService;
 
 }
