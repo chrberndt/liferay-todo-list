@@ -124,7 +124,7 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 			_taskLocalService.updateTask(
 				serviceContext.getGuestOrUserId(), taskId, title, description,
-				dueDate, serviceContext);
+				completed, dueDate, serviceContext);
 		}
 	}
 
