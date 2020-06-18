@@ -54,7 +54,7 @@ public class TasksManagementToolbarDisplayContext
 					dropdownItem -> {
 						dropdownItem.putData("action", "deleteTasks");
 
-						// TODO
+						// TODO: Add trashHelper support
 
 						boolean trashEnabled = false;
 						//						boolean trashEnabled = _trashHelper.isTrashEnabled(

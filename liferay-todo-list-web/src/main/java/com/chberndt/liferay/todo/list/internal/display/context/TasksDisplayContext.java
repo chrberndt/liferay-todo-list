@@ -75,7 +75,7 @@ public class TasksDisplayContext {
 			{
 				put("trashEnabled", false);
 
-				// TODO
+				// TODO: Add trashHelper support
 
 				//					_trashHelper.isTrashEnabled(
 				//						themeDisplay.getScopeGroupId()));
@@ -194,7 +194,7 @@ public class TasksDisplayContext {
 	private final PortalPreferences _portalPreferences;
 	private Integer _status;
 
-	// TODO
+	// TODO: Add trashHelper support
 	// private final TrashHelper _trashHelper;
 
 }
