@@ -45,7 +45,7 @@ long taskId = BeanParamUtil.getLong(task, request, "taskId");
 		var form = document.getElementById('<portlet:namespace />fm');
 
 		if (form) {
-			form.action = '<portlet:actionURL name="/edit_task"><portlet:param name="mvcRenderCommandName" value="/editTask" /></portlet:actionURL>';
+			form.action = '<portlet:actionURL name="/edit_task"><portlet:param name="mvcRenderCommandName" value="/edit_task" /></portlet:actionURL>';
 			form.target = '';
 
 			var cmd = form.querySelector('#<portlet:namespace /><%= Constants.CMD %>');
