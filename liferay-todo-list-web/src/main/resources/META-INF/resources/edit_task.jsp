@@ -29,6 +29,8 @@ long taskId = BeanParamUtil.getLong(task, request, "taskId");
 				<aui:input name="description" placeholder="description" />
 
 				<aui:input name="dueDate" />
+
+				<aui:input name="completed" />
 			</aui:fieldset>
 		</aui:fieldset-group>
 
