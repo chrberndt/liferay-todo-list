@@ -1,7 +1,7 @@
 package com.chberndt.liferay.todo.list.internal.portlet.action;
 
 import com.chberndt.liferay.todo.list.model.Task;
-import com.chberndt.liferay.todo.list.service.TaskLocalServiceUtil;
+import com.chberndt.liferay.todo.list.service.TaskServiceUtil;
 
 import com.liferay.portal.kernel.util.ParamUtil;
 
@@ -18,13 +18,10 @@ public class ActionUtil {
 		Task task = null;
 
 		if (taskId > 0) {
-
-			// TODO: Use remote service
-
-			task = TaskLocalServiceUtil.getTask(taskId);
+			task = TaskServiceUtil.getTask(taskId);
 		}
 
-		// TODO: Add trash support
+		// TODO: Add trashHelper support
 
 		//		if ((task != null) && task.isInTrash()) {
 		//			throw new NoSuchTaskException("{taskId=" + taskId + "}");
