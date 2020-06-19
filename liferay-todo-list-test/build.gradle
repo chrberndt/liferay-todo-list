@@ -20,8 +20,8 @@ dependencies {
 	testCompile group: "org.springframework", name: "spring-test"
 
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge", version: "1.0.19"
-	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.test", version: "6.0.7"
-	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.test.integration", version: "6.0.7"
+	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.test", version: "6.2.5"
+	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.test.integration", version: "6.0.24"
 	testIntegrationCompile group: "log4j", name: "log4j", version: "1.2.17"
 	testIntegrationCompile project(":modules:liferay-todo-list:liferay-todo-list-api")
 	testIntegrationCompile project(":modules:liferay-todo-list:liferay-todo-list-service")
@@ -29,8 +29,8 @@ dependencies {
 	testModules group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge.connector", version: "1.0.0"
 	testModules group: "com.liferay", name: "com.liferay.sync.api", version: "5.0.6"
 	testModules group: "com.liferay", name: "com.liferay.sync.service", version: "3.0.9"
-	testModules group: "com.liferay.portal", name: "com.liferay.portal.test", version: "6.0.7"
-	testModules group: "com.liferay.portal", name: "com.liferay.portal.test.integration", version: "6.0.7"
+	testModules group: "com.liferay.portal", name: "com.liferay.portal.test", version: "6.2.5"
+	testModules group: "com.liferay.portal", name: "com.liferay.portal.test.integration", version: "6.0.24"
 	testModules group: "org.apache.aries.jmx", name: "org.apache.aries.jmx.core", version: "1.1.7"
 }
 
