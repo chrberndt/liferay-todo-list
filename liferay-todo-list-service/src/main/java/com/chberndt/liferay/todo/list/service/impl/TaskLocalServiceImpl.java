@@ -14,6 +14,8 @@
 
 package com.chberndt.liferay.todo.list.service.impl;
 
+import com.chberndt.liferay.todo.list.exception.TaskDueDateException;
+import com.chberndt.liferay.todo.list.exception.TaskTitleException;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskLocalServiceBaseImpl;
 
@@ -25,6 +27,7 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.Date;
@@ -74,7 +77,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		User user = userLocalService.getUser(userId);
 		long groupId = serviceContext.getScopeGroupId();
 
-		// TODO: validate
+		validate(title, dueDate); 
 
 		long taskId = counterLocalService.increment();
 
@@ -206,7 +209,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			status = WorkflowConstants.STATUS_DRAFT;
 		}
 
-		// TODO: validate
+		validate(title, dueDate); 
 
 		task.setTitle(title);
 		task.setDescription(description);
@@ -244,6 +247,17 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		resourceLocalService.updateResources(
 			entry.getCompanyId(), entry.getGroupId(), Task.class.getName(),
 			entry.getTaskId(), groupPermissions, guestPermissions);
+	}
+	
+	
+	protected void validate(String title, Date dueDate)
+		throws PortalException {
+		if (Validator.isNull(title)) {
+			throw new TaskTitleException();
+		}
+		if (Validator.isNull(dueDate)) {
+			throw new TaskDueDateException();
+		}
 	}
 
 }
