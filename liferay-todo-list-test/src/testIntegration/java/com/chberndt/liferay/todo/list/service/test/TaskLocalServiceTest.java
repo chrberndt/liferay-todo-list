@@ -1,4 +1,4 @@
-package com.chberndt.liferay.todo.list.service.persistence.test;
+package com.chberndt.liferay.todo.list.service.test;
 
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
