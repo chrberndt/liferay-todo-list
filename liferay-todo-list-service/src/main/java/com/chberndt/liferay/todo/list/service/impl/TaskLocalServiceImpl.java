@@ -77,7 +77,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		User user = userLocalService.getUser(userId);
 		long groupId = serviceContext.getScopeGroupId();
 
-		validate(title, dueDate); 
+		validate(title, dueDate);
 
 		long taskId = counterLocalService.increment();
 
@@ -209,7 +209,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			status = WorkflowConstants.STATUS_DRAFT;
 		}
 
-		validate(title, dueDate); 
+		validate(title, dueDate);
 
 		task.setTitle(title);
 		task.setDescription(description);
@@ -248,13 +248,12 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			entry.getCompanyId(), entry.getGroupId(), Task.class.getName(),
 			entry.getTaskId(), groupPermissions, guestPermissions);
 	}
-	
-	
-	protected void validate(String title, Date dueDate)
-		throws PortalException {
+
+	protected void validate(String title, Date dueDate) throws PortalException {
 		if (Validator.isNull(title)) {
 			throw new TaskTitleException();
 		}
+
 		if (Validator.isNull(dueDate)) {
 			throw new TaskDueDateException();
 		}
