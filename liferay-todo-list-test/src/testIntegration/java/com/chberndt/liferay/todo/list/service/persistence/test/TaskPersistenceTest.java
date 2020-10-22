@@ -46,7 +46,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import org.junit.After;
@@ -487,11 +486,10 @@ public class TaskPersistenceTest {
 		Task existingTask = _persistence.findByPrimaryKey(
 			newTask.getPrimaryKey());
 
-		Assert.assertTrue(
-			Objects.equals(
-				existingTask.getUuid(),
-				ReflectionTestUtil.invoke(
-					existingTask, "getOriginalUuid", new Class<?>[0])));
+		Assert.assertEquals(
+			existingTask.getUuid(),
+			ReflectionTestUtil.invoke(
+				existingTask, "getOriginalUuid", new Class<?>[0]));
 		Assert.assertEquals(
 			Long.valueOf(existingTask.getGroupId()),
 			ReflectionTestUtil.<Long>invoke(
