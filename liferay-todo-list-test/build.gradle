@@ -9,6 +9,7 @@ dependencies {
 	// this will no longer be necessary once we fix DestinationSyncRule
 
 	testCompile group: "com.liferay", name: "com.liferay.petra.lang"
+	testCompile group: "com.liferay", name: "com.liferay.petra.sql.dsl.api"
 	testCompile group: "com.liferay", name: "com.liferay.petra.string"
 	testCompile group: "com.liferay", name: "com.liferay.registry.api"
 	testCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel"
@@ -30,7 +31,7 @@ dependencies {
 	testModules group: "com.liferay", name: "com.liferay.sync.api", version: "5.0.6"
 	testModules group: "com.liferay", name: "com.liferay.sync.service", version: "3.0.9"
 	testModules group: "com.liferay.portal", name: "com.liferay.portal.test", version: "6.2.5"
-	testModules group: "com.liferay.portal", name: "com.liferay.portal.test.integration", version: "6.0.24"
+	testModules group: "com.liferay.portal", name: "com.liferay.portal.test.integration", version: "6.0.29"
 	testModules group: "org.apache.aries.jmx", name: "org.apache.aries.jmx.core", version: "1.1.7"
 }
 
