@@ -22,7 +22,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author berndt
+ * @author Christian Berndt
  */
 @Component
 public class ToDoListSampleDataLoader {
