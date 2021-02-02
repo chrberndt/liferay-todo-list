@@ -63,7 +63,7 @@
 
 	</entity>
 	<exceptions>
-		<exception>TaskTitle</exception>
 		<exception>TaskDueDate</exception>
+		<exception>TaskTitle</exception>
 	</exceptions>
 </service-builder>
