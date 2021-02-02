@@ -7,7 +7,6 @@ import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -67,7 +66,8 @@ public class ToDoListSampleDataLoader {
 
 			_taskLocalService.addTask(
 				serviceContext.getUserId(), "Meet Robert", "At Harry's Bar",
-				false, new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 5),
+				false,
+				new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 5)),
 				serviceContext);
 		}
 
@@ -78,7 +78,7 @@ public class ToDoListSampleDataLoader {
 			_taskLocalService.addTask(
 				serviceContext.getUserId(), "Catherine's birthday",
 				"Buy flowers", false,
-				new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 2),
+				new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 2)),
 				serviceContext);
 		}
 
@@ -88,7 +88,7 @@ public class ToDoListSampleDataLoader {
 			_taskLocalService.addTask(
 				serviceContext.getUserId(), "Pick up Rosalind",
 				"Kindergarten closes at 5pm", false,
-				new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 3),
+				new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 3)),
 				serviceContext);
 		}
 	}
