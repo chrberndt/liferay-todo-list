@@ -20,6 +20,9 @@ import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskLocalServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.Disjunction;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.User;
@@ -27,10 +30,12 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.Date;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -192,6 +197,20 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		return taskPersistence.fetchByG_T_First(groupId, title, null);
 	}
 
+	public List<Task> getTasksByKeywords(
+		long groupId, String keywords, int start, int end,
+		OrderByComparator<Task> orderByComparator) {
+
+		return taskLocalService.dynamicQuery(
+			_getKeywordSearchDynamicQuery(groupId, keywords), start, end,
+			orderByComparator);
+	}
+
+	public long getTasksCountByKeywords(long groupId, String keywords) {
+		return taskLocalService.dynamicQueryCount(
+			_getKeywordSearchDynamicQuery(groupId, keywords));
+	}
+
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public Task updateTask(
@@ -257,6 +276,28 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		if (Validator.isNull(dueDate)) {
 			throw new TaskDueDateException();
 		}
+	}
+
+	private DynamicQuery _getKeywordSearchDynamicQuery(
+		long groupId, String keywords) {
+
+		DynamicQuery dynamicQuery = dynamicQuery().add(
+			RestrictionsFactoryUtil.eq("groupId", groupId));
+
+		if (Validator.isNotNull(keywords)) {
+			Disjunction disjunctionQuery =
+				RestrictionsFactoryUtil.disjunction();
+
+			disjunctionQuery.add(
+				RestrictionsFactoryUtil.like("title", "%" + keywords + "%"));
+			disjunctionQuery.add(
+				RestrictionsFactoryUtil.like(
+					"description", "%" + keywords + "%"));
+
+			dynamicQuery.add(disjunctionQuery);
+		}
+
+		return dynamicQuery;
 	}
 
 }

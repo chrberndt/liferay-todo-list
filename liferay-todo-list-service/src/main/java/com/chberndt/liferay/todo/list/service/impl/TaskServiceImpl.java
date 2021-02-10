@@ -9,8 +9,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.util.Date;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -76,6 +78,18 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 			getPermissionChecker(), taskId, ActionKeys.VIEW);
 
 		return taskLocalService.getTask(taskId);
+	}
+
+	public List<Task> getTasksByKeywords(
+		long groupId, String keywords, int start, int end,
+		OrderByComparator<Task> orderByComparator) {
+
+		return taskLocalService.getTasksByKeywords(
+			groupId, keywords, start, end, orderByComparator);
+	}
+
+	public long getTasksCountByKeywords(long groupId, String keywords) {
+		return taskLocalService.getTasksCountByKeywords(groupId, keywords);
 	}
 
 	public Task updateTask(
