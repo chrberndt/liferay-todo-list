@@ -16,12 +16,10 @@
 
 			<%
 			Date dueDate = task.getDueDate();
-
-			String dueDateDescription = LanguageUtil.getTimeDescription(request, dueDate.getTime() - System.currentTimeMillis(), true);
 			%>
 
 			<span class="text-default">
-				<liferay-ui:message arguments="<%= new String[] {dueDateDescription} %>" key="due-in-x" />
+				<liferay-ui:message arguments="<%= LanguageUtil.getTimeDescription(request, dueDate.getTime() - System.currentTimeMillis(), true) %>" key="due-in-x" />
 			</span>
 
 			<%
