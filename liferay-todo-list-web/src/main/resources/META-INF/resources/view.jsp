@@ -2,18 +2,16 @@
 <%@ include file="/init.jsp" %>
 
 <%
-TasksDisplayContext tasksDisplayContext = (TasksDisplayContext)request.getAttribute(ToDoListWebKeys.TASKS_DISPLAY_CONTEXT);
+	TasksDisplayContext tasksDisplayContext = (TasksDisplayContext)request.getAttribute(ToDoListWebKeys.TASKS_DISPLAY_CONTEXT);
 
 String displayStyle = tasksDisplayContext.getDisplayStyle();
-SearchContainer tasksSearchContainer = tasksDisplayContext.getSearchContainer();
+SearchContainer tasksSearchContainer = tasksDisplayContext.getTaskSearchContainer();
 
 PortletURL portletURL = tasksSearchContainer.getIteratorURL();
-
-TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new TasksManagementToolbarDisplayContext(liferayPortletRequest, liferayPortletResponse, request, tasksSearchContainer, displayStyle);
 %>
 
 <clay:management-toolbar
-	displayContext="<%= tasksManagementToolbarDisplayContext %>"
+	displayContext="<%= new TasksManagementToolbarDisplayContext(liferayPortletRequest, liferayPortletResponse, request, tasksSearchContainer, displayStyle) %>"
 	searchContainerId="tasks"
 />
 
@@ -42,7 +40,8 @@ TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new 
 				<%
 				Map<String, Object> rowData = new HashMap<>();
 
-				rowData.put("actions", StringUtil.merge(tasksDisplayContext.getAvailableActions(task)));
+				// TODO
+				// rowData.put("actions", StringUtil.merge(tasksDisplayContext.getAvailableActions(task)));
 
 				row.setData(rowData);
 				%>

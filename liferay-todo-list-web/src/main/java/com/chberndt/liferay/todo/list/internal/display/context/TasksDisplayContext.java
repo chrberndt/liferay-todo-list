@@ -1,35 +1,25 @@
 package com.chberndt.liferay.todo.list.internal.display.context;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
-import com.chberndt.liferay.todo.list.internal.security.permission.resource.TaskPermission;
+import com.chberndt.liferay.todo.list.internal.search.TaskSearch;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalServiceUtil;
 
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
-import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
-import com.liferay.portal.kernel.portlet.PortalPreferences;
-import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
-import com.liferay.portal.kernel.portlet.PortletURLUtil;
-import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
-
-import javax.servlet.http.HttpServletRequest;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 /**
  * @author Christian Berndt
@@ -37,164 +27,171 @@ import javax.servlet.http.HttpServletRequest;
 public class TasksDisplayContext {
 
 	public TasksDisplayContext(
-		LiferayPortletRequest liferayPortletRequest,
-		LiferayPortletResponse liferayPortletResponse) {
+		RenderRequest renderRequest, RenderResponse renderResponse) {
 
-		_liferayPortletRequest = liferayPortletRequest;
-		_liferayPortletResponse = liferayPortletResponse;
-
-		// TODO: Add TrashHelper support
-		// _trashHelper = trashHelper;
-
-		_portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(
-			liferayPortletRequest);
-
-		_httpServletRequest = _liferayPortletRequest.getHttpServletRequest();
-	}
-
-	public List<String> getAvailableActions(Task task) throws PortalException {
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)_httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
-		if (TaskPermission.contains(
-				themeDisplay.getPermissionChecker(), task, ActionKeys.DELETE)) {
-
-			return Collections.singletonList("deleteTasks");
-		}
-
-		return Collections.emptyList();
-	}
-
-	public Map<String, Object> getComponentContext() throws PortalException {
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)_httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
-		return new HashMap<String, Object>() {
-			{
-				put("trashEnabled", false);
-
-				// TODO: Add trashHelper support
-
-				//					_trashHelper.isTrashEnabled(
-				//						themeDisplay.getScopeGroupId()));
-			}
-		};
+		_renderRequest = renderRequest;
+		_renderResponse = renderResponse;
 	}
 
 	public String getDisplayStyle() {
-		String displayStyle = ParamUtil.getString(
-			_httpServletRequest, "displayStyle");
-
-		if (Validator.isNull(displayStyle)) {
-			displayStyle = _portalPreferences.getValue(
-				ToDoListPortletKeys.TODO_LIST, "tasks-display-style", "icon");
-		}
-		else {
-			_portalPreferences.setValue(
-				ToDoListPortletKeys.TODO_LIST, "tasks-display-style",
-				displayStyle);
-
-			_httpServletRequest.setAttribute(
-				WebKeys.SINGLE_PAGE_APPLICATION_CLEAR_CACHE, Boolean.TRUE);
+		if (Validator.isNotNull(_displayStyle)) {
+			return _displayStyle;
 		}
 
-		return displayStyle;
+		_displayStyle = ParamUtil.getString(
+			_renderRequest, "displayStyle", "icon");
+
+		return _displayStyle;
 	}
 
-	public SearchContainer<Task> getSearchContainer()
-		throws PortalException, PortletException {
+	public long getGroupId() {
+		if (_groupId != null) {
+			return _groupId;
+		}
 
-		PortletURL portletURL = _liferayPortletResponse.createRenderURL();
+		ThemeDisplay themeDisplay = (ThemeDisplay)_renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
-		portletURL.setParameter("mvcRenderCommandName", "/view");
+		_groupId = ParamUtil.getLong(
+			_renderRequest, "groupId",
+			themeDisplay.getSiteGroupIdOrLiveGroupId());
 
-		String tasksNavigation = ParamUtil.getString(
-			_httpServletRequest, "tasksNavigation");
-
-		portletURL.setParameter("tasksNavigation", tasksNavigation);
-
-		SearchContainer<Task> tasksSearchContainer = new SearchContainer<>(
-			_liferayPortletRequest,
-			PortletURLUtil.clone(portletURL, _liferayPortletResponse), null,
-			"no-tasks-were-found");
-
-		String orderByCol = ParamUtil.getString(
-			_httpServletRequest, "orderByCol", "title");
-
-		tasksSearchContainer.setOrderByCol(orderByCol);
-
-		String orderByType = ParamUtil.getString(
-			_httpServletRequest, "orderByType", "asc");
-
-		tasksSearchContainer.setOrderByType(orderByType);
-
-		// TODO
-
-		//			tasksSearchContainer.setOrderByComparator(
-		//				BlogsUtil.getOrderByComparator(
-		//					tasksSearchContainer.getOrderByCol(),
-		//					tasksSearchContainer.getOrderByType()));
-
-		tasksSearchContainer.setRowChecker(
-			new EmptyOnClickRowChecker(_liferayPortletResponse));
-
-		_populateResults(tasksSearchContainer);
-
-		return tasksSearchContainer;
+		return _groupId;
 	}
 
-	private int _getStatus() {
-		if (_status != null) {
-			return _status;
+	public String getKeywords() {
+		if (_keywords != null) {
+			return _keywords;
 		}
 
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)_httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
+		_keywords = ParamUtil.getString(_renderRequest, "keywords");
 
-		PermissionChecker permissionChecker =
-			themeDisplay.getPermissionChecker();
-
-		if (permissionChecker.isContentReviewer(
-				themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId())) {
-
-			_status = WorkflowConstants.STATUS_ANY;
-		}
-		else {
-			_status = WorkflowConstants.STATUS_APPROVED;
-		}
-
-		return _status;
+		return _keywords;
 	}
 
-	private void _populateResults(SearchContainer<Task> searchContainer)
+	public String getNavigation() {
+		if (_navigation != null) {
+			return _navigation;
+		}
+
+		_navigation = ParamUtil.getString(_renderRequest, "navigation", "all");
+
+		return _navigation;
+	}
+
+	public String getOrderByCol() {
+		if (_orderByCol != null) {
+			return _orderByCol;
+		}
+
+		_orderByCol = ParamUtil.getString(
+			_renderRequest, "orderByCol", "title");
+
+		return _orderByCol;
+	}
+
+	public String getOrderByType() {
+		if (_orderByType != null) {
+			return _orderByType;
+		}
+
+		_orderByType = ParamUtil.getString(
+			_renderRequest, "orderByType", "asc");
+
+		return _orderByType;
+	}
+
+	public PortletURL getPortletURL() {
+		ThemeDisplay themeDisplay = (ThemeDisplay)_renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		PortletURL portletURL = _renderResponse.createRenderURL();
+
+		portletURL.setParameter("mvcPath", "/view.jsp");
+		portletURL.setParameter("redirect", themeDisplay.getURLCurrent());
+		portletURL.setParameter("groupId", String.valueOf(getGroupId()));
+
+		String displayStyle = getDisplayStyle();
+
+		if (Validator.isNotNull(displayStyle)) {
+			portletURL.setParameter("displayStyle", displayStyle);
+		}
+
+		String keywords = getKeywords();
+
+		if (Validator.isNotNull(keywords)) {
+			portletURL.setParameter("keywords", keywords);
+		}
+
+		String navigation = getNavigation();
+
+		if (Validator.isNotNull(navigation)) {
+			portletURL.setParameter("navigation", navigation);
+		}
+
+		String orderByCol = getOrderByCol();
+
+		if (Validator.isNotNull(orderByCol)) {
+			portletURL.setParameter("orderByCol", orderByCol);
+		}
+
+		String orderByType = getOrderByType();
+
+		if (Validator.isNotNull(orderByType)) {
+			portletURL.setParameter("orderByType", orderByType);
+		}
+
+		return portletURL;
+	}
+
+	public SearchContainer<Task> getTaskSearchContainer()
 		throws PortalException {
 
-		List<Task> tasksResults = null;
+		if (_taskSearch != null) {
+			return _taskSearch;
+		}
 
-		// TODO: filter tasks by keyword
+		ThemeDisplay themeDisplay = (ThemeDisplay)_renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
-		// TODO: filter tasks by assetCategoryId and / or assetTagName
+		TaskSearch taskSearch = new TaskSearch(_renderRequest, getPortletURL());
 
-		// TODO: Manage index based search
+		taskSearch.setEmptyResultsMessage(
+			LanguageUtil.format(
+				ResourceBundleUtil.getBundle(
+					themeDisplay.getLocale(), getClass()),
+				"no-task-was-found", false));
 
-		searchContainer.setTotal(TaskLocalServiceUtil.getTasksCount());
+		taskSearch.setOrderByCol(getOrderByCol());
+		taskSearch.setOrderByType(getOrderByType());
+		taskSearch.setRowChecker(new EmptyOnClickRowChecker(_renderResponse));
 
-		tasksResults = TaskLocalServiceUtil.getTasks(
-			searchContainer.getStart(), searchContainer.getEnd());
+		int tasksCount = 0;
+		List<Task> tasks = Collections.emptyList();
 
-		searchContainer.setResults(tasksResults);
+		tasksCount = (int)TaskLocalServiceUtil.getTasksCountByKeywords(
+			_groupId, _keywords);
+
+		tasks = TaskLocalServiceUtil.getTasksByKeywords(
+			_groupId, _keywords, taskSearch.getStart(), taskSearch.getEnd(),
+			taskSearch.getOrderByComparator());
+
+		taskSearch.setResults(tasks);
+		taskSearch.setTotal(tasksCount);
+
+		_taskSearch = taskSearch;
+
+		return _taskSearch;
 	}
 
-	private final HttpServletRequest _httpServletRequest;
-	private final LiferayPortletRequest _liferayPortletRequest;
-	private final LiferayPortletResponse _liferayPortletResponse;
-	private final PortalPreferences _portalPreferences;
-	private Integer _status;
-
-	// TODO: Add trashHelper support
-	// private final TrashHelper _trashHelper;
+	private String _displayStyle;
+	private Long _groupId;
+	private String _keywords;
+	private String _navigation;
+	private String _orderByCol;
+	private String _orderByType;
+	private final RenderRequest _renderRequest;
+	private final RenderResponse _renderResponse;
+	private TaskSearch _taskSearch;
 
 }
