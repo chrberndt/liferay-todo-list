@@ -6,13 +6,14 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.util.PropsValues;
 
 import java.util.Date;
 import java.util.Locale;
@@ -33,8 +34,10 @@ public class ToDoListSampleDataLoader {
 
 		long defaultCompanyId = _portal.getDefaultCompanyId();
 
-		Company defaultCompany = _companyLocalService.getCompanyById(
-			defaultCompanyId);
+		String groupKey = PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME;
+
+		Group defaultGroup = _groupLocalService.getGroup(
+			defaultCompanyId, groupKey);
 
 		User user = _userLocalService.getDefaultUser(defaultCompanyId);
 
@@ -46,7 +49,7 @@ public class ToDoListSampleDataLoader {
 		serviceContext.setAddGuestPermissions(true);
 		serviceContext.setCompanyId(defaultCompanyId);
 		serviceContext.setLanguageId(_language.getLanguageId(locale));
-		serviceContext.setScopeGroupId(defaultCompany.getGroupId());
+		serviceContext.setScopeGroupId(defaultGroup.getGroupId());
 		serviceContext.setTimeZone(user.getTimeZone());
 		serviceContext.setUserId(user.getUserId());
 
@@ -56,7 +59,7 @@ public class ToDoListSampleDataLoader {
 	@Activate
 	private void _loadSampleData() throws Exception {
 		if (_log.isInfoEnabled()) {
-			_log.info("Loading sample data.");
+			_log.info("Loading sample data");
 		}
 
 		ServiceContext serviceContext = getServiceContext();
@@ -97,7 +100,7 @@ public class ToDoListSampleDataLoader {
 		ToDoListSampleDataLoader.class);
 
 	@Reference
-	private CompanyLocalService _companyLocalService;
+	private GroupLocalService _groupLocalService;
 
 	@Reference
 	private Language _language;
