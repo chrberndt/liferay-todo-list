@@ -98,6 +98,9 @@ public class ToDoListSampleDataLoader {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ToDoListSampleDataLoader.class);
+	//
+	//	@Reference
+	//	private CompanyLocalService _companyLocalService;
 
 	@Reference
 	private GroupLocalService _groupLocalService;
