@@ -1,16 +1,6 @@
 dependencies {
-	compileOnly group: "com.liferay", name: "com.liferay.application.list.api"
-	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib"
-	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.clay"
-	compileOnly group: "com.liferay", name: "com.liferay.petra.function"
-	compileOnly group: "com.liferay", name: "com.liferay.petra.reflect"
-	compileOnly group: "com.liferay", name: "com.liferay.petra.string"
-	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
-	compileOnly group: "com.liferay.portal", name: "com.liferay.util.taglib"
-	compileOnly group: "javax.portlet", name: "portlet-api"
-	compileOnly group: "javax.servlet", name: "javax.servlet-api"
-	compileOnly group: "javax.servlet.jsp", name: "javax.servlet.jsp-api", version: "2.3.1"
-	compileOnly group: "jstl", name: "jstl"
-	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
+	//	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
 	compileOnly project(":modules:liferay-todo-list:liferay-todo-list-api")
 }
