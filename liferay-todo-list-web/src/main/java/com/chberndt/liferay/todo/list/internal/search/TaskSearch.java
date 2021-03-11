@@ -23,7 +23,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 /**
- * @
+ * @author Christian Berndt
  */
 public class TaskSearch extends SearchContainer<Task> {
 

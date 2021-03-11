@@ -4,6 +4,9 @@ import com.liferay.portal.kernel.dao.search.DAOParamUtil;
 
 import javax.portlet.PortletRequest;
 
+/**
+ * @author Christian Berndt
+ */
 public class TaskSearchTerms extends TaskDisplayTerms {
 
 	public TaskSearchTerms(PortletRequest portletRequest) {

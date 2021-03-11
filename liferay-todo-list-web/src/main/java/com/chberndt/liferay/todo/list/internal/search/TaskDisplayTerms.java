@@ -5,6 +5,9 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 import javax.portlet.PortletRequest;
 
+/**
+ * @author Christian Berndt
+ */
 public class TaskDisplayTerms extends DisplayTerms {
 
 	public static final String DESCRIPTION = "description";
