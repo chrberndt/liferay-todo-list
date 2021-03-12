@@ -19,6 +19,7 @@ import com.chberndt.liferay.todo.list.exception.TaskTitleException;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskLocalServiceBaseImpl;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.Disjunction;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -28,17 +29,24 @@ import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
+import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
+
+import java.io.Serializable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * The implementation of the task local service.
@@ -83,7 +91,9 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		User user = userLocalService.getUser(userId);
 		long groupId = serviceContext.getScopeGroupId();
 
-		validate(title, dueDate);
+		int status = WorkflowConstants.STATUS_DRAFT;
+
+		_validate(title, dueDate);
 
 		long taskId = counterLocalService.increment();
 
@@ -100,6 +110,10 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		task.setDescription(description);
 		task.setCompleted(completed);
 		task.setDueDate(dueDate);
+		task.setStatus(status);
+		task.setStatusByUserId(userId);
+		task.setStatusDate(serviceContext.getModifiedDate(null));
+		task.setExpandoBridgeAttributes(serviceContext);
 
 		task = taskPersistence.update(task);
 
@@ -122,9 +136,9 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			userId, task, serviceContext.getAssetCategoryIds(),
 			serviceContext.getAssetTagNames());
 
-		// TODO: Workflow
+		// Workflow
 
-		return task;
+		return _startWorkflowInstance(userId, task, serviceContext);
 	}
 
 	@Override
@@ -184,11 +198,20 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		// TODO: Asset
 
-		// TODO: Expando
+		// Expando
+
+		expandoRowLocalService.deleteRows(
+			task.getCompanyId(),
+			_classNameLocalService.getClassNameId(Task.class.getName()),
+			task.getTaskId());
 
 		// TODO: Trash
 
-		// TODO: Workflow
+		// Workflow
+
+		workflowInstanceLinkLocalService.deleteWorkflowInstanceLinks(
+			task.getCompanyId(), task.getGroupId(), Task.class.getName(),
+			task.getTaskId());
 
 		return task;
 	}
@@ -273,20 +296,12 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		Task task = taskPersistence.findByPrimaryKey(taskId);
 
-		int status = task.getStatus();
-
-		if (!task.isPending() && !task.isDraft()) {
-			status = WorkflowConstants.STATUS_DRAFT;
-		}
-
-		validate(title, dueDate);
+		_validate(title, dueDate);
 
 		task.setTitle(title);
 		task.setDescription(description);
 		task.setCompleted(completed);
 		task.setDueDate(dueDate);
-
-		task.setStatus(status);
 
 		task.setExpandoBridgeAttributes(serviceContext);
 
@@ -299,39 +314,31 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		task = taskPersistence.update(task);
 
-		// TODO: Workflow
+		// Workflow
+
+		task = _startWorkflowInstance(userId, task, serviceContext);
 
 		return task;
 	}
 
 	@Override
 	public void updateTaskResources(
-			Task entry, ModelPermissions modelPermissions)
+			Task task, ModelPermissions modelPermissions)
 		throws PortalException {
 
 		resourceLocalService.updateResources(
-			entry.getCompanyId(), entry.getGroupId(), Task.class.getName(),
-			entry.getTaskId(), modelPermissions);
+			task.getCompanyId(), task.getGroupId(), Task.class.getName(),
+			task.getTaskId(), modelPermissions);
 	}
 
 	@Override
 	public void updateTaskResources(
-			Task entry, String[] groupPermissions, String[] guestPermissions)
+			Task task, String[] groupPermissions, String[] guestPermissions)
 		throws PortalException {
 
 		resourceLocalService.updateResources(
-			entry.getCompanyId(), entry.getGroupId(), Task.class.getName(),
-			entry.getTaskId(), groupPermissions, guestPermissions);
-	}
-
-	protected void validate(String title, Date dueDate) throws PortalException {
-		if (Validator.isNull(title)) {
-			throw new TaskTitleException();
-		}
-
-		if (Validator.isNull(dueDate)) {
-			throw new TaskDueDateException();
-		}
+			task.getCompanyId(), task.getGroupId(), Task.class.getName(),
+			task.getTaskId(), groupPermissions, guestPermissions);
 	}
 
 	private DynamicQuery _getKeywordSearchDynamicQuery(
@@ -355,5 +362,51 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		return dynamicQuery;
 	}
+
+	private Task _startWorkflowInstance(
+			long userId, Task task, ServiceContext serviceContext)
+		throws PortalException {
+
+		String userPortraitURL = StringPool.BLANK;
+		String userURL = StringPool.BLANK;
+
+		if (serviceContext.getThemeDisplay() != null) {
+			User user = userLocalService.getUser(userId);
+
+			userPortraitURL = user.getPortraitURL(
+				serviceContext.getThemeDisplay());
+			userURL = user.getDisplayURL(serviceContext.getThemeDisplay());
+		}
+
+		Map<String, Serializable> workflowContext =
+			HashMapBuilder.<String, Serializable>put(
+			// TODO
+//			HashMapBuilder.<String, Serializable>put(
+//				WorkflowConstants.CONTEXT_URL,
+//				_getEntryURL(task, serviceContext)
+//			).put(
+				WorkflowConstants.CONTEXT_USER_PORTRAIT_URL, userPortraitURL
+			).put(
+				WorkflowConstants.CONTEXT_USER_URL, userURL
+			).build();
+
+		return WorkflowHandlerRegistryUtil.startWorkflowInstance(
+			task.getCompanyId(), task.getGroupId(), userId,
+			Task.class.getName(), task.getTaskId(), task, serviceContext,
+			workflowContext);
+	}
+
+	private void _validate(String title, Date dueDate) throws PortalException {
+		if (Validator.isNull(title)) {
+			throw new TaskTitleException();
+		}
+
+		if (dueDate == null) {
+			throw new TaskDueDateException();
+		}
+	}
+
+	@Reference
+	private ClassNameLocalService _classNameLocalService;
 
 }
