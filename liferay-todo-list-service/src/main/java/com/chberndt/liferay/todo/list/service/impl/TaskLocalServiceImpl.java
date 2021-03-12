@@ -213,6 +213,38 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
+	public Task updateStatus(
+			long userId, long taskId, int status, ServiceContext serviceContext)
+		throws PortalException {
+
+		// Task
+
+		Task task = taskLocalService.getTask(taskId);
+
+		task.setStatus(status);
+
+		User user = userLocalService.getUser(userId);
+
+		task.setStatusByUserId(user.getUserId());
+		task.setStatusByUserName(user.getFullName());
+
+		task.setStatusDate(serviceContext.getModifiedDate(new Date()));
+
+		task = taskPersistence.update(task);
+
+		// Asset
+
+		if (status == WorkflowConstants.STATUS_APPROVED) {
+			assetEntryLocalService.updateEntry(
+				Task.class.getName(), task.getTaskId(), task.getStatusDate(),
+				null, true, false);
+		}
+
+		return task;
+	}
+
+	@Indexable(type = IndexableType.REINDEX)
+	@Override
 	public Task updateTask(
 			long userId, long taskId, String title, String description,
 			boolean completed, Date dueDate, ServiceContext serviceContext)
