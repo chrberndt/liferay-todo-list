@@ -32,7 +32,7 @@
 				<liferay-ui:message arguments="<%= new String[] {task.getUserName(), modifiedDateDescription} %>" key="x-modified-x-ago" />
 			</span>
 			<span class="text-default">
-				<aui:workflow-status markupView="lexicon" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= 0 %>" />
+				<aui:workflow-status markupView="lexicon" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= task.getStatus() %>" />
 			</span>
 		</liferay-ui:search-container-column-text>
 
