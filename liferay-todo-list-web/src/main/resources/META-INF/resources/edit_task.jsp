@@ -10,7 +10,7 @@ Task task = (Task)request.getAttribute(WebKeys.TASK);
 <div class="container-fluid-1280">
 	<aui:form method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveTask();" %>'>
 		<aui:input name="<%= Constants.CMD %>" type="hidden" />
-		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+<%-- 		<aui:input name="redirect" type="hidden" value="<%= redirect %>" /> --%>
 		<aui:input name="taskId" type="hidden" value='<%= BeanParamUtil.getLong(task, request, "taskId") %>' />
 
 		<%--
