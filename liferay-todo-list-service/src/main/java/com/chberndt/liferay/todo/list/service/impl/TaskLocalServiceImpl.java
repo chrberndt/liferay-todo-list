@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -115,7 +116,11 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			addTaskResources(task, serviceContext.getModelPermissions());
 		}
 
-		// TODO: Asset
+		// Asset
+
+		updateAsset(
+			userId, task, serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames());
 
 		// TODO: Workflow
 
@@ -211,6 +216,20 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			_getKeywordSearchDynamicQuery(groupId, keywords));
 	}
 
+	@Override
+	public void updateAsset(
+			long userId, Task task, long[] assetCategoryIds,
+			String[] assetTagNames)
+		throws PortalException {
+
+		assetEntryLocalService.updateEntry(
+			userId, task.getGroupId(), task.getCreateDate(),
+			task.getModifiedDate(), Task.class.getName(), task.getTaskId(),
+			task.getUuid(), 0, assetCategoryIds, assetTagNames, true, false,
+			null, null, null, null, ContentTypes.TEXT_HTML, task.getTitle(),
+			null, null, null, null, 0, 0, null);
+	}
+
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public Task updateStatus(
@@ -271,7 +290,12 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		task.setExpandoBridgeAttributes(serviceContext);
 
-		// TODO: Asset
+		// Asset
+
+		updateAsset(
+			serviceContext.getUserId(), task,
+			serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames());
 
 		task = taskPersistence.update(task);
 
