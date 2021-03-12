@@ -11,6 +11,8 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="com.chberndt.liferay.todo.list.exception.NoSuchTaskException" %><%@
+page import="com.chberndt.liferay.todo.list.exception.TaskDueDateException" %><%@
+page import="com.chberndt.liferay.todo.list.exception.TaskTitleException" %><%@
 page import="com.chberndt.liferay.todo.list.internal.display.context.TasksDisplayContext" %><%@
 page import="com.chberndt.liferay.todo.list.internal.display.context.TasksManagementToolbarDisplayContext" %><%@
 page import="com.chberndt.liferay.todo.list.internal.util.WebKeys" %><%@
