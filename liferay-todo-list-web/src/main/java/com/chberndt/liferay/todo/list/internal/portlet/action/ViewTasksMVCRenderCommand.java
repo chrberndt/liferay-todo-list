@@ -48,7 +48,9 @@ public class ViewTasksMVCRenderCommand implements MVCRenderCommand {
 
 		// Add task list related attributes.
 
-		addTaskListAttributes(renderRequest);
+		_addTaskListAttributes(renderRequest);
+
+		// TODO
 
 		//		// Add Clay management toolbar related attributes.
 		//
@@ -62,7 +64,7 @@ public class ViewTasksMVCRenderCommand implements MVCRenderCommand {
 	 *
 	 * @param renderRequest
 	 */
-	private void addTaskListAttributes(RenderRequest renderRequest) {
+	private void _addTaskListAttributes(RenderRequest renderRequest) {
 		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
