@@ -79,6 +79,7 @@ public class ViewTasksMVCRenderCommand implements MVCRenderCommand {
 			SearchContainer.DEFAULT_DELTA);
 
 		int start = ((currentPage > 0) ? (currentPage - 1) : 0) * delta;
+
 		int end = start + delta;
 
 		// Get sorting options.
@@ -113,6 +114,7 @@ public class ViewTasksMVCRenderCommand implements MVCRenderCommand {
 			"taskCount",
 			_taskService.getTasksCountByKeywords(
 				themeDisplay.getScopeGroupId(), keywords));
+
 		renderRequest.setAttribute("tasks", tasks);
 	}
 
