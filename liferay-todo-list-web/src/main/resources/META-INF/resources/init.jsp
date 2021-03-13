@@ -10,7 +10,8 @@ taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
-<%@ page import="com.chberndt.liferay.todo.list.exception.NoSuchTaskException" %><%@
+<%@ page import="com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys" %><%@
+page import="com.chberndt.liferay.todo.list.exception.NoSuchTaskException" %><%@
 page import="com.chberndt.liferay.todo.list.exception.TaskDueDateException" %><%@
 page import="com.chberndt.liferay.todo.list.exception.TaskTitleException" %><%@
 page import="com.chberndt.liferay.todo.list.internal.display.context.TasksDisplayContext" %><%@
@@ -29,6 +30,7 @@ page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
+page import="com.liferay.portal.kernel.util.PortalUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
 page import="com.liferay.taglib.search.ResultRow" %><%@
 page import="com.liferay.taglib.util.LexiconUtil" %>
@@ -37,7 +39,8 @@ page import="com.liferay.taglib.util.LexiconUtil" %>
 page import="java.util.HashMap" %><%@
 page import="java.util.Map" %>
 
-<%@ page import="javax.portlet.PortletURL" %>
+<%@ page import="javax.portlet.PortletRequest" %><%@
+page import="javax.portlet.PortletURL" %>
 
 <liferay-frontend:defineObjects />
 

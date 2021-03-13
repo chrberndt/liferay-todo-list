@@ -19,10 +19,19 @@ Task task = (Task)row.getObject();
 		<portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
 	</portlet:renderURL>
 
+	<%
+	PortletURL editTaskURL = PortalUtil.getControlPanelPortletURL(request, themeDisplay.getScopeGroup(), ToDoListPortletKeys.TODO_LIST, 0, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+
+	editTaskURL.setParameter("mvcRenderCommandName", "/edit_task");
+	editTaskURL.setParameter("redirect", currentURL);
+	editTaskURL.setParameter("portletResource", portletDisplay.getId());
+	editTaskURL.setParameter("taskId", String.valueOf(task.getTaskId()));
+	%>
+
 	<liferay-ui:icon
 		label="<%= true %>"
 		message="edit"
-		url="<%= editURL %>"
+		url="<%= editTaskURL.toString() %>"
 	/>
 
 	<liferay-security:permissionsURL

@@ -31,11 +31,15 @@ PortletURL portletURL = tasksSearchContainer.getIteratorURL();
 				keyProperty="taskId"
 				modelVar="task"
 			>
-				<liferay-portlet:renderURL varImpl="rowURL">
-					<portlet:param name="mvcRenderCommandName" value="/edit_task" />
-					<portlet:param name="redirect" value="<%= portletURL.toString() %>" />
-					<portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
-				</liferay-portlet:renderURL>
+
+				<%
+				PortletURL rowURL = PortalUtil.getControlPanelPortletURL(request, themeDisplay.getScopeGroup(), ToDoListPortletKeys.TODO_LIST, 0, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+
+				rowURL.setParameter("mvcRenderCommandName", "/edit_task");
+				rowURL.setParameter("redirect", currentURL);
+				rowURL.setParameter("portletResource", portletDisplay.getId());
+				rowURL.setParameter("taskId", String.valueOf(task.getTaskId()));
+				%>
 
 				<%
 				Map<String, Object> rowData = new HashMap<>();

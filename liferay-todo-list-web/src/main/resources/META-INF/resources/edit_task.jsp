@@ -4,13 +4,21 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
+String portletResource = ParamUtil.getString(request, "portletResource");
+String referringPortletResource = ParamUtil.getString(request, "referringPortletResource");
+
 Task task = (Task)request.getAttribute(WebKeys.TASK);
+
+portletDisplay.setShowBackIcon(true);
+portletDisplay.setURLBack(redirect);
 %>
 
 <div class="container-fluid-1280">
 	<aui:form method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveTask();" %>'>
 		<aui:input name="<%= Constants.CMD %>" type="hidden" />
-		<%-- <aui:input name="redirect" type="hidden" value="<%= redirect %>" /> --%>
+		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+		<aui:input name="portletResource" type="hidden" value="<%= portletResource %>" />
+		<aui:input name="referringPortletResource" type="hidden" value="<%= referringPortletResource %>" />
 		<aui:input name="taskId" type="hidden" value='<%= BeanParamUtil.getLong(task, request, "taskId") %>' />
 
 		<liferay-ui:error exception="<%= TaskDueDateException.class %>" message="please-enter-a-due-date" />
@@ -33,7 +41,7 @@ Task task = (Task)request.getAttribute(WebKeys.TASK);
 		<liferay-frontend:edit-form-footer>
 			<aui:button type="submit" />
 
-			<aui:button href="<%= redirect %>" type="cancel" />
+			<aui:button href="<%= redirect %>" name="cancelButton" type="cancel" />
 		</liferay-frontend:edit-form-footer>
 	</aui:form>
 </div>
