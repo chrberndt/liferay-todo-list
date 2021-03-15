@@ -79,7 +79,6 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 				deleteTasks(actionRequest);
 			}
 		}
-
 		catch (TaskDueDateException | TaskTitleException exception) {
 			SessionErrors.add(actionRequest, exception.getClass());
 
