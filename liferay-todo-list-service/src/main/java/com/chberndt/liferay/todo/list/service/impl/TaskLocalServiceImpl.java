@@ -80,6 +80,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 	 * injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use
 	 * <code>com.chberndt.liferay.todo.list.service.TaskLocalServiceUtil</code>.
 	 */
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public Task addTask(
 			long userId, String title, String description, boolean completed,
@@ -181,6 +182,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			Task.class.getName(), task.getTaskId(), modelPermissions);
 	}
 
+	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public Task deleteTask(Task task) throws PortalException {
 
@@ -200,7 +202,6 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		assetEntryLocalService.deleteEntry(
 			Task.class.getName(), task.getTaskId());
-
 
 		// Expando
 
@@ -384,7 +385,9 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		Map<String, Serializable> workflowContext =
 			HashMapBuilder.<String, Serializable>put(
+
 			// TODO
+
 //			HashMapBuilder.<String, Serializable>put(
 //				WorkflowConstants.CONTEXT_URL,
 //				_getEntryURL(task, serviceContext)
