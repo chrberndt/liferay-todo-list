@@ -196,7 +196,11 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		// TODO: Subscriptions
 
-		// TODO: Asset
+		// Asset
+
+		assetEntryLocalService.deleteEntry(
+			Task.class.getName(), task.getTaskId());
+
 
 		// Expando
 
