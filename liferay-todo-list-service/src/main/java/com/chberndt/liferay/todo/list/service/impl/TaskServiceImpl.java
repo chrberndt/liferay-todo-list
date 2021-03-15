@@ -55,11 +55,9 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		// TODO: Create and use ToDoListActionKeys
-
-		//		_portletResourcePermission.check(
-		//			getPermissionChecker(), serviceContext.getScopeGroupId(),
-		//			"ADD_TASK");
+		//				_portletResourcePermission.check(
+		//					getPermissionChecker(), serviceContext.getScopeGroupId(),
+		//					"ADD_TASK");
 
 		return taskLocalService.addTask(
 			getUserId(), title, description, completed, dueDate,

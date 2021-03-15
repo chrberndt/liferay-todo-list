@@ -177,6 +177,7 @@ public class TasksDisplayContext {
 			taskSearch.getOrderByComparator());
 
 		taskSearch.setResults(tasks);
+
 		taskSearch.setTotal(tasksCount);
 
 		_taskSearch = taskSearch;

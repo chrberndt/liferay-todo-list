@@ -2,8 +2,8 @@ package com.chberndt.liferay.todo.list.internal.portlet.action;
 
 import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.exception.NoSuchTaskException;
-import com.chberndt.liferay.todo.list.internal.util.WebKeys;
 import com.chberndt.liferay.todo.list.model.Task;
+import com.chberndt.liferay.todo.list.web.constants.ToDoListWebKeys;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
@@ -36,7 +36,7 @@ public class EditTaskMVCRenderCommand implements MVCRenderCommand {
 		try {
 			Task task = ActionUtil.getTask(renderRequest);
 
-			renderRequest.setAttribute(WebKeys.TASK, task);
+			renderRequest.setAttribute(ToDoListWebKeys.TASK, task);
 		}
 		catch (NoSuchTaskException | PrincipalException e) {
 			SessionErrors.add(renderRequest, e.getClass());
