@@ -28,8 +28,8 @@ dependencies {
 	testIntegrationCompile project(":modules:liferay-todo-list:liferay-todo-list-service")
 
 	testModules group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge.connector", version: "1.0.0"
-	testModules group: "com.liferay", name: "com.liferay.sync.api", version: "5.0.6"
-	testModules group: "com.liferay", name: "com.liferay.sync.service", version: "3.0.9"
+//	testModules group: "com.liferay", name: "com.liferay.sync.api", version: "5.0.6"
+//	testModules group: "com.liferay", name: "com.liferay.sync.service", version: "3.0.9"
 	testModules group: "com.liferay.portal", name: "com.liferay.portal.test", version: "6.2.5"
 	testModules group: "com.liferay.portal", name: "com.liferay.portal.test.integration", version: "6.0.29"
 	testModules group: "org.apache.aries.jmx", name: "org.apache.aries.jmx.core", version: "1.1.7"
