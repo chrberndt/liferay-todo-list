@@ -25,3 +25,7 @@ hs_err_pid*
 **/bin/
 **/.project
 **/.settings/
+
+# Ignore sonarqube builds
+build/sonarqube
+/build/
