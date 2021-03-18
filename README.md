@@ -1,4 +1,5 @@
 # liferay-todo-list
+
 A ToDo list application meant to explore, test and demonstrate the development of Liferay custom modules.
 
 ## How To Build
@@ -9,7 +10,9 @@ TODO
 
 ### Integration Tests
 
-1. Change working directory to liferay-todo-list application: `cd $LIFERAY_WORKSPACE/modules/liferay-todo-list`
+1. Change working directory to liferay-todo-list application: `cd $LIFERAY_WORKSPACE`
+1. Run integration tests with `./gradlew buildService initBundle modules:liferay-todo-list:liferay-todo-list-test:testIntegration`
+1. Open test reports with `firefox modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests/testIntegration/index.html &`
 
 ### Sonarqube
 
