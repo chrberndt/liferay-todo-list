@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  sonarqube:
+#    build: ./sonarqube
+    image: sonarqube:7.9.6-community
+    container_name: sonarqube 
+    ports:
+      - 9000:9000
