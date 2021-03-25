@@ -2,7 +2,32 @@
 
 A ToDo list application meant to explore, test and demonstrate the development of Liferay custom modules.
 
+## Prerequisities
+
+1. Download and install `blade`
+1. Create a new Liferay workspace with `blade init`
+1. Change working directory to `$LIFERAY_WORKSPACE/modules`
+1. Clone `liferay-todo-list` sources with `git clone git@github.com:chrberndt/liferay-todo-list.git`
+
 ## How To Build
+
+### `gradle-local.properties`
+
+```
+#
+# Set the "liferay.workspace.product" to set the
+# "app.server.tomcat.version", "liferay.workspace.bundle.url",
+# "liferay.workspace.docker.image.liferay", and
+# "liferay.workspace.target.platform.version" that matches your Liferay
+# Product Version. To override each of these settings, set them
+# individually.
+#
+
+#liferay.workspace.product = portal-7.3-ga7
+liferay.workspace.product=portal-7.3-ga6
+```
+
+## How To Deploy
 
 TODO
 

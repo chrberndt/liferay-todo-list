@@ -182,6 +182,13 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			Task.class.getName(), task.getTaskId(), modelPermissions);
 	}
 
+	@Override
+	public Task deleteTask(long taskId) throws PortalException {
+		Task task = taskPersistence.findByPrimaryKey(taskId);
+
+		return taskLocalService.deleteTask(task);
+	}
+
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public Task deleteTask(Task task) throws PortalException {
