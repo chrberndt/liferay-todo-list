@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.WebKeys"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
@@ -16,7 +17,6 @@ page import="com.chberndt.liferay.todo.list.exception.TaskDueDateException" %><%
 page import="com.chberndt.liferay.todo.list.exception.TaskTitleException" %><%@
 page import="com.chberndt.liferay.todo.list.internal.display.context.TasksDisplayContext" %><%@
 page import="com.chberndt.liferay.todo.list.internal.display.context.TasksManagementToolbarDisplayContext" %><%@
-page import="com.chberndt.liferay.todo.list.internal.util.WebKeys" %><%@
 page import="com.chberndt.liferay.todo.list.model.Task" %><%@
 page import="com.chberndt.liferay.todo.list.web.constants.ToDoListWebKeys" %>
 

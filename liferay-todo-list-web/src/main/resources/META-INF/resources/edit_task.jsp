@@ -7,7 +7,7 @@ String redirect = ParamUtil.getString(request, "redirect");
 String portletResource = ParamUtil.getString(request, "portletResource");
 String referringPortletResource = ParamUtil.getString(request, "referringPortletResource");
 
-Task task = (Task)request.getAttribute(WebKeys.TASK);
+Task task = (Task)request.getAttribute(ToDoListWebKeys.TASK);
 
 portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(redirect);
