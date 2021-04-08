@@ -28,14 +28,17 @@ public class TaskModelIndexerWriterContributor
 		BatchIndexingActionable batchIndexingActionable,
 		ModelIndexerWriterDocumentHelper modelIndexerWriterDocumentHelper) {
 
-		//		batchIndexingActionable.setAddCriteriaMethod(
-		//			dynamicQuery -> {
-		//				Property displayDateProperty = PropertyFactoryUtil.forName(
-		//					"displayDate");
+		// TODO
+
+		//batchIndexingActionable.setAddCriteriaMethod(
+		//	dynamicQuery -> {
+		//		Property displayDateProperty = PropertyFactoryUtil.forName(
+		//			"displayDate");
 
 		//
-		//				dynamicQuery.add(displayDateProperty.lt(new Date()));
-		//			});
+		//
+		//		dynamicQuery.add(displayDateProperty.lt(new Date()));
+		//	});
 		batchIndexingActionable.setPerformActionMethod(
 			(Task task) -> batchIndexingActionable.addDocuments(
 				modelIndexerWriterDocumentHelper.getDocument(task)));
