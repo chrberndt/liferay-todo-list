@@ -55,9 +55,11 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		//				_portletResourcePermission.check(
-		//					getPermissionChecker(), serviceContext.getScopeGroupId(),
-		//					"ADD_TASK");
+		// TODO: Re-enable permission check
+
+		//_portletResourcePermission.check(
+		//	getPermissionChecker(), serviceContext.getScopeGroupId(),
+		//	"ADD_TASK");
 
 		return taskLocalService.addTask(
 			getUserId(), title, description, completed, dueDate,
@@ -105,8 +107,10 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 
 	// TODO: Fix portletResourcePermission check
 
-	//	@Reference(target = "(resource.name=" + ToDoListPortletKeys.TODO_LIST + ")")
-	//	private PortletResourcePermission _portletResourcePermission;
+	//@Reference(
+	//	target = "(resource.name=" + ToDoListPortletKeys.TODO_LIST + ")"
+	//)
+	//private PortletResourcePermission _portletResourcePermission;
 
 	@Reference(
 		target = "(model.class.name=com.chberndt.liferay.todo.list.model.Task)"
