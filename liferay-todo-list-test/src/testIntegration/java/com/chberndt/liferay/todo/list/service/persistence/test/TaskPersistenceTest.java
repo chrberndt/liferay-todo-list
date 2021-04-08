@@ -232,12 +232,27 @@ public class TaskPersistenceTest {
 	}
 
 	@Test
+	public void testCountByStatus() throws Exception {
+		_persistence.countByStatus(RandomTestUtil.nextInt());
+
+		_persistence.countByStatus(0);
+	}
+
+	@Test
 	public void testCountByG_T() throws Exception {
 		_persistence.countByG_T(RandomTestUtil.nextLong(), "");
 
 		_persistence.countByG_T(0L, "null");
 
 		_persistence.countByG_T(0L, (String)null);
+	}
+
+	@Test
+	public void testCountByG_S() throws Exception {
+		_persistence.countByG_S(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextInt());
+
+		_persistence.countByG_S(0L, 0);
 	}
 
 	@Test
