@@ -123,9 +123,6 @@ public class TaskAssetRenderer
 
 	@Override
 	public String getTitle(Locale locale) {
-		//		ResourceBundle resourceBundle =
-		//			_resourceBundleLoader.loadResourceBundle(locale);
-
 		return _task.getTitle();
 	}
 
@@ -163,17 +160,6 @@ public class TaskAssetRenderer
 
 		return getURLEdit(
 			PortalUtil.getHttpServletRequest(liferayPortletRequest));
-	}
-
-	@Override
-	public String getUrlTitle() {
-
-		// TODO
-
-		return null;
-
-		// return _task.getUrlTitle();
-
 	}
 
 	@Override
