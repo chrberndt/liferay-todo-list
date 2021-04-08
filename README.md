@@ -43,7 +43,8 @@ TODO
 
 1. Change working directory to liferay-todo-list application: `cd $LIFERAY_WORKSPACE/modules/liferay-todo-list`
 1. Start local sonarqube server: `docker-compose up` (This will download and start a sonarqube server which can be accessed at [http://localhost:9000](http://localhost:9000))
-1. Run the sonarqube task: `./gradlew modules:liferay-todo-list:sonarqube`
+1. Change working directory to `$LIFERAY_WORKSPACE` and run the `sonarqube` task: `cd $LIFERAY_WORKSPACE; ./gradlew modules:liferay-todo-list:sonarqube`
+1. Review test results at [http://localhost:9000](http://localhost:9000)
 
 ## Contact
 
