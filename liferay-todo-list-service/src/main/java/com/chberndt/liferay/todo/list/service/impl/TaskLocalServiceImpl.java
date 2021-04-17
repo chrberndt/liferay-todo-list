@@ -32,12 +32,17 @@ import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
+
+import java.io.Serializable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -131,11 +136,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			userId, task, serviceContext.getAssetCategoryIds(),
 			serviceContext.getAssetTagNames());
 
-		// TODO: Workflow
-
-		// return _startWorkflowInstance(userId, task, serviceContext);
-
-		return task;
+		return _startWorkflowInstance(userId, task, serviceContext);
 	}
 
 	@Override
@@ -215,11 +216,11 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		// TODO: Trash
 
-		// TODO: Workflow
+		// Workflow
 
-		//workflowInstanceLinkLocalService.deleteWorkflowInstanceLinks(
-		//	task.getCompanyId(), task.getGroupId(), Task.class.getName(),
-		//	task.getTaskId());
+		workflowInstanceLinkLocalService.deleteWorkflowInstanceLinks(
+			task.getCompanyId(), task.getGroupId(), Task.class.getName(),
+			task.getTaskId());
 
 		return task;
 	}
@@ -291,9 +292,12 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		// Asset
 
 		if (status == WorkflowConstants.STATUS_APPROVED) {
-			assetEntryLocalService.updateEntry(
-				Task.class.getName(), task.getTaskId(), task.getStatusDate(),
-				null, true, false);
+			assetEntryLocalService.updateVisible(
+				Task.class.getName(), task.getTaskId(), true);
+		}
+		else if (status == WorkflowConstants.STATUS_IN_TRASH) {
+			assetEntryLocalService.updateVisible(
+				Task.class.getName(), task.getTaskId(), false);
 		}
 
 		return task;
@@ -328,9 +332,9 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		task = taskPersistence.update(task);
 
-		// TODO: Workflow
+		// Workflow
 
-		// task = _startWorkflowInstance(userId, task, serviceContext);
+		task = _startWorkflowInstance(userId, task, serviceContext);
 
 		return task;
 	}
@@ -377,44 +381,25 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		return dynamicQuery;
 	}
 
-	// TODO
+	private Task _startWorkflowInstance(
+			long userId, Task task, ServiceContext serviceContext)
+		throws PortalException {
 
-	//	private Task _startWorkflowInstance(
-	//			long userId, Task task, ServiceContext serviceContext)
-	//		throws PortalException {
-	//
-	//		String userPortraitURL = StringPool.BLANK;
-	//		String userURL = StringPool.BLANK;
-	//
-	//		if (serviceContext.getThemeDisplay() != null) {
-	//			User user = userLocalService.getUser(userId);
+		Map<String, Serializable> workflowContext =
+			HashMapBuilder.<String, Serializable>put(
+				WorkflowConstants.CONTEXT_COMMAND, serviceContext.getCommand()
 
-	//
-	//			userPortraitURL = user.getPortraitURL(
-	//				serviceContext.getThemeDisplay());
-	//			userURL = user.getDisplayURL(serviceContext.getThemeDisplay());
-	//		}
-	//
-	//		Map<String, Serializable> workflowContext =
-	//			HashMapBuilder.<String, Serializable>put(
-	//
-	//			// TODO
-	//
-	//			//HashMapBuilder.<String, Serializable>put(
-	//			//	WorkflowConstants.CONTEXT_URL,
-	//			//	_getEntryURL(task, serviceContext)
-	//			//).put(
-	//				WorkflowConstants.CONTEXT_USER_PORTRAIT_URL, userPortraitURL
-	//			).put(
-	//				WorkflowConstants.CONTEXT_USER_URL, userURL
-	//			).build();
+			// TODO
 
-	//
-	//		return WorkflowHandlerRegistryUtil.startWorkflowInstance(
-	//			task.getCompanyId(), task.getGroupId(), userId,
-	//			Task.class.getName(), task.getTaskId(), task, serviceContext,
-	//			workflowContext);
-	//	}
+//			).put(
+//				WorkflowConstants.CONTEXT_URL, _getTaskURL(task, serviceContext)
+			).build();
+
+		return WorkflowHandlerRegistryUtil.startWorkflowInstance(
+			task.getCompanyId(), task.getGroupId(), userId,
+			Task.class.getName(), task.getTaskId(), task, serviceContext,
+			workflowContext);
+	}
 
 	private void _validate(String title, Date dueDate) throws PortalException {
 		if (Validator.isNull(title)) {
