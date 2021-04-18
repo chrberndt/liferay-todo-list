@@ -50,6 +50,6 @@ page import="javax.portlet.PortletURL" %>
 <portlet:defineObjects />
 
 <%
-	String textProperty = GetterUtil.getString(portletPreferences.getValue("textProperty", null));
-	boolean booleanProperty = GetterUtil.getBoolean(portletPreferences.getValue("booleanProperty", null));
+String textProperty = GetterUtil.getString(portletPreferences.getValue("textProperty", null));
+boolean booleanProperty = GetterUtil.getBoolean(portletPreferences.getValue("booleanProperty", null));
 %>
