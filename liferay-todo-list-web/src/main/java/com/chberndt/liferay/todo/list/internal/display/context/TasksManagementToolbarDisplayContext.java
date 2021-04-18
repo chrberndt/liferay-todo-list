@@ -1,9 +1,12 @@
 package com.chberndt.liferay.todo.list.internal.display.context;
 
+import com.chberndt.liferay.todo.list.constants.ToDoListActionKeys;
+import com.chberndt.liferay.todo.list.internal.security.permission.resource.ToDoListPermission;
 import com.chberndt.liferay.todo.list.model.Task;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.display.context.SearchContainerManagementToolbarDisplayContext;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenuBuilder;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.ViewTypeItem;
@@ -89,30 +92,22 @@ public class TasksManagementToolbarDisplayContext
 
 	@Override
 	public CreationMenu getCreationMenu() {
+		if (!ToDoListPermission.contains(
+				_themeDisplay.getPermissionChecker(),
+				_themeDisplay.getScopeGroupId(), ToDoListActionKeys.ADD_TASK)) {
 
-		// TODO: fix CreationMenu check
+			return null;
+		}
 
-		//		if (!ToDoListPermission.contains(
-		//				_themeDisplay.getPermissionChecker(),
-		//				_themeDisplay.getScopeGroupId(), "ADD_TASK")) {
-		//				// _themeDisplay.getScopeGroupId(), ActionKeys.ADD_ENTRY)) {
-		//
-		//			return null;
-		//		}
-
-		return new CreationMenu() {
-			{
-				addDropdownItem(
-					dropdownItem -> {
-						dropdownItem.setHref(
-							liferayPortletResponse.createRenderURL(),
-							"mvcRenderCommandName", "/edit_task", "redirect",
-							currentURLObj.toString());
-						dropdownItem.setLabel(
-							LanguageUtil.get(request, "add-task"));
-					});
+		return CreationMenuBuilder.addDropdownItem(
+			dropdownItem -> {
+				dropdownItem.setHref(
+					liferayPortletResponse.createRenderURL(),
+					"mvcRenderCommandName", "/edit_task", "redirect",
+					currentURLObj.toString());
+				dropdownItem.setLabel(LanguageUtil.get(request, "add-task"));
 			}
-		};
+		).build();
 	}
 
 	// TODO:
