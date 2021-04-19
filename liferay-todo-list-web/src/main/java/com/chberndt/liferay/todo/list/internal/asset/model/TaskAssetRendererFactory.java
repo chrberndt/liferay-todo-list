@@ -67,22 +67,6 @@ public class TaskAssetRendererFactory extends BaseAssetRendererFactory<Task> {
 		return taskAssetRenderer;
 	}
 
-	//	@Override
-	//	public AssetRenderer<Task> getAssetRenderer(long groupId, String urlTitle)
-	//		throws PortalException {
-	//
-	//		TaskAssetRenderer taskAssetRenderer = new TaskAssetRenderer(
-	//			_taskLocalService.getTask(groupId, urlTitle),
-	//			ResourceBundleLoaderUtil.
-	//				getResourceBundleLoaderByBundleSymbolicName(
-	//					"com.chberndt.liferay.todo.list.web"));
-
-	//
-	//		taskAssetRenderer.setServletContext(_servletContext);
-	//
-	//		return taskAssetRenderer;
-	//	}
-
 	@Override
 	public String getClassName() {
 		return Task.class.getName();
