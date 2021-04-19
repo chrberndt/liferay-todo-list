@@ -9,6 +9,7 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenuBuilder;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.ViewTypeItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.ViewTypeItemList;
 import com.liferay.petra.string.StringPool;
@@ -18,9 +19,11 @@ import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.portlet.PortletURL;
 
@@ -61,8 +64,9 @@ public class TasksManagementToolbarDisplayContext
 						// TODO: Add trashHelper support
 
 						boolean trashEnabled = false;
-						//						boolean trashEnabled = _trashHelper.isTrashEnabled(
-						//							_themeDisplay.getScopeGroupId());
+						//	boolean trashEnabled = _trashHelper.isTrashEnabled(
+
+						// _themeDisplay.getScopeGroupId());
 
 						dropdownItem.setIcon(
 							trashEnabled ? "trash" : "times-circle");
@@ -168,32 +172,52 @@ public class TasksManagementToolbarDisplayContext
 		};
 	}
 
-	// TODO
-
-	//	protected List<DropdownItem> getOrderByDropdownItems() {
-	//		return null;
-	//	}
+	@Override
+	protected List<DropdownItem> getOrderByDropdownItems() {
+		return DropdownItemListBuilder.add(
+			dropdownItem -> {
+				dropdownItem.setActive(
+					Objects.equals(getOrderByCol(), "title"));
+				dropdownItem.setHref(
+					_getCurrentSortingURL(), "orderByCol", "title");
+				dropdownItem.setLabel(LanguageUtil.get(request, "title"));
+			}
+		).add(
+			dropdownItem -> {
+				dropdownItem.setActive(
+					Objects.equals(getOrderByCol(), "due-date"));
+				dropdownItem.setHref(
+					_getCurrentSortingURL(), "orderByCol", "dueDate");
+				dropdownItem.setLabel(LanguageUtil.get(request, "due-date"));
+			}
+		).add(
+			dropdownItem -> {
+				dropdownItem.setActive(
+					Objects.equals(getOrderByCol(), "create-date"));
+				dropdownItem.setHref(
+					_getCurrentSortingURL(), "orderByCol", "createDate");
+				dropdownItem.setLabel(LanguageUtil.get(request, "create-date"));
+			}
+		).build();
+	}
 
 	// TODO: fix deprecated methods
 
-	// TODO: enable sorting
+	private PortletURL _getCurrentSortingURL() {
+		PortletURL sortingURL = getPortletURL();
 
-	//	private PortletURL _getCurrentSortingURL() {
-	//		PortletURL sortingURL = getPortletURL();
+		sortingURL.setParameter("mvcRenderCommandName", "/view");
 
-	//
-	//		sortingURL.setParameter("mvcRenderCommandName", "view");
-	//
-	//		sortingURL.setParameter(SearchContainer.DEFAULT_CUR_PARAM, "0");
-	//
-	//		String keywords = ParamUtil.getString(request, "keywords");
-	//
-	//		if (Validator.isNotNull(keywords)) {
-	//			sortingURL.setParameter("keywords", keywords);
-	//		}
-	//
-	//		return sortingURL;
-	//	}
+		sortingURL.setParameter(SearchContainer.DEFAULT_CUR_PARAM, "0");
+
+		String keywords = ParamUtil.getString(request, "keywords");
+
+		if (Validator.isNotNull(keywords)) {
+			sortingURL.setParameter("keywords", keywords);
+		}
+
+		return sortingURL;
+	}
 
 	private final String _displayStyle;
 	private final ThemeDisplay _themeDisplay;
