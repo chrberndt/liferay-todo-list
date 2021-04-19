@@ -50,17 +50,11 @@ public class ViewTasksMVCRenderCommand implements MVCRenderCommand {
 
 		_addTaskListAttributes(renderRequest);
 
-		// TODO
-
-		//		// Add Clay management toolbar related attributes.
-		//
-		//		addManagementToolbarAttributes(renderRequest, renderResponse);
-
 		return "/view.jsp";
 	}
 
 	/**
-	 * Adds assigment list related attributes to the request.
+	 * Adds task list related attributes to the request.
 	 *
 	 * @param renderRequest
 	 */
