@@ -16,6 +16,7 @@ page import="com.chberndt.liferay.todo.list.exception.TaskDueDateException" %><%
 page import="com.chberndt.liferay.todo.list.exception.TaskTitleException" %><%@
 page import="com.chberndt.liferay.todo.list.internal.display.context.TasksDisplayContext" %><%@
 page import="com.chberndt.liferay.todo.list.internal.display.context.TasksManagementToolbarDisplayContext" %><%@
+page import="com.chberndt.liferay.todo.list.internal.security.permission.resource.TaskPermission" %><%@
 page import="com.chberndt.liferay.todo.list.model.Task" %><%@
 page import="com.chberndt.liferay.todo.list.web.constants.ToDoListWebKeys" %>
 
@@ -26,6 +27,7 @@ page import="com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker" %><%@
 page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
 page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
+page import="com.liferay.portal.kernel.security.permission.ActionKeys" %><%@
 page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
