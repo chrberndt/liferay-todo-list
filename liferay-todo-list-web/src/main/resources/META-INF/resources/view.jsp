@@ -5,6 +5,7 @@
 	TasksDisplayContext tasksDisplayContext = (TasksDisplayContext)request.getAttribute(ToDoListWebKeys.TASKS_DISPLAY_CONTEXT);
 
 String displayStyle = tasksDisplayContext.getDisplayStyle();
+
 SearchContainer tasksSearchContainer = tasksDisplayContext.getTaskSearchContainer();
 
 PortletURL portletURL = tasksSearchContainer.getIteratorURL();
