@@ -1,6 +1,8 @@
 
 package com.chberndt.liferay.todo.list.service.impl;
 
+import com.chberndt.liferay.todo.list.constants.ToDoListActionKeys;
+import com.chberndt.liferay.todo.list.constants.ToDoListConstants;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskServiceBaseImpl;
 
@@ -8,6 +10,7 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
+import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
@@ -16,6 +19,8 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * The implementation of the task remote service.
@@ -55,11 +60,9 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		// TODO: Re-enable permission check
-
-		//_portletResourcePermission.check(
-		//	getPermissionChecker(), serviceContext.getScopeGroupId(),
-		//	"ADD_TASK");
+		_portletResourcePermission.check(
+			getPermissionChecker(), serviceContext.getScopeGroupId(),
+			ToDoListActionKeys.ADD_TASK);
 
 		return taskLocalService.addTask(
 			getUserId(), title, description, completed, dueDate,
@@ -105,12 +108,12 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 			serviceContext);
 	}
 
-	// TODO: Fix portletResourcePermission check
-
-	//@Reference(
-	//	target = "(resource.name=" + ToDoListPortletKeys.TODO_LIST + ")"
-	//)
-	//private PortletResourcePermission _portletResourcePermission;
+	@Reference(
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(resource.name=" + ToDoListConstants.RESOURCE_NAME + ")"
+	)
+	private volatile PortletResourcePermission _portletResourcePermission;
 
 	@Reference(
 		target = "(model.class.name=com.chberndt.liferay.todo.list.model.Task)"
