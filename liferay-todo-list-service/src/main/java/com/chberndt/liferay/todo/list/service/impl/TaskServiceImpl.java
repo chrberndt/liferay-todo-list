@@ -7,13 +7,18 @@ import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -76,6 +81,49 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 		taskLocalService.deleteTask(taskId);
 	}
 
+	@Override
+	public List<Task> getGroupTasks(long groupId, int status, int max) {
+		return getGroupTasks(groupId, status, 0, max);
+	}
+
+	@Override
+	public List<Task> getGroupTasks(
+		long groupId, int status, int start, int end) {
+
+		if (status == WorkflowConstants.STATUS_ANY) {
+			return taskPersistence.filterFindByG_NotS(
+				groupId, WorkflowConstants.STATUS_IN_TRASH, start, end);
+		}
+
+		return taskPersistence.filterFindByG_S(
+			groupId, status, start, end);
+	}
+
+	@Override
+	public List<Task> getGroupTasks(
+		long groupId, int status, int start, int end,
+		OrderByComparator<Task> orderByComparator) {
+
+		if (status == WorkflowConstants.STATUS_ANY) {
+			return taskPersistence.filterFindByG_NotS(
+				groupId, WorkflowConstants.STATUS_IN_TRASH, start, end,
+				orderByComparator);
+		}
+
+		return taskPersistence.filterFindByG_S(
+			groupId, status, start, end, orderByComparator);
+	}
+
+	@Override
+	public int getGroupTasksCount(long groupId, int status) {
+		if (status == WorkflowConstants.STATUS_ANY) {
+			return taskPersistence.filterCountByG_NotS(
+				groupId, WorkflowConstants.STATUS_IN_TRASH);
+		}
+
+		return taskPersistence.filterCountByG_S(groupId, status);
+	}
+
 	public Task getTask(long taskId) throws PortalException {
 		_taskModelResourcePermission.check(
 			getPermissionChecker(), taskId, ActionKeys.VIEW);
@@ -93,6 +141,22 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 
 	public long getTasksCountByKeywords(long groupId, String keywords) {
 		return taskLocalService.getTasksCountByKeywords(groupId, keywords);
+	}
+	
+	@Override
+	public Task moveTaskToTrash(long taskId) throws PortalException {
+		_taskModelResourcePermission.check(
+			getPermissionChecker(), taskId, ActionKeys.DELETE);
+
+		return taskLocalService.moveTaskToTrash(getUserId(), taskId);
+	}
+
+	@Override
+	public void restoreTaskFromTrash(long taskId) throws PortalException {
+		_taskModelResourcePermission.check(
+			getPermissionChecker(), taskId, ActionKeys.DELETE);
+
+		taskLocalService.restoreTaskFromTrash(getUserId(), taskId);
 	}
 
 	public Task updateTask(

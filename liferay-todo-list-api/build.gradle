@@ -1,5 +1,5 @@
 dependencies {
-	//	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
 
-	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+	// compileOnly group: "com.liferay.portal", name: "release.portal.api"
 }

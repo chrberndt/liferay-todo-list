@@ -4,7 +4,7 @@
 <service-builder dependency-injector="ds" package-path="com.chberndt.liferay.todo.list">
 	<author>Christian Berndt</author>
 	<namespace>Custom</namespace>
-	<entity local-service="true" name="Task" remote-service="true" uuid="true">
+	<entity local-service="true" name="Task" remote-service="true" uuid="true" trash-enabled="true">
 
 		<!-- PK fields -->
 
@@ -63,6 +63,11 @@
 		<finder name="G_S" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="status" />
+		</finder>
+
+		<finder name="G_NotS" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column comparator="!=" name="status" />
 		</finder>
 
 		<!-- References -->

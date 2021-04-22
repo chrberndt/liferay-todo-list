@@ -1,8 +1,8 @@
 package com.chberndt.liferay.todo.list.internal.portlet.action;
 
+import com.chberndt.liferay.todo.list.exception.NoSuchTaskException;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskServiceUtil;
-
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import javax.portlet.PortletRequest;
@@ -21,11 +21,9 @@ public class ActionUtil {
 			task = TaskServiceUtil.getTask(taskId);
 		}
 
-		// TODO: Add trashHelper support
-
-		//		if ((task != null) && task.isInTrash()) {
-		//			throw new NoSuchTaskException("{taskId=" + taskId + "}");
-		//		}
+		if ((task != null) && task.isInTrash()) {
+			throw new NoSuchTaskException("{taskId=" + taskId + "}");
+		}
 
 		return task;
 	}

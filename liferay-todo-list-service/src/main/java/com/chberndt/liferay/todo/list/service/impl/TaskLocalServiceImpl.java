@@ -18,12 +18,14 @@ import com.chberndt.liferay.todo.list.exception.TaskDueDateException;
 import com.chberndt.liferay.todo.list.exception.TaskTitleException;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskLocalServiceBaseImpl;
-
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.Disjunction;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Indexable;
@@ -31,15 +33,20 @@ import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
+import com.liferay.portal.kernel.social.SocialActivityManagerUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
+import com.liferay.social.kernel.model.SocialActivityConstants;
+import com.liferay.trash.exception.RestoreEntryException;
+import com.liferay.trash.exception.TrashEntryException;
+import com.liferay.trash.model.TrashEntry;
+import com.liferay.trash.service.TrashEntryLocalService;
 
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -214,7 +221,10 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			_classNameLocalService.getClassNameId(Task.class.getName()),
 			task.getTaskId());
 
-		// TODO: Trash
+		// Trash
+
+		_trashEntryLocalService.deleteEntry(
+			Task.class.getName(), task.getTaskId());
 
 		// Workflow
 
@@ -223,6 +233,35 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			task.getTaskId());
 
 		return task;
+	}
+
+	@Override
+	public List<Task> getGroupTasks(
+		long groupId, QueryDefinition<Task> queryDefinition) {
+
+		if (queryDefinition.isExcludeStatus()) {
+			return taskPersistence.findByG_NotS(
+				groupId, queryDefinition.getStatus(),
+				queryDefinition.getStart(), queryDefinition.getEnd(),
+				queryDefinition.getOrderByComparator());
+		}
+
+		return taskPersistence.findByG_S(
+			groupId, queryDefinition.getStatus(), queryDefinition.getStart(),
+			queryDefinition.getEnd(), queryDefinition.getOrderByComparator());
+	}
+
+	@Override
+	public int getGroupTasksCount(
+		long groupId, QueryDefinition<Task> queryDefinition) {
+
+		if (queryDefinition.isExcludeStatus()) {
+			return taskPersistence.countByG_NotS(
+				groupId, queryDefinition.getStatus());
+		}
+
+		return taskPersistence.countByG_S(
+			groupId, queryDefinition.getStatus());
 	}
 
 	@Override
@@ -246,6 +285,125 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 	public long getTasksCountByKeywords(long groupId, String keywords) {
 		return taskLocalService.dynamicQueryCount(
 			_getKeywordSearchDynamicQuery(groupId, keywords));
+	}
+	
+
+	@Override
+	public void moveTasksToTrash(long groupId, long userId)
+		throws PortalException {
+
+		List<Task> entries = taskPersistence.findByGroupId(groupId);
+
+		for (Task task : entries) {
+			taskLocalService.moveTaskToTrash(userId, task);
+		}
+	}
+
+	/**
+	 * Moves the task to the recycle bin. Social activity counters for
+	 * this task get disabled.
+	 *
+	 * @param  userId the primary key of the user moving the task
+	 * @param  task the task to be moved
+	 * @return the moved task
+	 */
+	@Indexable(type = IndexableType.REINDEX)
+	@Override
+	public Task moveTaskToTrash(long userId, Task task)
+		throws PortalException {
+
+		// Task
+
+		if (task.isInTrash()) {
+			throw new TrashEntryException();
+		}
+
+		int oldStatus = task.getStatus();
+
+		if (oldStatus == WorkflowConstants.STATUS_PENDING) {
+			task.setStatus(WorkflowConstants.STATUS_DRAFT);
+
+			task = taskPersistence.update(task);
+		}
+
+		task = updateStatus(
+			userId, task.getTaskId(), WorkflowConstants.STATUS_IN_TRASH,
+			new ServiceContext());
+
+		// Social
+
+		JSONObject extraDataJSONObject = JSONUtil.put(
+			"title", task.getTitle());
+
+		SocialActivityManagerUtil.addActivity(
+			userId, task, SocialActivityConstants.TYPE_MOVE_TO_TRASH,
+			extraDataJSONObject.toString(), 0);
+
+		// Workflow
+
+		if (oldStatus == WorkflowConstants.STATUS_PENDING) {
+			workflowInstanceLinkLocalService.deleteWorkflowInstanceLink(
+				task.getCompanyId(), task.getGroupId(),
+				Task.class.getName(), task.getTaskId());
+		}
+
+		return task;
+	}
+
+	/**
+	 * Moves the task with the ID to the recycle bin.
+	 *
+	 * @param  userId the primary key of the user moving the task
+	 * @param  taskId the primary key of the task to be moved
+	 * @return the moved task
+	 */
+	@Override
+	public Task moveTaskToTrash(long userId, long taskId)
+		throws PortalException {
+
+		Task task = taskPersistence.findByPrimaryKey(taskId);
+
+		return taskLocalService.moveTaskToTrash(userId, task);
+	}
+
+	/**
+	 * Restores the task with the ID from the recycle bin. Social
+	 * activity counters for this task get activated.
+	 *
+	 * @param  userId the primary key of the user restoring the task
+	 * @param  taskId the primary key of the task to be restored
+	 * @return the restored task from the recycle bin
+	 */
+	@Indexable(type = IndexableType.REINDEX)
+	@Override
+	public Task restoreTaskFromTrash(long userId, long taskId)
+		throws PortalException {
+
+		// Task
+
+		Task task = taskPersistence.findByPrimaryKey(taskId);
+
+		if (!task.isInTrash()) {
+			throw new RestoreEntryException(
+					RestoreEntryException.INVALID_STATUS);
+		}
+
+		TrashEntry trashEntry = _trashEntryLocalService.getEntry(
+			Task.class.getName(), taskId);
+
+		task = updateStatus(
+			userId, taskId, trashEntry.getStatus(), new ServiceContext());
+
+		// Social
+
+		JSONObject extraDataJSONObject = JSONUtil.put(
+			"title", task.getTitle());
+
+		SocialActivityManagerUtil.addActivity(
+			userId, task, SocialActivityConstants.TYPE_RESTORE_FROM_TRASH,
+			extraDataJSONObject.toString(), 0);
+
+		return task;
 	}
 
 	@Override
@@ -413,5 +571,8 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 	@Reference
 	private ClassNameLocalService _classNameLocalService;
+	
+	@Reference
+	private TrashEntryLocalService _trashEntryLocalService;
 
 }

@@ -256,6 +256,14 @@ public class TaskPersistenceTest {
 	}
 
 	@Test
+	public void testCountByG_NotS() throws Exception {
+		_persistence.countByG_NotS(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextInt());
+
+		_persistence.countByG_NotS(0L, 0);
+	}
+
+	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		Task newTask = addTask();
 

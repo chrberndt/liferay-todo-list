@@ -3,10 +3,13 @@ package com.chberndt.liferay.todo.list.internal.portlet.action;
 import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.exception.NoSuchTaskException;
 import com.chberndt.liferay.todo.list.exception.TaskDueDateException;
-import com.chberndt.liferay.todo.list.exception.TaskTitleException;
+import com.chberndt.liferay.todo.list.internal.bulk.selection.TaskBulkSelectionFactory;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskService;
-
+import com.liferay.bulk.selection.BulkSelection;
+import com.liferay.petra.reflect.ReflectionUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.TrashedModel;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
@@ -15,12 +18,19 @@ import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.trash.service.TrashEntryService;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -29,6 +39,7 @@ import javax.portlet.PortletURL;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
 
 /**
  * @author Christian Berndt
@@ -41,24 +52,7 @@ import org.osgi.service.component.annotations.Reference;
 	service = MVCActionCommand.class
 )
 public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
-
-	protected void deleteTasks(ActionRequest actionRequest) throws Exception {
-		long taskId = ParamUtil.getLong(actionRequest, "taskId");
-
-		long[] deleteTaskIds = null;
-
-		if (taskId > 0) {
-			deleteTaskIds = new long[] {taskId};
-		}
-		else {
-			deleteTaskIds = ParamUtil.getLongValues(actionRequest, "rowIds");
-		}
-
-		for (long deleteTaskId : deleteTaskIds) {
-			_taskService.deleteTask(deleteTaskId);
-		}
-	}
-
+	
 	@Override
 	protected void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
@@ -68,31 +62,75 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 		try {
 			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
-				Task task = updateTask(actionRequest);
-
-				String redirect = getSaveAndContinueRedirect(
-					actionRequest, task);
-
-				sendRedirect(actionRequest, actionResponse, redirect);
+				_updateTask(actionRequest);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
-				deleteTasks(actionRequest);
+				_deleteTasks(actionRequest, false);
+			}
+			else if (cmd.equals(Constants.MOVE_TO_TRASH)) {
+				_deleteTasks(actionRequest, true);
+			}
+			else if (cmd.equals(Constants.RESTORE)) {
+				_restoreTrashEntries(actionRequest);
 			}
 		}
-		catch (TaskDueDateException | TaskTitleException exception) {
-			SessionErrors.add(actionRequest, exception.getClass());
+		catch (NoSuchTaskException | PrincipalException
+				   exception) {
 
-			actionResponse.setRenderParameter(
-				"mvcRenderCommandName", "/edit_task");
-
-			hideDefaultSuccessMessage(actionRequest);
-		}
-		catch (NoSuchTaskException | PrincipalException exception) {
 			SessionErrors.add(actionRequest, exception.getClass());
 		}
 	}
+	
+	private void _deleteTask(
+		Task task, boolean moveToTrash,
+		List<TrashedModel> trashedModels) {
 
-	protected String getSaveAndContinueRedirect(
+		try {
+			if (moveToTrash) {
+				trashedModels.add(
+					_taskService.moveTaskToTrash(task.getTaskId()));
+			}
+			else {
+				_taskService.deleteTask(task.getTaskId());
+			}
+		}
+		catch (PortalException portalException) {
+			ReflectionUtil.throwException(portalException);
+		}
+	}
+	
+	private void _deleteTasks (
+			ActionRequest actionRequest, boolean moveToTrash)
+		throws Exception {
+
+		List<TrashedModel> trashedModels = new ArrayList<>();
+
+		BulkSelection<Task> taskBulkSelection =
+			_taskBulkSelectionFactory.create(
+				_getParameterMap(actionRequest));
+
+		taskBulkSelection.forEach(
+			task -> _deleteTask(task, moveToTrash, trashedModels));
+
+		if (moveToTrash && !trashedModels.isEmpty()) {
+			addDeleteSuccessData(
+				actionRequest,
+				HashMapBuilder.<String, Object>put(
+					"trashedModels", trashedModels
+				).build());
+		}
+	}
+	
+	private Map<String, String[]> _getParameterMap(ActionRequest actionRequest) throws Exception {
+
+		Map<String, String[]> parameterMap = new HashMap<>(actionRequest.getParameterMap());
+
+		parameterMap.put("groupId", new String[] { String.valueOf(_portal.getScopeGroupId(actionRequest)) });
+
+		return parameterMap;
+	}
+
+	private String _getSaveAndContinueRedirect(
 		ActionRequest actionRequest, Task task) {
 
 		PortletURL portletURL = _portal.getControlPanelPortletURL(
@@ -112,8 +150,19 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 		return portletURL.toString();
 	}
+	
+	private void _restoreTrashEntries(ActionRequest actionRequest)
+			throws Exception {
 
-	protected Task updateTask(ActionRequest actionRequest) throws Exception {
+			long[] restoreTrashEntryIds = StringUtil.split(
+				ParamUtil.getString(actionRequest, "restoreTrashEntryIds"), 0L);
+
+			for (long restoreTrashEntryId : restoreTrashEntryIds) {
+				_trashEntryService.restoreEntry(restoreTrashEntryId);
+			}
+		}
+
+	private Task _updateTask(ActionRequest actionRequest) throws Exception {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
@@ -155,8 +204,14 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private Portal _portal;
+	
+	@Reference
+	private TaskBulkSelectionFactory _taskBulkSelectionFactory;
 
 	@Reference
 	private TaskService _taskService;
+
+	@Reference
+	private TrashEntryService _trashEntryService;
 
 }
