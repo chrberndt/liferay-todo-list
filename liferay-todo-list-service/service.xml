@@ -4,7 +4,7 @@
 <service-builder dependency-injector="ds" package-path="com.chberndt.liferay.todo.list">
 	<author>Christian Berndt</author>
 	<namespace>Custom</namespace>
-	<entity local-service="true" name="Task" remote-service="true" uuid="true" trash-enabled="true">
+	<entity local-service="true" name="Task" remote-service="true" trash-enabled="true" uuid="true">
 
 		<!-- PK fields -->
 
