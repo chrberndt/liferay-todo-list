@@ -18,6 +18,7 @@ import com.chberndt.liferay.todo.list.exception.TaskDueDateException;
 import com.chberndt.liferay.todo.list.exception.TaskTitleException;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskLocalServiceBaseImpl;
+
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.Disjunction;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -47,6 +48,7 @@ import com.liferay.trash.model.TrashEntry;
 import com.liferay.trash.service.TrashEntryLocalService;
 
 import java.io.Serializable;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -260,8 +262,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 				groupId, queryDefinition.getStatus());
 		}
 
-		return taskPersistence.countByG_S(
-			groupId, queryDefinition.getStatus());
+		return taskPersistence.countByG_S(groupId, queryDefinition.getStatus());
 	}
 
 	@Override
@@ -286,7 +287,6 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		return taskLocalService.dynamicQueryCount(
 			_getKeywordSearchDynamicQuery(groupId, keywords));
 	}
-	
 
 	@Override
 	public void moveTasksToTrash(long groupId, long userId)
@@ -300,6 +300,22 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 	}
 
 	/**
+	 * Moves the task with the ID to the recycle bin.
+	 *
+	 * @param  userId the primary key of the user moving the task
+	 * @param  taskId the primary key of the task to be moved
+	 * @return the moved task
+	 */
+	@Override
+	public Task moveTaskToTrash(long userId, long taskId)
+		throws PortalException {
+
+		Task task = taskPersistence.findByPrimaryKey(taskId);
+
+		return taskLocalService.moveTaskToTrash(userId, task);
+	}
+
+	/**
 	 * Moves the task to the recycle bin. Social activity counters for
 	 * this task get disabled.
 	 *
@@ -309,8 +325,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
-	public Task moveTaskToTrash(long userId, Task task)
-		throws PortalException {
+	public Task moveTaskToTrash(long userId, Task task) throws PortalException {
 
 		// Task
 
@@ -332,8 +347,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		// Social
 
-		JSONObject extraDataJSONObject = JSONUtil.put(
-			"title", task.getTitle());
+		JSONObject extraDataJSONObject = JSONUtil.put("title", task.getTitle());
 
 		SocialActivityManagerUtil.addActivity(
 			userId, task, SocialActivityConstants.TYPE_MOVE_TO_TRASH,
@@ -343,27 +357,11 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		if (oldStatus == WorkflowConstants.STATUS_PENDING) {
 			workflowInstanceLinkLocalService.deleteWorkflowInstanceLink(
-				task.getCompanyId(), task.getGroupId(),
-				Task.class.getName(), task.getTaskId());
+				task.getCompanyId(), task.getGroupId(), Task.class.getName(),
+				task.getTaskId());
 		}
 
 		return task;
-	}
-
-	/**
-	 * Moves the task with the ID to the recycle bin.
-	 *
-	 * @param  userId the primary key of the user moving the task
-	 * @param  taskId the primary key of the task to be moved
-	 * @return the moved task
-	 */
-	@Override
-	public Task moveTaskToTrash(long userId, long taskId)
-		throws PortalException {
-
-		Task task = taskPersistence.findByPrimaryKey(taskId);
-
-		return taskLocalService.moveTaskToTrash(userId, task);
 	}
 
 	/**
@@ -385,7 +383,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		if (!task.isInTrash()) {
 			throw new RestoreEntryException(
-					RestoreEntryException.INVALID_STATUS);
+				RestoreEntryException.INVALID_STATUS);
 		}
 
 		TrashEntry trashEntry = _trashEntryLocalService.getEntry(
@@ -396,8 +394,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		// Social
 
-		JSONObject extraDataJSONObject = JSONUtil.put(
-			"title", task.getTitle());
+		JSONObject extraDataJSONObject = JSONUtil.put("title", task.getTitle());
 
 		SocialActivityManagerUtil.addActivity(
 			userId, task, SocialActivityConstants.TYPE_RESTORE_FROM_TRASH,
@@ -571,7 +568,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 	@Reference
 	private ClassNameLocalService _classNameLocalService;
-	
+
 	@Reference
 	private TrashEntryLocalService _trashEntryLocalService;
 
