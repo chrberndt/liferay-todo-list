@@ -7,18 +7,14 @@ import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
-import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -95,8 +91,7 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 				groupId, WorkflowConstants.STATUS_IN_TRASH, start, end);
 		}
 
-		return taskPersistence.filterFindByG_S(
-			groupId, status, start, end);
+		return taskPersistence.filterFindByG_S(groupId, status, start, end);
 	}
 
 	@Override
@@ -142,7 +137,7 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 	public long getTasksCountByKeywords(long groupId, String keywords) {
 		return taskLocalService.getTasksCountByKeywords(groupId, keywords);
 	}
-	
+
 	@Override
 	public Task moveTaskToTrash(long taskId) throws PortalException {
 		_taskModelResourcePermission.check(
