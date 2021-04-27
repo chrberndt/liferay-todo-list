@@ -2,6 +2,7 @@ package com.chberndt.liferay.todo.list.internal.trash;
 
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.portlet.PortletProvider;
@@ -22,7 +23,6 @@ import javax.portlet.PortletURL;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-
 
 /**
  * @author Christian Berndt
@@ -53,6 +53,7 @@ public class TaskTrashHandler extends BaseTrashHandler {
 		Task task = _taskLocalService.getTask(classPK);
 
 		portletURL.setParameter("taskId", String.valueOf(task.getTaskId()));
+
 		// portletURL.setParameter("urlTitle", task.getUrlTitle());
 
 		return portletURL.toString();
@@ -90,8 +91,8 @@ public class TaskTrashHandler extends BaseTrashHandler {
 		Task task = _taskLocalService.getTask(classPK);
 
 		if (!hasTrashPermission(
-				PermissionThreadLocal.getPermissionChecker(),
-				task.getGroupId(), classPK, TrashActionKeys.RESTORE)) {
+				PermissionThreadLocal.getPermissionChecker(), task.getGroupId(),
+				classPK, TrashActionKeys.RESTORE)) {
 
 			return false;
 		}
@@ -131,8 +132,7 @@ public class TaskTrashHandler extends BaseTrashHandler {
 		}
 
 		if (!containerModel) {
-			portletURL.setParameter(
-				"mvcRenderCommandName", "/edit_task");
+			portletURL.setParameter("mvcRenderCommandName", "/edit_task");
 		}
 
 		return portletURL;
@@ -148,13 +148,14 @@ public class TaskTrashHandler extends BaseTrashHandler {
 	}
 
 	@Reference
-	private TaskLocalService _taskLocalService;
-
-	@Reference(target = "(model.class.name=com.liferay.blogs.model.Task)")
-	private ModelResourcePermission<Task>
-		_taskModelResourcePermission;
+	private Portal _portal;
 
 	@Reference
-	private Portal _portal;
+	private TaskLocalService _taskLocalService;
+
+	@Reference(
+		target = "(model.class.name=com.chberndt.liferay.todo.list.model.Task)"
+	)
+	private ModelResourcePermission<Task> _taskModelResourcePermission;
 
 }
