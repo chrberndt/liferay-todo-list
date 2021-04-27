@@ -9,10 +9,12 @@ String displayStyle = tasksDisplayContext.getDisplayStyle();
 SearchContainer tasksSearchContainer = tasksDisplayContext.getTaskSearchContainer();
 
 PortletURL portletURL = tasksSearchContainer.getIteratorURL();
+
+TrashHelper trashHelper = (TrashHelper)request.getAttribute(TrashWebKeys.TRASH_HELPER);
 %>
 
 <clay:management-toolbar
-	displayContext="<%= new TasksManagementToolbarDisplayContext(liferayPortletRequest, liferayPortletResponse, request, tasksSearchContainer, displayStyle) %>"
+	displayContext="<%= new TasksManagementToolbarDisplayContext(liferayPortletRequest, liferayPortletResponse, request, tasksSearchContainer, trashHelper, displayStyle) %>"
 	searchContainerId="tasks"
 />
 

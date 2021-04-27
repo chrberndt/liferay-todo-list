@@ -36,7 +36,9 @@ page import="com.liferay.portal.kernel.util.PortalUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %><%@
 page import="com.liferay.taglib.search.ResultRow" %><%@
-page import="com.liferay.taglib.util.LexiconUtil" %>
+page import="com.liferay.taglib.util.LexiconUtil" %><%@
+page import="com.liferay.trash.TrashHelper" %><%@
+page import="com.liferay.trash.util.TrashWebKeys" %>
 
 <%@ page import="java.util.Date" %><%@
 page import="java.util.HashMap" %><%@

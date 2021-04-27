@@ -8,23 +8,27 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.display.context.SearchCon
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenuBuilder;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
-import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.ViewTypeItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.ViewTypeItemList;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.trash.TrashHelper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
+import javax.portlet.ActionRequest;
 import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,14 +43,14 @@ public class TasksManagementToolbarDisplayContext
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
 		HttpServletRequest httpServletRequest,
-		SearchContainer<Task> searchContainer, String displayStyle) {
+		SearchContainer<Task> searchContainer, TrashHelper trashHelper,
+		String displayStyle) {
 
 		super(
 			liferayPortletRequest, liferayPortletResponse, httpServletRequest,
 			searchContainer);
 
-		// TODO: Add TrashHelper support
-
+		_trashHelper = trashHelper;
 		_displayStyle = displayStyle;
 
 		_themeDisplay = (ThemeDisplay)httpServletRequest.getAttribute(
@@ -55,43 +59,60 @@ public class TasksManagementToolbarDisplayContext
 
 	@Override
 	public List<DropdownItem> getActionDropdownItems() {
-		return new DropdownItemList() {
-			{
-				add(
-					dropdownItem -> {
-						dropdownItem.putData("action", "deleteTasks");
+		return DropdownItemListBuilder.add(
+			dropdownItem -> {
+				dropdownItem.putData("action", "deleteEntries");
 
-						// TODO: Add trashHelper support
+				boolean trashEnabled = _trashHelper.isTrashEnabled(
+					_themeDisplay.getScopeGroupId());
 
-						boolean trashEnabled = false;
-						//	boolean trashEnabled = _trashHelper.isTrashEnabled(
+				dropdownItem.setIcon(trashEnabled ? "trash" : "times-circle");
 
-						// _themeDisplay.getScopeGroupId());
+				String label = "delete";
 
-						dropdownItem.setIcon(
-							trashEnabled ? "trash" : "times-circle");
+				if (trashEnabled) {
+					label = "move-to-recycle-bin";
+				}
 
-						String label = "delete";
+				dropdownItem.setLabel(LanguageUtil.get(request, label));
 
-						if (trashEnabled) {
-							label = "move-to-recycle-bin";
-						}
-
-						dropdownItem.setLabel(LanguageUtil.get(request, label));
-
-						dropdownItem.setQuickAction(true);
-					});
+				dropdownItem.setQuickAction(true);
 			}
-		};
+		).build();
 	}
 
 	@Override
 	public String getClearResultsURL() {
-		PortletURL clearResultsURL = getPortletURL();
+		return getSearchActionURL();
+	}
 
-		clearResultsURL.setParameter("keywords", StringPool.BLANK);
+	public Map<String, Object> getComponentContext() throws PortalException {
+		return HashMapBuilder.<String, Object>put(
+			"deleteEntriesCmd",
+			() -> {
+				if (_trashHelper.isTrashEnabled(
+						_themeDisplay.getScopeGroup())) {
 
-		return clearResultsURL.toString();
+					return Constants.MOVE_TO_TRASH;
+				}
+
+				return Constants.DELETE;
+			}
+		).put(
+			"deleteEntriesURL",
+			() -> {
+				PortletURL deleteEntriesURL =
+					liferayPortletResponse.createActionURL();
+
+				deleteEntriesURL.setParameter(
+					ActionRequest.ACTION_NAME, "/edit_task");
+
+				return deleteEntriesURL.toString();
+			}
+		).put(
+			"trashEnabled",
+			_trashHelper.isTrashEnabled(_themeDisplay.getScopeGroupId())
+		).build();
 	}
 
 	@Override
@@ -221,5 +242,6 @@ public class TasksManagementToolbarDisplayContext
 
 	private final String _displayStyle;
 	private final ThemeDisplay _themeDisplay;
+	private final TrashHelper _trashHelper;
 
 }
