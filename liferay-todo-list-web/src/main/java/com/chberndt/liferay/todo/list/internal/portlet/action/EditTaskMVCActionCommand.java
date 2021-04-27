@@ -6,6 +6,7 @@ import com.chberndt.liferay.todo.list.exception.TaskDueDateException;
 import com.chberndt.liferay.todo.list.internal.bulk.selection.TaskBulkSelectionFactory;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskService;
+
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -40,7 +41,6 @@ import javax.portlet.PortletURL;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-
 /**
  * @author Christian Berndt
  */
@@ -52,7 +52,7 @@ import org.osgi.service.component.annotations.Reference;
 	service = MVCActionCommand.class
 )
 public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
-	
+
 	@Override
 	protected void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
@@ -74,16 +74,13 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 				_restoreTrashEntries(actionRequest);
 			}
 		}
-		catch (NoSuchTaskException | PrincipalException
-				   exception) {
-
+		catch (NoSuchTaskException | PrincipalException exception) {
 			SessionErrors.add(actionRequest, exception.getClass());
 		}
 	}
-	
+
 	private void _deleteTask(
-		Task task, boolean moveToTrash,
-		List<TrashedModel> trashedModels) {
+		Task task, boolean moveToTrash, List<TrashedModel> trashedModels) {
 
 		try {
 			if (moveToTrash) {
@@ -98,16 +95,14 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 			ReflectionUtil.throwException(portalException);
 		}
 	}
-	
-	private void _deleteTasks (
-			ActionRequest actionRequest, boolean moveToTrash)
+
+	private void _deleteTasks(ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
 
 		List<TrashedModel> trashedModels = new ArrayList<>();
 
 		BulkSelection<Task> taskBulkSelection =
-			_taskBulkSelectionFactory.create(
-				_getParameterMap(actionRequest));
+			_taskBulkSelectionFactory.create(_getParameterMap(actionRequest));
 
 		taskBulkSelection.forEach(
 			task -> _deleteTask(task, moveToTrash, trashedModels));
@@ -120,12 +115,18 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 				).build());
 		}
 	}
-	
-	private Map<String, String[]> _getParameterMap(ActionRequest actionRequest) throws Exception {
 
-		Map<String, String[]> parameterMap = new HashMap<>(actionRequest.getParameterMap());
+	private Map<String, String[]> _getParameterMap(ActionRequest actionRequest)
+		throws Exception {
 
-		parameterMap.put("groupId", new String[] { String.valueOf(_portal.getScopeGroupId(actionRequest)) });
+		Map<String, String[]> parameterMap = new HashMap<>(
+			actionRequest.getParameterMap());
+
+		parameterMap.put(
+			"groupId",
+			new String[] {
+				String.valueOf(_portal.getScopeGroupId(actionRequest))
+			});
 
 		return parameterMap;
 	}
@@ -150,17 +151,17 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 		return portletURL.toString();
 	}
-	
+
 	private void _restoreTrashEntries(ActionRequest actionRequest)
-			throws Exception {
+		throws Exception {
 
-			long[] restoreTrashEntryIds = StringUtil.split(
-				ParamUtil.getString(actionRequest, "restoreTrashEntryIds"), 0L);
+		long[] restoreTrashEntryIds = StringUtil.split(
+			ParamUtil.getString(actionRequest, "restoreTrashEntryIds"), 0L);
 
-			for (long restoreTrashEntryId : restoreTrashEntryIds) {
-				_trashEntryService.restoreEntry(restoreTrashEntryId);
-			}
+		for (long restoreTrashEntryId : restoreTrashEntryIds) {
+			_trashEntryService.restoreEntry(restoreTrashEntryId);
 		}
+	}
 
 	private Task _updateTask(ActionRequest actionRequest) throws Exception {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
@@ -204,7 +205,7 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private Portal _portal;
-	
+
 	@Reference
 	private TaskBulkSelectionFactory _taskBulkSelectionFactory;
 

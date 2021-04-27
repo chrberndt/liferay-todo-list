@@ -2,6 +2,7 @@ package com.chberndt.liferay.todo.list.internal.bulk.selection;
 
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskService;
+
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.bulk.selection.BaseSingleEntryBulkSelection;
@@ -14,10 +15,13 @@ import java.util.Map;
 /**
  * @author Christian Berndt
  */
-public class SingleTaskBulkSelection extends BaseSingleEntryBulkSelection<Task> {
+public class SingleTaskBulkSelection
+	extends BaseSingleEntryBulkSelection<Task> {
 
-	public SingleTaskBulkSelection(long entryId, Map<String, String[]> parameterMap, TaskService taskService,
-			AssetEntryLocalService assetEntryLocalService) {
+	public SingleTaskBulkSelection(
+		long entryId, Map<String, String[]> parameterMap,
+		TaskService taskService,
+		AssetEntryLocalService assetEntryLocalService) {
 
 		super(entryId, parameterMap);
 
@@ -27,7 +31,8 @@ public class SingleTaskBulkSelection extends BaseSingleEntryBulkSelection<Task> 
 	}
 
 	@Override
-	public Class<? extends BulkSelectionFactory> getBulkSelectionFactoryClass() {
+	public Class<? extends BulkSelectionFactory>
+		getBulkSelectionFactoryClass() {
 
 		return TaskBulkSelectionFactory.class;
 	}
@@ -50,7 +55,7 @@ public class SingleTaskBulkSelection extends BaseSingleEntryBulkSelection<Task> 
 	}
 
 	private final AssetEntryLocalService _assetEntryLocalService;
-	private final TaskService _taskService;
 	private final long _entryId;
+	private final TaskService _taskService;
 
 }

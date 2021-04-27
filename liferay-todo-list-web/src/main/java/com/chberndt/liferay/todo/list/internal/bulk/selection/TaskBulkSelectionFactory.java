@@ -2,6 +2,7 @@ package com.chberndt.liferay.todo.list.internal.bulk.selection;
 
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskService;
+
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.bulk.selection.BulkSelectionFactory;
@@ -24,29 +25,24 @@ import org.osgi.service.component.annotations.Reference;
 	property = "model.class.name=com.chberndt.liferay.todo.list.model.Task",
 	service = {TaskBulkSelectionFactory.class, BulkSelectionFactory.class}
 )
-public class TaskBulkSelectionFactory
-	implements BulkSelectionFactory<Task> {
+public class TaskBulkSelectionFactory implements BulkSelectionFactory<Task> {
 
 	@Override
-	public BulkSelection<Task> create(
-		Map<String, String[]> parameterMap) {
-
+	public BulkSelection<Task> create(Map<String, String[]> parameterMap) {
 		boolean selectAll = MapUtil.getBoolean(parameterMap, "selectAll");
 
 		if (selectAll) {
 			long groupId = MapUtil.getLong(parameterMap, "groupId");
 
 			return new GroupTaskBulkSelection(
-				groupId, parameterMap, _taskService,
-				_assetEntryLocalService);
+				groupId, parameterMap, _taskService, _assetEntryLocalService);
 		}
 
 		long entryId = MapUtil.getLong(parameterMap, "entryId");
 
 		if (entryId > 0) {
 			return new SingleTaskBulkSelection(
-				entryId, parameterMap, _taskService,
-				_assetEntryLocalService);
+				entryId, parameterMap, _taskService, _assetEntryLocalService);
 		}
 
 		long[] entryIds = GetterUtil.getLongValues(
@@ -55,8 +51,7 @@ public class TaskBulkSelectionFactory
 
 		if (ArrayUtil.isNotEmpty(entryIds)) {
 			return new MultipleTaskBulkSelection(
-				entryIds, parameterMap, _taskService,
-				_assetEntryLocalService);
+				entryIds, parameterMap, _taskService, _assetEntryLocalService);
 		}
 
 		return new EmptyBulkSelection<>();
@@ -67,4 +62,5 @@ public class TaskBulkSelectionFactory
 
 	@Reference
 	private TaskService _taskService;
+
 }

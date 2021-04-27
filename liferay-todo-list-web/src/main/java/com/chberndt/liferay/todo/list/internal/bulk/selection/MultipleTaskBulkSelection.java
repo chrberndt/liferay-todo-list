@@ -3,6 +3,7 @@ package com.chberndt.liferay.todo.list.internal.bulk.selection;
 import com.chberndt.liferay.todo.list.exception.NoSuchTaskException;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskService;
+
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.bulk.selection.BaseMultipleEntryBulkSelection;
@@ -18,10 +19,13 @@ import java.util.Map;
 /**
  * @author Christian Berndt
  */
-public class MultipleTaskBulkSelection extends BaseMultipleEntryBulkSelection<Task> {
+public class MultipleTaskBulkSelection
+	extends BaseMultipleEntryBulkSelection<Task> {
 
-	public MultipleTaskBulkSelection(long[] entryIds, Map<String, String[]> parameterMap, TaskService taskService,
-			AssetEntryLocalService assetEntryLocalService) {
+	public MultipleTaskBulkSelection(
+		long[] entryIds, Map<String, String[]> parameterMap,
+		TaskService taskService,
+		AssetEntryLocalService assetEntryLocalService) {
 
 		super(entryIds, parameterMap);
 
@@ -30,7 +34,8 @@ public class MultipleTaskBulkSelection extends BaseMultipleEntryBulkSelection<Ta
 	}
 
 	@Override
-	public Class<? extends BulkSelectionFactory> getBulkSelectionFactoryClass() {
+	public Class<? extends BulkSelectionFactory>
+		getBulkSelectionFactoryClass() {
 
 		return TaskBulkSelectionFactory.class;
 	}
@@ -44,18 +49,21 @@ public class MultipleTaskBulkSelection extends BaseMultipleEntryBulkSelection<Ta
 	protected Task fetchEntry(long entryId) {
 		try {
 			return _taskService.getTask(entryId);
-		} catch (NoSuchTaskException noSuchTaskException) {
+		}
+		catch (NoSuchTaskException noSuchTaskException) {
 			if (_log.isWarnEnabled()) {
 				_log.warn(noSuchTaskException, noSuchTaskException);
 			}
 
 			return null;
-		} catch (PortalException portalException) {
+		}
+		catch (PortalException portalException) {
 			return ReflectionUtil.throwException(portalException);
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(MultipleTaskBulkSelection.class);
+	private static final Log _log = LogFactoryUtil.getLog(
+		MultipleTaskBulkSelection.class);
 
 	private final AssetEntryLocalService _assetEntryLocalService;
 	private final TaskService _taskService;

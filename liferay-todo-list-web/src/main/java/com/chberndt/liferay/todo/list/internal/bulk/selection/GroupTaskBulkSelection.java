@@ -2,6 +2,7 @@ package com.chberndt.liferay.todo.list.internal.bulk.selection;
 
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskService;
+
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.bulk.selection.BaseContainerEntryBulkSelection;
@@ -18,10 +19,13 @@ import java.util.Map;
 /**
  * @author Christian Berndt
  */
-public class GroupTaskBulkSelection extends BaseContainerEntryBulkSelection<Task> {
+public class GroupTaskBulkSelection
+	extends BaseContainerEntryBulkSelection<Task> {
 
-	public GroupTaskBulkSelection(long groupId, Map<String, String[]> parameterMap, TaskService taskService,
-			AssetEntryLocalService assetEntryLocalService) {
+	public GroupTaskBulkSelection(
+		long groupId, Map<String, String[]> parameterMap,
+		TaskService taskService,
+		AssetEntryLocalService assetEntryLocalService) {
 
 		super(groupId, parameterMap);
 
@@ -31,33 +35,39 @@ public class GroupTaskBulkSelection extends BaseContainerEntryBulkSelection<Task
 	}
 
 	@Override
-	public <E extends PortalException> void forEach(UnsafeConsumer<Task, E> unsafeConsumer) throws PortalException {
+	public <E extends PortalException> void forEach(
+			UnsafeConsumer<Task, E> unsafeConsumer)
+		throws PortalException {
 
-		IntervalActionProcessor<Task> taskIntervalActionProcessor = new IntervalActionProcessor<>((int) getSize());
+		IntervalActionProcessor<Task> taskIntervalActionProcessor =
+			new IntervalActionProcessor<>((int)getSize());
 
-		taskIntervalActionProcessor.setPerformIntervalActionMethod((start, end) -> {
-			List<Task> tasks = _taskService.getGroupTasks(_groupId, WorkflowConstants.STATUS_APPROVED, start,
-					end);
+		taskIntervalActionProcessor.setPerformIntervalActionMethod(
+			(start, end) -> {
+				List<Task> tasks = _taskService.getGroupTasks(
+					_groupId, WorkflowConstants.STATUS_APPROVED, start, end);
 
-			for (Task task : tasks) {
-				unsafeConsumer.accept(task);
-			}
+				for (Task task : tasks) {
+					unsafeConsumer.accept(task);
+				}
 
-			return null;
-		});
+				return null;
+			});
 
 		taskIntervalActionProcessor.performIntervalActions();
 	}
 
 	@Override
-	public Class<? extends BulkSelectionFactory> getBulkSelectionFactoryClass() {
+	public Class<? extends BulkSelectionFactory>
+		getBulkSelectionFactoryClass() {
 
 		return TaskBulkSelectionFactory.class;
 	}
 
 	@Override
 	public long getSize() {
-		return _taskService.getGroupTasksCount(_groupId, WorkflowConstants.STATUS_APPROVED);
+		return _taskService.getGroupTasksCount(
+			_groupId, WorkflowConstants.STATUS_APPROVED);
 	}
 
 	@Override
@@ -66,7 +76,7 @@ public class GroupTaskBulkSelection extends BaseContainerEntryBulkSelection<Task
 	}
 
 	private final AssetEntryLocalService _assetEntryLocalService;
-	private final TaskService _taskService;
 	private final long _groupId;
+	private final TaskService _taskService;
 
 }
