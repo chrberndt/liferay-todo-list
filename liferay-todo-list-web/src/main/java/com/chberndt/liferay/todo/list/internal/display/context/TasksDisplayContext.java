@@ -169,12 +169,12 @@ public class TasksDisplayContext {
 		int tasksCount = 0;
 		List<Task> tasks = Collections.emptyList();
 
-//		tasksCount = (int)TaskLocalServiceUtil.getTasksCountByKeywords(
-//			_groupId, _keywords);
-//
-//		tasks = TaskLocalServiceUtil.getTasksByKeywords(
-//			_groupId, _keywords, taskSearch.getStart(), taskSearch.getEnd(),
-//			taskSearch.getOrderByComparator());
+		tasksCount = (int)TaskLocalServiceUtil.getTasksCountByKeywords(
+			_groupId, _keywords);
+
+		tasks = TaskLocalServiceUtil.getTasksByKeywords(
+			_groupId, _keywords, taskSearch.getStart(), taskSearch.getEnd(),
+			taskSearch.getOrderByComparator());
 
 		taskSearch.setResults(tasks);
 
