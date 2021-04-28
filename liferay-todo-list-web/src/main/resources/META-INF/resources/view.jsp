@@ -11,14 +11,27 @@ SearchContainer tasksSearchContainer = tasksDisplayContext.getTaskSearchContaine
 PortletURL portletURL = tasksSearchContainer.getIteratorURL();
 
 TrashHelper trashHelper = (TrashHelper)request.getAttribute(TrashWebKeys.TRASH_HELPER);
+
+TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new TasksManagementToolbarDisplayContext(liferayPortletRequest, liferayPortletResponse, request, tasksSearchContainer, trashHelper, displayStyle);
 %>
 
 <clay:management-toolbar
-	displayContext="<%= new TasksManagementToolbarDisplayContext(liferayPortletRequest, liferayPortletResponse, request, tasksSearchContainer, trashHelper, displayStyle) %>"
+	displayContext="<%= tasksManagementToolbarDisplayContext %>"
 	searchContainerId="tasks"
+	supportsBulkActions="<%= true %>"
 />
 
-<div class="container-fluid container-fluid-max-xl main-content-body">
+<portlet:actionURL name="/edit_task" var="restoreTrashEntriesURL">
+	<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.RESTORE %>" />
+</portlet:actionURL>
+
+<liferay-trash:undo
+	portletURL="<%= restoreTrashEntriesURL %>"
+/>
+
+<clay:container-fluid
+	cssClass="main-content-body"
+>
 	<aui:form action="<%= portletURL.toString() %>" method="get" name="fm">
 		<aui:input name="<%= Constants.CMD %>" type="hidden" />
 		<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
@@ -62,7 +75,15 @@ TrashHelper trashHelper = (TrashHelper)request.getAttribute(TrashWebKeys.TRASH_H
 			/>
 		</liferay-ui:search-container>
 	</aui:form>
-</div>
+</clay:container-fluid>
+
+<%--
+<liferay-frontend:component
+	componentId="<%= tasksManagementToolbarDisplayContext.getDefaultEventHandler() %>"
+	context="<%= tasksManagementToolbarDisplayContext.getComponentContext() %>"
+	module="js/ManagementToolbarDefaultEventHandler.es"
+/>
+--%>
 
 <aui:script>
 	var deleteTasks = function() {

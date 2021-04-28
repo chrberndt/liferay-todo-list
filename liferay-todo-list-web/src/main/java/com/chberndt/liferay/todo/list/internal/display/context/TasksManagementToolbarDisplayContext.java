@@ -61,7 +61,7 @@ public class TasksManagementToolbarDisplayContext
 	public List<DropdownItem> getActionDropdownItems() {
 		return DropdownItemListBuilder.add(
 			dropdownItem -> {
-				dropdownItem.putData("action", "deleteEntries");
+				dropdownItem.putData("action", "deleteTasks");
 
 				boolean trashEnabled = _trashHelper.isTrashEnabled(
 					_themeDisplay.getScopeGroupId());
@@ -101,13 +101,13 @@ public class TasksManagementToolbarDisplayContext
 		).put(
 			"deleteEntriesURL",
 			() -> {
-				PortletURL deleteEntriesURL =
+				PortletURL deleteTasksURL =
 					liferayPortletResponse.createActionURL();
 
-				deleteEntriesURL.setParameter(
+				deleteTasksURL.setParameter(
 					ActionRequest.ACTION_NAME, "/edit_task");
 
-				return deleteEntriesURL.toString();
+				return deleteTasksURL.toString();
 			}
 		).put(
 			"trashEnabled",
@@ -133,6 +133,11 @@ public class TasksManagementToolbarDisplayContext
 				dropdownItem.setLabel(LanguageUtil.get(request, "add-task"));
 			}
 		).build();
+	}
+
+	@Override
+	public String getDefaultEventHandler() {
+		return "TASKS_MANAGEMENT_TOOLBAR_DEFAULT_EVENT_HANDLER";
 	}
 
 	// TODO:

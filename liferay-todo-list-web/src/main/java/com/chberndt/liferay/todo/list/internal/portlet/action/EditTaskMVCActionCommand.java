@@ -62,7 +62,12 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 		try {
 			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
-				_updateTask(actionRequest);
+				Task task = _updateTask(actionRequest);
+				
+				String redirect = _getSaveAndContinueRedirect(
+						actionRequest, task);
+
+					sendRedirect(actionRequest, actionResponse, redirect);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
 				_deleteTasks(actionRequest, false);
