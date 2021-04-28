@@ -6,7 +6,6 @@ import com.chberndt.liferay.todo.list.exception.TaskDueDateException;
 import com.chberndt.liferay.todo.list.internal.bulk.selection.TaskBulkSelectionFactory;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskService;
-
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -35,8 +34,6 @@ import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -62,12 +59,7 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 		try {
 			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
-				Task task = _updateTask(actionRequest);
-				
-				String redirect = _getSaveAndContinueRedirect(
-						actionRequest, task);
-
-					sendRedirect(actionRequest, actionResponse, redirect);
+				_updateTask(actionRequest);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
 				_deleteTasks(actionRequest, false);
@@ -134,27 +126,6 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 			});
 
 		return parameterMap;
-	}
-
-	private String _getSaveAndContinueRedirect(
-		ActionRequest actionRequest, Task task) {
-
-		PortletURL portletURL = _portal.getControlPanelPortletURL(
-			actionRequest, ToDoListPortletKeys.TODO_LIST,
-			PortletRequest.RENDER_PHASE);
-
-		if (task != null) {
-			portletURL.setParameter("backURL", portletURL.toString());
-
-			portletURL.setParameter("mvcRenderCommandName", "/edit_task");
-			portletURL.setParameter("taskId", String.valueOf(task.getTaskId()));
-
-			String redirect = ParamUtil.getString(actionRequest, "redirect");
-
-			portletURL.setParameter("redirect", redirect);
-		}
-
-		return portletURL.toString();
 	}
 
 	private void _restoreTrashEntries(ActionRequest actionRequest)
