@@ -1,45 +1,29 @@
-// based on the model of https://github.com/gamerson/liferay-workspace-test-dev/blob/master/modules/sample/sample-test/build.gradle
+configurations {
+	testBundle
+}
 
 dependencies {
-	// service builder template end
-	// service builder template start
-	// template end
-	// template start
-	// these will be fixed by workspace
-	// this will no longer be necessary once we fix DestinationSyncRule
-
-	testCompile group: "com.liferay", name: "com.liferay.petra.lang"
-	testCompile group: "com.liferay", name: "com.liferay.petra.sql.dsl.api"
-	testCompile group: "com.liferay", name: "com.liferay.petra.string"
-	testCompile group: "com.liferay", name: "com.liferay.registry.api"
-	testCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel"
-	testCompile group: "javax.portlet", name: "portlet-api"
-	testCompile group: "junit", name: "junit"
-	testCompile group: "org.apache.felix", name: "org.apache.felix.http.servlet-api", version: "1.1.2"
-	testCompile group: "org.osgi", name: "org.osgi.core"
-	testCompile group: "org.slf4j", name: "slf4j-api"
-	testCompile group: "org.springframework", name: "spring-test"
+	testBundle group: "com.liferay.portal", name: "com.liferay.portal.test", version: "8.1.5"
 
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge", version: "1.0.19"
-	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.test", version: "6.2.5"
-	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.test.integration", version: "6.0.24"
+	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.test", version: "8.1.5"
+	testIntegrationCompile group: "com.liferay.portal", name: "release.portal.api"
+	testIntegrationCompile group: "javax.portlet", name: "portlet-api", version: "3.0.1"
+	testIntegrationCompile group: "junit", name: "junit"
 	testIntegrationCompile group: "log4j", name: "log4j", version: "1.2.17"
+	testIntegrationCompile group: "org.apache.felix", name: "org.apache.felix.http.servlet-api", version: "1.1.2"
+	testIntegrationCompile group: "org.slf4j", name: "slf4j-api"
 	testIntegrationCompile project(":modules:liferay-todo-list:liferay-todo-list-api")
 	testIntegrationCompile project(":modules:liferay-todo-list:liferay-todo-list-service")
-
-	testModules group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge.connector", version: "1.0.0"
-//	testModules group: "com.liferay", name: "com.liferay.sync.api", version: "5.0.6"
-//	testModules group: "com.liferay", name: "com.liferay.sync.service", version: "3.0.9"
-	testModules group: "com.liferay.portal", name: "com.liferay.portal.test", version: "6.2.5"
-	testModules group: "com.liferay.portal", name: "com.liferay.portal.test.integration", version: "6.0.29"
-	testModules group: "org.apache.aries.jmx", name: "org.apache.aries.jmx.core", version: "1.1.7"
 }
 
-// the following configurations will no longer be necessary in future versions of workspace
 copyTestModules {
-	dependsOn ":modules:liferay-todo-list:liferay-todo-list-api:deploy", ":modules:liferay-todo-list:liferay-todo-list-service:deploy"
+	dependsOn "copyTestBundle", ":modules:liferay-todo-list:liferay-todo-list-api:deploy", ":modules:liferay-todo-list:liferay-todo-list-service:deploy"
 }
 
-setUpTestableTomcat {
-	dependsOn ":initBundle"
+def deployDir = project.rootDir.path + '/bundles/osgi/test'
+
+task copyTestBundle(type: Copy) {
+	from configurations.testBundle
+	into deployDir
 }
