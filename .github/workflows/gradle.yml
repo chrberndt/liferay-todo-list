@@ -21,7 +21,13 @@ jobs:
       with:
         java-version: '8'
         distribution: 'adopt'
+    - name: Download JPM
+      run: wget https://raw.githubusercontent.com/jpm4j/jpm4j.installers/master/dist/biz.aQute.jpm.run.jar
+    - name: Install JPM in the current user's home directory
+      run: java -jar biz.aQute.jpm.run.jar --home ~ init
+    - name: Install BLADE
+      run: jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    - run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+    - run: ./gradlew build
