@@ -6,6 +6,7 @@ import com.chberndt.liferay.todo.list.exception.TaskDueDateException;
 import com.chberndt.liferay.todo.list.internal.bulk.selection.TaskBulkSelectionFactory;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskService;
+
 import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.exception.PortalException;
