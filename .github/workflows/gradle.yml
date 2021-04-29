@@ -23,15 +23,17 @@ jobs:
         distribution: 'adopt'
     - name: Download JPM
       run: wget https://raw.githubusercontent.com/jpm4j/jpm4j.installers/master/dist/biz.aQute.jpm.run.jar
-    - name: Install JPM in the current user's home directory
+    - name: Install JPM
       run: sudo java -jar biz.aQute.jpm.run.jar init
      # run: java -jar biz.aQute.jpm.run.jar --home ~ init
-    - name: Add user's ~/bin directory to PATH
-      run: export PATH="~/bin:$PATH"
+    # - name: Add user's ~/bin directory to PATH
+    #  run: export PATH="~/bin:$PATH"
     - name: Install BLADE
-      run: jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
+      run: sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
     - name: Update BLADE to the latest release
-      run: blade update
+      run: sudo blade update
+    - name: Create an empty Liferay workspace
+      run: blade init -v portal-7.3-ga7 liferay-workspace
     # - name: Grant execute permission for gradlew
     # - run: chmod +x gradlew
     # - name: Build with Gradle
