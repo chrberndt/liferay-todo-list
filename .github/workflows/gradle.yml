@@ -27,7 +27,7 @@ jobs:
       run: java -jar biz.aQute.jpm.run.jar --home ~ init
     - name: Install BLADE
       run: jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
-    - name: Grant execute permission for gradlew
-    - run: chmod +x gradlew
-    - name: Build with Gradle
-    - run: ./gradlew build
+    # - name: Grant execute permission for gradlew
+    # - run: chmod +x gradlew
+    # - name: Build with Gradle
+    # - run: ./gradlew build
