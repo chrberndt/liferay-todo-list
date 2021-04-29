@@ -24,7 +24,8 @@ jobs:
     - name: Download JPM
       run: wget https://raw.githubusercontent.com/jpm4j/jpm4j.installers/master/dist/biz.aQute.jpm.run.jar
     - name: Install JPM in the current user's home directory
-      run: java -jar biz.aQute.jpm.run.jar --home ~ init
+      run: java -jar biz.aQute.jpm.run.jar init
+     # run: java -jar biz.aQute.jpm.run.jar --home ~ init
     - name: Add user's ~/bin directory to PATH
       run: export PATH="~/bin:$PATH"
     - name: Install BLADE
