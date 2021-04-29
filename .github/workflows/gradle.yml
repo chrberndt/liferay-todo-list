@@ -26,11 +26,11 @@ jobs:
     - name: Install JPM in the current user's home directory
       run: java -jar biz.aQute.jpm.run.jar --home ~ init
     - name: Add user's ~/bin directory to PATH
-      run: export PATH="$HOME/bin:$PATH"
+      run: export PATH="~/bin:$PATH"
     - name: Install BLADE
-      run: ~/bin/jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
+      run: jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
     - name: Update BLADE to the latest release
-      run: ~/bin/blade update
+      run: blade update
     # - name: Grant execute permission for gradlew
     # - run: chmod +x gradlew
     # - name: Build with Gradle
