@@ -28,9 +28,9 @@ jobs:
     - name: Add user's ~/bin directory to PATH
       run: export PATH="$HOME/bin:$PATH"
     - name: Install BLADE
-      run: jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
+      run: ~/bin/jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
     - name: Update BLADE to the latest release
-      run: blade update
+      run: ~/bin/blade update
     # - name: Grant execute permission for gradlew
     # - run: chmod +x gradlew
     # - name: Build with Gradle
