@@ -341,9 +341,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			task = taskPersistence.update(task);
 		}
 
-		task = updateStatus(
-			userId, task.getTaskId(), WorkflowConstants.STATUS_IN_TRASH,
-			new ServiceContext());
+		task = updateStatus(userId, task, WorkflowConstants.STATUS_IN_TRASH);
 
 		// Social
 
@@ -389,8 +387,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 		TrashEntry trashEntry = _trashEntryLocalService.getEntry(
 			Task.class.getName(), taskId);
 
-		task = updateStatus(
-			userId, taskId, trashEntry.getStatus(), new ServiceContext());
+		task = updateStatus(userId, task, trashEntry.getStatus());
 
 		// Social
 
@@ -423,36 +420,51 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			null, null, null, null, 0, 0, null);
 	}
 
-	@Indexable(type = IndexableType.REINDEX)
 	@Override
-	public Task updateStatus(
-			long userId, long taskId, int status, ServiceContext serviceContext)
+	public Task updateStatus(long userId, Task task, int status)
 		throws PortalException {
 
 		// Task
 
-		Task task = taskLocalService.getTask(taskId);
-
-		task.setStatus(status);
-
 		User user = userLocalService.getUser(userId);
 
-		task.setStatusByUserId(user.getUserId());
-		task.setStatusByUserName(user.getFullName());
-
-		task.setStatusDate(serviceContext.getModifiedDate(new Date()));
+		task.setStatus(status);
+		task.setStatusByUserId(userId);
+		task.setStatusByUserName(user.getScreenName());
+		task.setStatusDate(new Date());
 
 		task = taskPersistence.update(task);
 
-		// Asset
+		JSONObject extraDataJSONObject = JSONUtil.put("title", task.getTitle());
 
 		if (status == WorkflowConstants.STATUS_APPROVED) {
+
+			// Asset
+
 			assetEntryLocalService.updateVisible(
 				Task.class.getName(), task.getTaskId(), true);
+
+			// TODO: Social
+
+			//socialActivityLocalService.addActivity(
+			//	userId, task.getGroupId(), Task.class.getName(),
+			//	task.getTaskId(),
+			//	SocialActivityConstants.TYPE_RESTORE_FROM_TRASH,
+			//	extraDataJSONObject.toString(), 0);
 		}
 		else if (status == WorkflowConstants.STATUS_IN_TRASH) {
+
+			// Asset
+
 			assetEntryLocalService.updateVisible(
 				Task.class.getName(), task.getTaskId(), false);
+
+			// TODO: Social
+
+			//socialActivityLocalService.addActivity(
+			//	userId, task.getGroupId(), Task.class.getName(),
+			//	task.getTaskId(), SocialActivityConstants.TYPE_MOVE_TO_TRASH,
+			//	extraDataJSONObject.toString(), 0);
 		}
 
 		return task;
