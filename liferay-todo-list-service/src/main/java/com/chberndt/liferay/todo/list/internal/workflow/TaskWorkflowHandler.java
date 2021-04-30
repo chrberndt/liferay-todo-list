@@ -5,7 +5,6 @@ import com.chberndt.liferay.todo.list.service.TaskLocalService;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.workflow.BaseWorkflowHandler;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -49,11 +48,9 @@ public class TaskWorkflowHandler extends BaseWorkflowHandler<Task> {
 			(String)workflowContext.get(
 				WorkflowConstants.CONTEXT_ENTRY_CLASS_PK));
 
-		ServiceContext serviceContext = (ServiceContext)workflowContext.get(
-			"serviceContext");
+		Task task = _taskLocalService.getTask(classPK);
 
-		return _taskLocalService.updateStatus(
-			userId, classPK, status, serviceContext);
+		return _taskLocalService.updateStatus(userId, task, status);
 	}
 
 	@Reference
