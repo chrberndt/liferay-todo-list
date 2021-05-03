@@ -4,6 +4,8 @@
 ResultRow row = (ResultRow)request.getAttribute("SEARCH_CONTAINER_RESULT_ROW");
 
 Task task = (Task)row.getObject();
+
+TrashHelper trashHelper = (TrashHelper)request.getAttribute(TrashWebKeys.TRASH_HELPER);
 %>
 
 <liferay-ui:icon-menu
@@ -54,25 +56,17 @@ Task task = (Task)row.getObject();
 	</c:if>
 
 	<c:if test="<%= TaskPermission.contains(permissionChecker, task, ActionKeys.DELETE) %>">
-		<portlet:actionURL name="/edit_task" var="deleteURL">
+		<portlet:actionURL name="/edit_task" var="deleteTaskURL">
 			<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
-
-			<%
-
-			// TODO: Add trashHelper support
-
-			%>
-
-			<%--
 			<portlet:param name="<%= Constants.CMD %>" value="<%= trashHelper.isTrashEnabled(scopeGroupId) ? Constants.MOVE_TO_TRASH : Constants.DELETE %>" />
-			--%>
-
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
 		</portlet:actionURL>
 
 		<liferay-ui:icon-delete
-			url="<%= deleteURL %>"
+			label="<%= true %>"
+			trash="<%= trashHelper.isTrashEnabled(scopeGroupId) %>"
+			url="<%= deleteTaskURL %>"
 		/>
 	</c:if>
 </liferay-ui:icon-menu>

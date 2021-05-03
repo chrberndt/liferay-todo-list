@@ -38,20 +38,19 @@ public class TaskBulkSelectionFactory implements BulkSelectionFactory<Task> {
 				groupId, parameterMap, _taskService, _assetEntryLocalService);
 		}
 
-		long entryId = MapUtil.getLong(parameterMap, "entryId");
+		long taskId = MapUtil.getLong(parameterMap, "taskId");
 
-		if (entryId > 0) {
+		if (taskId > 0) {
 			return new SingleTaskBulkSelection(
-				entryId, parameterMap, _taskService, _assetEntryLocalService);
+				taskId, parameterMap, _taskService, _assetEntryLocalService);
 		}
 
-		long[] entryIds = GetterUtil.getLongValues(
-			StringUtil.split(
-				MapUtil.getString(parameterMap, "deleteEntryIds")));
+		long[] taskIds = GetterUtil.getLongValues(
+			StringUtil.split(MapUtil.getString(parameterMap, "deleteTaskIds")));
 
-		if (ArrayUtil.isNotEmpty(entryIds)) {
+		if (ArrayUtil.isNotEmpty(taskIds)) {
 			return new MultipleTaskBulkSelection(
-				entryIds, parameterMap, _taskService, _assetEntryLocalService);
+				taskIds, parameterMap, _taskService, _assetEntryLocalService);
 		}
 
 		return new EmptyBulkSelection<>();
