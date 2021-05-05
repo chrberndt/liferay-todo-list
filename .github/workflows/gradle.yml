@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: debian:buster
 
     steps:
     - uses: actions/checkout@v2
@@ -29,10 +29,9 @@ jobs:
     # - name: Add user's ~/bin directory to PATH
     #  run: export PATH="~/bin:$PATH"
     - name: Install BLADE
-      run: sudo jpm install -f https://github.com/liferay/liferay-blade-cli/archive/refs/tags/4.0.8.zip
-     # run: sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
-    # - name: Update BLADE to the latest release
-      # run: sudo blade update
+      run: sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
+    - name: Update BLADE to the latest release
+      run: sudo blade update
     - name: Create an empty Liferay workspace
       run: blade init -v portal-7.3-ga7 liferay-workspace
     # - name: Grant execute permission for gradlew
