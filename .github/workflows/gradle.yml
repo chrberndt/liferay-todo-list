@@ -34,7 +34,7 @@ jobs:
       run: sudo blade update
     - name: Create an empty Liferay workspace
       working-directory: /opt/
-      run: blade init -v portal-7.3-ga7 liferay-workspace
+      run: blade init -v portal-7.3-ga6 liferay-workspace
     # - name: Checkout sources
     #  uses: actions/checkout@v2
     #  with:
