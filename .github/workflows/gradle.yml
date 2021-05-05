@@ -39,8 +39,9 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.head.sha }}
     - name: Copy sources
-      working-directory: ./liferay-workspace/modules
-      run: cp -r /home/runner/work/liferay-todo-list/liferay-todo-list .
+      run: ls -lh
+     # working-directory: ./liferay-workspace/modules
+     # run: cp -r /home/runner/work/liferay-todo-list/liferay-todo-list .
     - name: Setup gradlew
       working-directory: ./liferay-workspace
       run: chmod +x gradlew
