@@ -34,11 +34,12 @@ jobs:
       run: sudo blade update
     - name: Create an empty Liferay workspace
       run: blade init -v portal-7.3-ga7 liferay-workspace
-    - name: Setup and run tests
+    - name: Setup gradlew
       working-directory: ./liferay-workspace
-      run:
-        chmod +x gradlew
-        ./gradlew initBundle
+      run: chmod +x gradlew
+    - name: Download bundle
+      working-directory: ./liferay-workspace
+      run: ./gradlew initBundle
     # - name: Grant execute permission for gradlew
     # - run: chmod +x gradlew
     # - name: Build with Gradle
