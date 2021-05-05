@@ -34,12 +34,12 @@ jobs:
       run: sudo blade update
     - name: Create an empty Liferay workspace
       run: blade init -v portal-7.3-ga7 liferay-workspace
-    - name: Checkout sources
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
+    # - name: Checkout sources
+    #  uses: actions/checkout@v2
+    #  with:
+    #   ref: ${{ github.event.pull_request.head.sha }}
     - name: Copy sources
-      run: ls -lh
+      run: ls -lh; pwd
      # working-directory: ./liferay-workspace/modules
      # run: cp -r /home/runner/work/liferay-todo-list/liferay-todo-list .
     - name: Setup gradlew
