@@ -58,21 +58,13 @@ public class TaskModelIndexerWriterContributor
 
 	@Override
 	public IndexerWriterMode getIndexerWriterMode(Task task) {
-		if (task.isApproved() || task.isDraft() || task.isPending()) {
-
-			// TODO: Add trash support
-			// if (task.isApproved() || task.isDraft() ||
-
-			//		task.isInTrash() || task.isPending()) {
+		if (task.isApproved() || task.isDraft() ||
+			task.isInTrash() || task.isPending()) {
 
 			return IndexerWriterMode.UPDATE;
 		}
 
-		if (!task.isApproved()) {
-
-			// TODO: Add trash support
-			// if (!task.isApproved() && !task.isInTrash()) {
-
+		if (!task.isApproved() && !task.isInTrash()) {
 			return IndexerWriterMode.SKIP;
 		}
 
