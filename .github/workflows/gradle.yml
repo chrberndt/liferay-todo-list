@@ -51,10 +51,10 @@ jobs:
       run: ./gradlew initBundle
     - name: Generate service builder classes
       working-directory: /opt/liferay-workspace
-      run: ./gradlew buildService
+      run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-service:buildService
     - name: Run integration tests
       working-directory: /opt/liferay-workspace
-      run: ./gradlew testIntegration
+      run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
     # - name: Grant execute permission for gradlew
     # - run: chmod +x gradlew
     # - name: Build with Gradle
