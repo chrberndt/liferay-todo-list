@@ -35,10 +35,11 @@ jobs:
     - name: Create an empty Liferay workspace
       run: blade init -v portal-7.3-ga7 liferay-workspace
     - name: Checkout sources
-      working-directory: ./liferay-workspace/modules
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
       with:
         ref: ${{ github.event.pull_request.head.sha }}
+    - name: Move sources to modules
+      run: mv liferay-todo-list liferay-workspace/modules
     - name: Setup gradlew
       working-directory: ./liferay-workspace
       run: chmod +x gradlew
@@ -47,7 +48,7 @@ jobs:
       run: ./gradlew initBundle
     - name: Run integration tests
       working-directory: ./liferay-workspace
-      run: ./gradlew testIntegration
+      run: ./gradlew buildService
     # - name: Grant execute permission for gradlew
     # - run: chmod +x gradlew
     # - name: Build with Gradle
