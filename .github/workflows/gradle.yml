@@ -38,8 +38,8 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: ${{ github.event.pull_request.head.sha }}
-    - name: Move sources to modules
-      run: mv liferay-todo-list liferay-workspace/modules
+    - name: Copy sources
+      run: cp -r /home/runner/work/liferay-todo-list/liferay-todo-list liferay-workspace/modules/
     - name: Setup gradlew
       working-directory: ./liferay-workspace
       run: chmod +x gradlew
