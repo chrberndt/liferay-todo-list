@@ -40,6 +40,9 @@ jobs:
     - name: Download bundle
       working-directory: ./liferay-workspace
       run: ./gradlew initBundle
+    - name: Run integration tests
+      working-directory: ./liferay-workspace
+      run: ./gradlew testIntegration
     # - name: Grant execute permission for gradlew
     # - run: chmod +x gradlew
     # - name: Build with Gradle
