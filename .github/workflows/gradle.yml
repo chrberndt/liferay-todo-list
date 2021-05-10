@@ -25,9 +25,6 @@ jobs:
       run: wget https://raw.githubusercontent.com/jpm4j/jpm4j.installers/master/dist/biz.aQute.jpm.run.jar
     - name: Install JPM
       run: sudo java -jar biz.aQute.jpm.run.jar init
-     # run: java -jar biz.aQute.jpm.run.jar --home ~ init
-    # - name: Add user's ~/bin directory to PATH
-    #  run: export PATH="~/bin:$PATH"
     - name: Install BLADE
       run: sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
     - name: Update BLADE to the latest release
@@ -35,12 +32,7 @@ jobs:
     - name: Create an empty Liferay workspace
       working-directory: /opt/
       run: blade init -v portal-7.3-ga6 liferay-workspace
-    # - name: Checkout sources
-    #  uses: actions/checkout@v2
-    #  with:
-    #   ref: ${{ github.event.pull_request.head.sha }}
     - name: Copy sources
-    #  run: ls -lh; pwd
       working-directory: /opt/liferay-workspace/modules
       run: cp -r /home/runner/work/liferay-todo-list/liferay-todo-list .
     - name: Setup gradlew
@@ -55,11 +47,6 @@ jobs:
     - name: Run integration tests
       working-directory: /opt/liferay-workspace
       run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
-    # - name: Grant execute permission for gradlew
-    # - run: chmod +x gradlew
-    # - name: Build with Gradle
-    # - run: ./gradlew build
-    # Copy integration test reports to github pages
     - name: GitHub Pages
       # You may pin to the exact commit or the version.
       # uses: crazy-max/ghaction-github-pages@b8f8d291c97fe0edd9fb4ee73018163593418e8f
@@ -72,11 +59,11 @@ jobs:
         # Git branch where assets will be deployed
         # target_branch: # optional, default is gh-pages
         # Create incremental commit instead of doing push force
-        #keep_history: # optional, default is false
+        # keep_history: # optional, default is false
         # Allow an empty commit to be created
         # allow_empty_commit: # optional, default is true
         # Build directory to deploy
-        build_dir: /opt/liferay-workspace/modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests/testIntegration/
+        build_dir: /opt/liferay-workspace/modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests/
         # The committer name and email address
         # committer: # optional
         # The author name and email address
