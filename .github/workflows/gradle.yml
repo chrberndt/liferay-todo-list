@@ -47,6 +47,8 @@ jobs:
     - name: Run integration tests
       working-directory: /opt/liferay-workspace
       run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
+    - name: List test reports
+      run: pwd; ls -lh /home/runner/work/liferay-todo-list
     - name: GitHub Pages
       if: ${{ always() }}     
       # You may pin to the exact commit or the version.
