@@ -64,7 +64,7 @@ jobs:
         # Allow an empty commit to be created
         # allow_empty_commit: # optional, default is true
         # Build directory to deploy
-        build_dir: ./liferay-todo-list-test/build/reports/tests/
+        build_dir: /opt/liferay-workspace/modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests/testIntegration
         # The committer name and email address
         # committer: # optional
         # The author name and email address
