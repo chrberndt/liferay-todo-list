@@ -47,6 +47,8 @@ jobs:
     - name: Run integration tests
       working-directory: /opt/liferay-workspace
       run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
+    - name: Copy test reports
+      run: cp -r /opt/liferay-workspace/modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests /home/runner/work/liferay-todo-list/liferay-todo-list/
     - name: List test reports
       if: ${{ always() }}     
       run: pwd; ls -lh /home/runner/work/liferay-todo-list
@@ -70,7 +72,8 @@ jobs:
         # Allow an empty commit to be created
         # allow_empty_commit: # optional, default is true
         # Build directory to deploy
-        build_dir: /opt/liferay-workspace/modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests/testIntegration
+        build_dir: /tests
+        # build_dir: /home/runner/work/liferay-todo-list/liferay-todo-list/tests
         # The committer name and email address
         # committer: # optional
         # The author name and email address
