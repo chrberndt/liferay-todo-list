@@ -48,7 +48,6 @@ jobs:
       working-directory: /opt/liferay-workspace
       run: ./gradlew properties
     - name: Run integration tests
-    - name: Run integration tests
       working-directory: /opt/liferay-workspace
       run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
     - name: Print OSGi directory
