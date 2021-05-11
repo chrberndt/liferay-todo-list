@@ -21,8 +21,8 @@ copyTestModules {
 	dependsOn "copyTestBundle", ":modules:liferay-todo-list:liferay-todo-list-api:deploy", ":modules:liferay-todo-list:liferay-todo-list-service:deploy"
 }
 
-def deployDir = project.rootDir.path + '/bundles/deploy'
-// def deployDir = project.rootDir.path + '/bundles/osgi/test'
+// def deployDir = project.rootDir.path + '/bundles/deploy'
+def deployDir = project.rootDir.path + '/bundles/osgi/test'
 
 task copyTestBundle(type: Copy) {
 	from configurations.testBundle
