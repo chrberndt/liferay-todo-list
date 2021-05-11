@@ -50,12 +50,9 @@ jobs:
     - name: Copy test reports
       if: ${{ always() }}     
       run: cp -r /opt/liferay-workspace/modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests /home/runner/work/liferay-todo-list/liferay-todo-list/
-    # - name: List test reports
-    #  if: ${{ always() }}     
-    #  run: pwd; ls -lh /home/runner/work/liferay-todo-list
-    - name: Print directory tree
+    - name: Print Java version
       if: ${{ always() }}     
-      run: tree
+      run: java -version
     - name: GitHub Pages
       if: ${{ always() }}
       # You may pin to the exact commit or the version.
