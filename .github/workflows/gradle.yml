@@ -44,6 +44,9 @@ jobs:
     - name: Generate service builder classes
       working-directory: /opt/liferay-workspace
       run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-service:buildService
+    - name: Print Gradle properties
+      working-directory: /opt/liferay-workspace
+      run: ./gradlew properties
     - name: Run integration tests
       working-directory: /opt/liferay-workspace
       run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
