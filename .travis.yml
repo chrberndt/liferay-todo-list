@@ -12,7 +12,8 @@ script:
     - sudo java -jar biz.aQute.jpm.run.jar init
     # Install BLADE
     - sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
-    - sudo blade update
+    - blade update
     # Check setup
     - java -version
     - blade -version
+    - which blade
