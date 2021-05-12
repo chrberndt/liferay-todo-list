@@ -15,5 +15,5 @@ script:
     - blade update
     # Check setup
     - java -version
-    - blade -version
+    - blade version
     - which blade
