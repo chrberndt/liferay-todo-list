@@ -20,10 +20,10 @@ script:
     # Create an empty Liferay workspace
     - cd ..; pwd
     - blade init -v portal-7.3-ga6 liferay-workspace
-    - tree
     # Copy sources to modules directory
     - cd liferay-workspace
-    - tree
     - cp -r /home/travis/build/chrberndt/liferay-todo-list modules
     # Download Liferay bundle
     - ./gradlew initBundle
+    # Build service classes
+    - ./gradlew :modules:liferay-todo-list:liferay-todo-list-service:buildService
