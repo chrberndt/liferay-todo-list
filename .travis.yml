@@ -3,7 +3,8 @@ install: skip
 
 os: linux
 dist: trusty
-jdk: oraclejdk8
+jdk: openjdk8
+# jdk: oraclejdk8
 
 script:
     - pwd; ls -lh
