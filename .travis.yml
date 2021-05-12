@@ -27,3 +27,5 @@ script:
     - ./gradlew initBundle
     # Build service classes
     - ./gradlew :modules:liferay-todo-list:liferay-todo-list-service:buildService
+    # Run integration tests
+    - ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
