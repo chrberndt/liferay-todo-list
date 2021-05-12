@@ -29,3 +29,9 @@ script:
     - ./gradlew :modules:liferay-todo-list:liferay-todo-list-service:buildService
     # Run integration tests
     - ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
+# Deploy test reports to github pages
+deploy:
+  provider: pages:git
+  token: github_token
+  edge: true # opt in to dpl v2
+  local_dir: modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests/testIntegration/
