@@ -7,4 +7,7 @@ jdk: oraclejdk8
 
 script:
     - pwd; ls -lh
+    # Download and install JPM
+    - wget https://raw.githubusercontent.com/jpm4j/jpm4j.installers/master/dist/biz.aQute.jpm.run.jar
+    - sudo java -jar biz.aQute.jpm.run.jar init
 #  - ./gradlew build --scan -s
