@@ -11,8 +11,9 @@ script:
     - wget https://raw.githubusercontent.com/jpm4j/jpm4j.installers/master/dist/biz.aQute.jpm.run.jar
     - sudo java -jar biz.aQute.jpm.run.jar init
     # Install BLADE
-    - sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
-    - blade update
+    - sudo jpm install -f https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/blade/com.liferay.blade.cli//4.0.8/com.liferay.blade.cli-4.0.8.jar
+    # - sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
+    #- blade update
     # Check setup
     - java -version
     - blade version
