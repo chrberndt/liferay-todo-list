@@ -10,4 +10,6 @@ script:
     # Download and install JPM
     - wget https://raw.githubusercontent.com/jpm4j/jpm4j.installers/master/dist/biz.aQute.jpm.run.jar
     - sudo java -jar biz.aQute.jpm.run.jar init
-#  - ./gradlew build --scan -s
+    # Install BLADE
+    - sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
+    - sudo blade update
