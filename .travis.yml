@@ -17,8 +17,8 @@ script:
     #- blade version
     #- which blade
     # Create an empty Liferay workspace
-    - blade init -v portal-7.3-ga6 /opt/liferay-workspace
+    - blade init -v portal-7.3-ga6 ../liferay-workspace
     # Copy sources to modules directory
-    - cp -r /home/travis/build/chrberndt/liferay-todo-list /opt/liferay-workspace/modules
+    - cp -r /home/travis/build/chrberndt/liferay-todo-list ../liferay-workspace/modules
     # Download Liferay bundle
-    - /opt/liferay-workspace/gradlew initBundle
+    - ../liferay-workspace/gradlew initBundle
