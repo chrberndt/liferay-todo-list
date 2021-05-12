@@ -20,3 +20,5 @@ script:
     - blade init -v portal-7.3-ga6 /opt/liferay-workspace
     # Copy sources to modules directory
     - cp -r /home/travis/build/chrberndt/liferay-todo-list /opt/liferay-workspace/modules
+    # Download Liferay bundle
+    - /opt/liferay-workspace/gradlew initBundle
