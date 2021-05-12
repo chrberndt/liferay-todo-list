@@ -13,3 +13,6 @@ script:
     # Install BLADE
     - sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
     - sudo blade update
+    # Check setup
+    - java -version
+    - blade -version
