@@ -29,7 +29,7 @@ script:
     # Build service classes
     - ./gradlew :modules:liferay-todo-list:liferay-todo-list-service:buildService
     # Run integration tests
-    - ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration --debug
+    - ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
 # Deploy test reports to github pages
 deploy:
   provider: pages:git
