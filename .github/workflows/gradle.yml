@@ -1,4 +1,4 @@
-# This workflow will build a Java project with Gradle
+# This workflow will build and test lifera-todo-list with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
 name: Java CI with Gradle
@@ -27,9 +27,6 @@ jobs:
       run: sudo java -jar biz.aQute.jpm.run.jar init
     - name: Install BLADE
       run: sudo jpm install -f https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/blade/com.liferay.blade.cli//4.0.8/com.liferay.blade.cli-4.0.8.jar
-#      run: sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
-#    - name: Update BLADE to the latest release
-#      run: sudo blade update
     - name: Create an empty Liferay workspace
       working-directory: /opt/
       run: blade init -v portal-7.3-ga6 liferay-workspace
@@ -56,7 +53,7 @@ jobs:
       run: ls -lh /opt/liferay-workspace/bundles/osgi/test
     - name: Copy test reports
       if: ${{ always() }}     
-      run: cp -r /opt/liferay-workspace/modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests /home/runner/work/liferay-todo-list/liferay-todo-list/
+      run: cp -r /opt/liferay-workspace/modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests/testIntegration /home/runner/work/liferay-todo-list/liferay-todo-list/
     - name: Print Java version
       if: ${{ always() }}     
       run: java -version
@@ -77,7 +74,7 @@ jobs:
         # Allow an empty commit to be created
         # allow_empty_commit: # optional, default is true
         # Build directory to deploy
-        build_dir: tests
+        build_dir: testIntegration
         # build_dir: /tests
         # build_dir: /home/runner/work/liferay-todo-list/liferay-todo-list/tests
         # The committer name and email address
