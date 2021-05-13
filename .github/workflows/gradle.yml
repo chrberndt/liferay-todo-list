@@ -26,9 +26,10 @@ jobs:
     - name: Install JPM
       run: sudo java -jar biz.aQute.jpm.run.jar init
     - name: Install BLADE
-      run: sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
-    - name: Update BLADE to the latest release
-      run: sudo blade update
+      run: sudo jpm install -f https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/blade/com.liferay.blade.cli//4.0.8/com.liferay.blade.cli-4.0.8.jar
+#      run: sudo jpm install -f https://releases.liferay.com/tools/blade-cli/latest/blade.jar
+#    - name: Update BLADE to the latest release
+#      run: sudo blade update
     - name: Create an empty Liferay workspace
       working-directory: /opt/
       run: blade init -v portal-7.3-ga6 liferay-workspace
@@ -44,6 +45,9 @@ jobs:
     - name: Generate service builder classes
       working-directory: /opt/liferay-workspace
       run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-service:buildService
+    - name: Print Gradle properties
+      working-directory: /opt/liferay-workspace
+      run: ./gradlew properties
     - name: Run integration tests
       working-directory: /opt/liferay-workspace
       run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration

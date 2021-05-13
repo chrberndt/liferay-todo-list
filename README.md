@@ -1,3 +1,6 @@
+[![Travis Build status](https://api.travis-ci.com/chrberndt/liferay-todo-list.svg?branch=master&status=started)](https://travis-ci.com/github/chrberndt/liferay-todo-list)
+
+
 # liferay-todo-list
 
 A ToDo list application meant to explore, test and demonstrate the development of Liferay custom modules.
