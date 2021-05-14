@@ -42,21 +42,12 @@ jobs:
     - name: Generate service builder classes
       working-directory: /opt/liferay-workspace
       run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-service:buildService
-    - name: Print Gradle properties
-      working-directory: /opt/liferay-workspace
-      run: ./gradlew properties
     - name: Run integration tests
       working-directory: /opt/liferay-workspace
       run: ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
-    - name: Print OSGi directory
-      if: ${{ always() }}     
-      run: ls -lh /opt/liferay-workspace/bundles/osgi/test
     - name: Copy test reports
       if: ${{ always() }}     
       run: cp -r /opt/liferay-workspace/modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests/testIntegration /home/runner/work/liferay-todo-list/liferay-todo-list/
-    - name: Print Java version
-      if: ${{ always() }}     
-      run: java -version
     - name: GitHub Pages
       if: ${{ always() }}
       # You may pin to the exact commit or the version.
