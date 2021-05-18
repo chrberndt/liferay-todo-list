@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
@@ -261,6 +262,73 @@ public class TaskPersistenceTest {
 			RandomTestUtil.nextLong(), RandomTestUtil.nextInt());
 
 		_persistence.countByG_NotS(0L, 0);
+	}
+
+	@Test
+	public void testCountByC_U() throws Exception {
+		_persistence.countByC_U(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong());
+
+		_persistence.countByC_U(0L, 0L);
+	}
+
+	@Test
+	public void testCountByC_S() throws Exception {
+		_persistence.countByC_S(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextInt());
+
+		_persistence.countByC_S(0L, 0);
+	}
+
+	@Test
+	public void testCountByC_NotS() throws Exception {
+		_persistence.countByC_NotS(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextInt());
+
+		_persistence.countByC_NotS(0L, 0);
+	}
+
+	@Test
+	public void testCountByG_U_S() throws Exception {
+		_persistence.countByG_U_S(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),
+			RandomTestUtil.nextInt());
+
+		_persistence.countByG_U_S(0L, 0L, 0);
+	}
+
+	@Test
+	public void testCountByG_U_SArrayable() throws Exception {
+		_persistence.countByG_U_S(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),
+			new int[] {RandomTestUtil.nextInt(), 0});
+	}
+
+	@Test
+	public void testCountByG_U_NotS() throws Exception {
+		_persistence.countByG_U_NotS(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),
+			RandomTestUtil.nextInt());
+
+		_persistence.countByG_U_NotS(0L, 0L, 0);
+	}
+
+	@Test
+	public void testCountByC_U_S() throws Exception {
+		_persistence.countByC_U_S(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),
+			RandomTestUtil.nextInt());
+
+		_persistence.countByC_U_S(0L, 0L, 0);
+	}
+
+	@Test
+	public void testCountByC_U_NotS() throws Exception {
+		_persistence.countByC_U_NotS(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),
+			RandomTestUtil.nextInt());
+
+		_persistence.countByC_U_NotS(0L, 0L, 0);
 	}
 
 	@Test
@@ -506,17 +574,59 @@ public class TaskPersistenceTest {
 
 		_persistence.clearCache();
 
-		Task existingTask = _persistence.findByPrimaryKey(
-			newTask.getPrimaryKey());
+		_assertOriginalValues(
+			_persistence.findByPrimaryKey(newTask.getPrimaryKey()));
+	}
 
+	@Test
+	public void testResetOriginalValuesWithDynamicQueryLoadFromDatabase()
+		throws Exception {
+
+		_testResetOriginalValuesWithDynamicQuery(true);
+	}
+
+	@Test
+	public void testResetOriginalValuesWithDynamicQueryLoadFromSession()
+		throws Exception {
+
+		_testResetOriginalValuesWithDynamicQuery(false);
+	}
+
+	private void _testResetOriginalValuesWithDynamicQuery(boolean clearSession)
+		throws Exception {
+
+		Task newTask = addTask();
+
+		if (clearSession) {
+			Session session = _persistence.openSession();
+
+			session.flush();
+
+			session.clear();
+		}
+
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			Task.class, _dynamicQueryClassLoader);
+
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.eq("taskId", newTask.getTaskId()));
+
+		List<Task> result = _persistence.findWithDynamicQuery(dynamicQuery);
+
+		_assertOriginalValues(result.get(0));
+	}
+
+	private void _assertOriginalValues(Task task) {
 		Assert.assertEquals(
-			existingTask.getUuid(),
+			task.getUuid(),
 			ReflectionTestUtil.invoke(
-				existingTask, "getOriginalUuid", new Class<?>[0]));
+				task, "getColumnOriginalValue", new Class<?>[] {String.class},
+				"uuid_"));
 		Assert.assertEquals(
-			Long.valueOf(existingTask.getGroupId()),
+			Long.valueOf(task.getGroupId()),
 			ReflectionTestUtil.<Long>invoke(
-				existingTask, "getOriginalGroupId", new Class<?>[0]));
+				task, "getColumnOriginalValue", new Class<?>[] {String.class},
+				"groupId"));
 	}
 
 	protected Task addTask() throws Exception {
