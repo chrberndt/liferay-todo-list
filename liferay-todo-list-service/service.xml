@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_2_0.dtd">
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.3.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_3_0.dtd">
 
 <service-builder dependency-injector="ds" package-path="com.chberndt.liferay.todo.list">
 	<author>Christian Berndt</author>
@@ -67,6 +67,44 @@
 
 		<finder name="G_NotS" return-type="Collection">
 			<finder-column name="groupId" />
+			<finder-column comparator="!=" name="status" />
+		</finder>
+
+		<finder name="C_U" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="userId" />
+		</finder>
+
+		<finder name="C_S" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="status" />
+		</finder>
+
+		<finder name="C_NotS" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column comparator="!=" name="status" />
+		</finder>
+
+		<finder name="G_U_S" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="userId" />
+			<finder-column arrayable-operator="OR" name="status" />
+		</finder>
+		<finder name="G_U_NotS" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="userId" />
+			<finder-column comparator="!=" name="status" />
+		</finder>
+
+		<finder name="C_U_S" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="userId" />
+			<finder-column name="status" />
+		</finder>
+
+		<finder name="C_U_NotS" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="userId" />
 			<finder-column comparator="!=" name="status" />
 		</finder>
 
