@@ -8,18 +8,13 @@ jdk: openjdk11
 # jdk: oraclejdk8
 
 script:
-    - pwd; ls -lh
     # Download and install JPM
     - wget https://raw.githubusercontent.com/jpm4j/jpm4j.installers/master/dist/biz.aQute.jpm.run.jar
     - sudo java -jar biz.aQute.jpm.run.jar init
     # Install BLADE
     - sudo jpm install -f https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/blade/com.liferay.blade.cli//4.0.8/com.liferay.blade.cli-4.0.8.jar
-    # Check setup
-    #- java -version
-    #- blade version
-    #- which blade
     # Create an empty Liferay workspace
-    - cd ..; pwd
+    - cd ..
     - blade init -v portal-7.3-ga6 liferay-workspace
     # Copy sources to modules directory
     - cd liferay-workspace
@@ -30,9 +25,3 @@ script:
     - ./gradlew :modules:liferay-todo-list:liferay-todo-list-service:buildService
     # Run integration tests
     - ./gradlew :modules:liferay-todo-list:liferay-todo-list-test:testIntegration
-# Deploy test reports to github pages
-# deploy:
-#  provider: pages:git
-#  token: github_token
-#  edge: true # opt in to dpl v2
-#  local_dir: modules/liferay-todo-list/liferay-todo-list-test/build/reports/tests/testIntegration/
