@@ -1,8 +1,23 @@
 version: "3.7"
 services:
-  sonarqube:
-#    build: ./sonarqube
-    image: sonarqube:7.9.6-community
-    container_name: sonarqube 
+  mysql:
+    build: ./mysql
+    container_name: mysql
     ports:
-      - 9000:9000
+      - 3306:3306
+    environment:
+# TODO: remove password from configuration
+      MYSQL_ROOT_PASSWORD: secret
+#      MYSQL_ROOT_HOST: '%'
+    networks:
+      - network-liferay-dev
+#  sonarqube:
+#    image: sonarqube:7.9.6-community
+#    container_name: sonarqube
+#    ports:
+#      - 9000:9000
+networks:
+  network-liferay-dev:
+    name: network-liferay-dev
+volumes:
+  mysql:
