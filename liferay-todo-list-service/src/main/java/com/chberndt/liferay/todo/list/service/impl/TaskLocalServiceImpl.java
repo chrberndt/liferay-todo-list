@@ -343,6 +343,12 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		task = updateStatus(userId, task, WorkflowConstants.STATUS_IN_TRASH);
 
+		// Task
+
+		_trashEntryLocalService.addTrashEntry(
+			userId, task.getGroupId(), Task.class.getName(), task.getTaskId(),
+			task.getUuid(), null, oldStatus, null, null);
+
 		// Social
 
 		JSONObject extraDataJSONObject = JSONUtil.put("title", task.getTitle());
@@ -388,6 +394,9 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			Task.class.getName(), taskId);
 
 		task = updateStatus(userId, task, trashEntry.getStatus());
+
+		_trashEntryLocalService.deleteEntry(
+			Task.class.getName(), task.getTaskId());
 
 		// Social
 
@@ -435,7 +444,7 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
 		task = taskPersistence.update(task);
 
-		JSONObject extraDataJSONObject = JSONUtil.put("title", task.getTitle());
+		// JSONObject extraDataJSONObject = JSONUtil.put("title", task.getTitle());
 
 		if (status == WorkflowConstants.STATUS_APPROVED) {
 
