@@ -7,7 +7,6 @@ import com.chberndt.liferay.todo.list.internal.bulk.selection.TaskBulkSelectionF
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskService;
 
-import com.liferay.bulk.selection.BulkSelection;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.TrashedModel;
@@ -58,6 +57,8 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
+		System.out.println("cmd = " + cmd);
+
 		try {
 			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
 				_updateTask(actionRequest);
@@ -77,35 +78,55 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 		}
 	}
 
-	private void _deleteTask(
-		Task task, boolean moveToTrash, List<TrashedModel> trashedModels) {
-
-		try {
-			if (moveToTrash) {
-				trashedModels.add(
-					_taskService.moveTaskToTrash(task.getTaskId()));
-			}
-			else {
-				_taskService.deleteTask(task.getTaskId());
-			}
-		}
-		catch (PortalException portalException) {
-			ReflectionUtil.throwException(portalException);
-		}
-	}
+	//	private void _deleteTask(
+	//		Task task, boolean moveToTrash, List<TrashedModel> trashedModels) {
+	//
+	//		try {
+	//			if (moveToTrash) {
+	//				trashedModels.add(
+	//					_taskService.moveTaskToTrash(task.getTaskId()));
+	//			}
+	//			else {
+	//				_taskService.deleteTask(task.getTaskId());
+	//			}
+	//		}
+	//		catch (PortalException portalException) {
+	//			ReflectionUtil.throwException(portalException);
+	//		}
+	//	}
 
 	private void _deleteTasks(ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
 
+		long[] deleteTaskIds = null;
+
+		long taskId = ParamUtil.getLong(actionRequest, "taskId");
+
+		if (taskId > 0) {
+			deleteTaskIds = new long[] {taskId};
+		}
+		else {
+			deleteTaskIds = ParamUtil.getLongValues(actionRequest, "rowIds");
+		}
+
 		List<TrashedModel> trashedModels = new ArrayList<>();
 
-		BulkSelection<Task> taskBulkSelection =
-			_taskBulkSelectionFactory.create(_getParameterMap(actionRequest));
+		for (long deleteTaskId : deleteTaskIds) {
+			try {
+				if (moveToTrash) {
+					trashedModels.add(
+						_taskService.moveTaskToTrash(deleteTaskId));
+				}
+				else {
+					_taskService.deleteTask(deleteTaskId);
+				}
+			}
+			catch (PortalException portalException) {
+				ReflectionUtil.throwException(portalException);
+			}
+		}
 
-		taskBulkSelection.forEach(
-			task -> _deleteTask(task, moveToTrash, trashedModels));
-
-		if (moveToTrash && !trashedModels.isEmpty()) {
+		if (moveToTrash && (deleteTaskIds.length > 0)) {
 			addDeleteSuccessData(
 				actionRequest,
 				HashMapBuilder.<String, Object>put(

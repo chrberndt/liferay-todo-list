@@ -6,7 +6,7 @@
 
 String displayStyle = tasksDisplayContext.getDisplayStyle();
 
-SearchContainer tasksSearchContainer = tasksDisplayContext.getTaskSearchContainer();
+SearchContainer<Task> tasksSearchContainer = (SearchContainer<Task>)tasksDisplayContext.getTaskSearchContainer();
 
 PortletURL portletURL = tasksSearchContainer.getIteratorURL();
 
@@ -16,9 +16,20 @@ TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new 
 %>
 
 <clay:management-toolbar
-	displayContext="<%= tasksManagementToolbarDisplayContext %>"
+	actionDropdownItems="<%= tasksManagementToolbarDisplayContext.getActionDropdownItems() %>"
+	clearResultsURL="<%= tasksManagementToolbarDisplayContext.getClearResultsURL() %>"
+	componentId="tasksManagementToolbar"
+	creationMenu="<%= tasksManagementToolbarDisplayContext.getCreationMenu() %>"
+	disabled="<%= tasksManagementToolbarDisplayContext.isDisabled() %>"
+	filterDropdownItems="<%= tasksManagementToolbarDisplayContext.getFilterDropdownItems() %>"
+	filterLabelItems="<%= tasksManagementToolbarDisplayContext.getFilterLabelItems() %>"
+	itemsTotal="<%= tasksSearchContainer.getTotal() %>"
+	searchActionURL="<%= String.valueOf(tasksManagementToolbarDisplayContext.getSearchActionURL()) %>"
 	searchContainerId="tasks"
-	supportsBulkActions="<%= true %>"
+	selectable="<%= tasksManagementToolbarDisplayContext.isSelectable() %>"
+	showInfoButton="<%= false %>"
+	showSearch="<%= tasksManagementToolbarDisplayContext.isShowSearch() %>"
+	viewTypeItems="<%= tasksManagementToolbarDisplayContext.getViewTypes() %>"
 />
 
 <portlet:actionURL name="/edit_task" var="restoreTrashEntriesURL">
@@ -77,20 +88,12 @@ TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new 
 	</aui:form>
 </clay:container-fluid>
 
-<%--
-<liferay-frontend:component
-	componentId="<%= tasksManagementToolbarDisplayContext.getDefaultEventHandler() %>"
-	context="<%= tasksManagementToolbarDisplayContext.getComponentContext() %>"
-	module="js/ManagementToolbarDefaultEventHandler.es"
-/>
---%>
-
 <aui:script>
-	var deleteTasks = function() {
-
+	var deleteTasks = function () {
 		if (
+			<%= trashHelper.isTrashEnabled(scopeGroupId) %> ||
 			confirm(
-				'<liferay-ui:message key="are-you-sure-you-want-to-delete-the-selected-tasks" />'
+				'<liferay-ui:message key="are-you-sure-you-want-to-delete-the-selected-entries" />'
 			)
 		) {
 			var form = document.getElementById('<portlet:namespace />fm');
@@ -103,25 +106,28 @@ TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new 
 				);
 
 				if (cmd) {
-					cmd.setAttribute('value', '<%= Constants.DELETE %>');
-				}
+					cmd.setAttribute(
+						'value',
+						'<%= trashHelper.isTrashEnabled(scopeGroupId) ? Constants.MOVE_TO_TRASH : Constants.DELETE %>'
+					);
 
-				submitForm(
-					form,
-					'<portlet:actionURL name="/edit_task" />'
-				);
+					submitForm(
+						form,
+						'<portlet:actionURL name="/edit_task" />'
+					);
+				}
 			}
 		}
 	};
 
 	var ACTIONS = {
-		deleteTasks: deleteTasks
+		deleteTasks: deleteTasks,
 	};
 
-	Liferay.componentReady('tasksManagementToolbar').then(function(
+	Liferay.componentReady('tasksManagementToolbar').then(function (
 		managementToolbar
 	) {
-		managementToolbar.on('actionItemClicked', function(event) {
+		managementToolbar.on('actionItemClicked', function (event) {
 			var itemData = event.data.item.data;
 
 			if (itemData && itemData.action && ACTIONS[itemData.action]) {

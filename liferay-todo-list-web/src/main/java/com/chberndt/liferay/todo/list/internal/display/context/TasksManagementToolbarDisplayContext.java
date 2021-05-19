@@ -198,6 +198,45 @@ public class TasksManagementToolbarDisplayContext
 		};
 	}
 
+	public ViewTypeItemList getViewTypes() {
+		PortletURL portletURL = liferayPortletResponse.createRenderURL();
+
+		portletURL.setParameter("mvcRenderCommandName", "/view");
+
+		// portletURL.setParameter("navigation", "images");
+
+		int delta = ParamUtil.getInteger(
+			request, SearchContainer.DEFAULT_DELTA_PARAM);
+
+		if (delta > 0) {
+			portletURL.setParameter("delta", String.valueOf(delta));
+		}
+
+		portletURL.setParameter("orderByCol", getOrderByCol());
+		portletURL.setParameter("orderByType", getOrderByType());
+
+		int cur = ParamUtil.getInteger(
+			request, SearchContainer.DEFAULT_CUR_PARAM);
+
+		if (cur > 0) {
+			portletURL.setParameter("cur", String.valueOf(cur));
+		}
+
+		String keywords = ParamUtil.getString(request, "keywords");
+
+		if (Validator.isNotNull(keywords)) {
+			portletURL.setParameter("keywords", keywords);
+		}
+
+		return new ViewTypeItemList(portletURL, getDisplayStyle()) {
+			{
+				addCardViewTypeItem();
+				addListViewTypeItem();
+				addTableViewTypeItem();
+			}
+		};
+	}
+
 	@Override
 	protected List<DropdownItem> getOrderByDropdownItems() {
 		return DropdownItemListBuilder.add(
