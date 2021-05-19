@@ -554,6 +554,10 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 			dynamicQuery.add(disjunctionQuery);
 		}
 
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.ne(
+				"status", WorkflowConstants.STATUS_IN_TRASH));
+
 		return dynamicQuery;
 	}
 
