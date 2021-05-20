@@ -113,11 +113,9 @@
 			property="createDate"
 		/>
 
-		<%--
 		<liferay-ui:search-container-column-status
 			name="status"
 		/>
-		--%>
 
 		<liferay-ui:search-container-column-jsp
 			path="/task_action.jsp"
