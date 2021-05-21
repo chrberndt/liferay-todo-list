@@ -57,8 +57,6 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
-		System.out.println("cmd = " + cmd);
-
 		try {
 			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
 				_updateTask(actionRequest);
