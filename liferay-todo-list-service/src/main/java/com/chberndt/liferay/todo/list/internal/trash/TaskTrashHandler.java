@@ -1,5 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.trash;
 
+import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
 
@@ -110,26 +111,10 @@ public class TaskTrashHandler extends BaseTrashHandler {
 	protected PortletURL getRestoreURL(
 			PortletRequest portletRequest, long classPK, boolean containerModel)
 		throws PortalException {
-
-		PortletURL portletURL = null;
-
-		Task task = _taskLocalService.getTask(classPK);
-		String portletId = PortletProviderUtil.getPortletId(
-			Task.class.getName(), PortletProvider.Action.VIEW);
-
-		long plid = _portal.getPlidFromPortletId(task.getGroupId(), portletId);
-
-		if (plid == LayoutConstants.DEFAULT_PLID) {
-			portletId = PortletProviderUtil.getPortletId(
-				Task.class.getName(), PortletProvider.Action.MANAGE);
-
-			portletURL = _portal.getControlPanelPortletURL(
-				portletRequest, portletId, PortletRequest.RENDER_PHASE);
-		}
-		else {
-			portletURL = PortletURLFactoryUtil.create(
-				portletRequest, portletId, plid, PortletRequest.RENDER_PHASE);
-		}
+		
+		String portletId = ToDoListPortletKeys.TODO_LIST;
+			
+		PortletURL portletURL = PortletURLFactoryUtil.create(portletRequest, portletId, PortletRequest.RENDER_PHASE); 
 
 		if (!containerModel) {
 			portletURL.setParameter("mvcRenderCommandName", "/edit_task");
