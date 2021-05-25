@@ -60,7 +60,7 @@ TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new 
 			>
 
 				<%
-				PortletURL rowURL = PortalUtil.getControlPanelPortletURL(request, themeDisplay.getScopeGroup(), ToDoListPortletKeys.TODO_LIST, 0, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+				PortletURL rowURL = liferayPortletResponse.createRenderURL();
 
 				rowURL.setParameter("mvcRenderCommandName", "/edit_task");
 				rowURL.setParameter("redirect", currentURL);

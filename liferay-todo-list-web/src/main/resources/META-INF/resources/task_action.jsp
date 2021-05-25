@@ -23,7 +23,7 @@ TrashHelper trashHelper = (TrashHelper)request.getAttribute(TrashWebKeys.TRASH_H
 		</portlet:renderURL>
 
 		<%
-		PortletURL editTaskURL = PortalUtil.getControlPanelPortletURL(request, themeDisplay.getScopeGroup(), ToDoListPortletKeys.TODO_LIST, 0, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+		PortletURL editTaskURL = liferayPortletResponse.createRenderURL();
 
 		editTaskURL.setParameter("mvcRenderCommandName", "/edit_task");
 		editTaskURL.setParameter("redirect", currentURL);
