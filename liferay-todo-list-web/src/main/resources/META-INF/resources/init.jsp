@@ -20,6 +20,7 @@ page import="com.chberndt.liferay.todo.list.model.Task" %><%@
 page import="com.chberndt.liferay.todo.list.web.constants.ToDoListWebKeys" %>
 
 <%@ page import="com.liferay.asset.kernel.model.AssetRenderer" %><%@
+page import="com.liferay.petra.string.StringPool" %><%@
 page import="com.liferay.portal.kernel.bean.BeanParamUtil" %><%@
 page import="com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker" %><%@
 page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
