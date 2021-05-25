@@ -7,8 +7,9 @@ services:
       - 3306:3306
     environment:
 # TODO: remove password from configuration
+# TODO: connect as unprivileged user (liferay)
       MYSQL_ROOT_PASSWORD: secret
-#      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: '%'
     networks:
       - network-liferay-dev
 #  sonarqube:
