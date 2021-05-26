@@ -78,23 +78,6 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 		actionResponse.setRenderParameter("mvcRenderCommandName", "/view");
 	}
 
-	//	private void _deleteTask(
-	//		Task task, boolean moveToTrash, List<TrashedModel> trashedModels) {
-	//
-	//		try {
-	//			if (moveToTrash) {
-	//				trashedModels.add(
-	//					_taskService.moveTaskToTrash(task.getTaskId()));
-	//			}
-	//			else {
-	//				_taskService.deleteTask(task.getTaskId());
-	//			}
-	//		}
-	//		catch (PortalException portalException) {
-	//			ReflectionUtil.throwException(portalException);
-	//		}
-	//	}
-
 	private void _deleteTasks(ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
 
@@ -134,22 +117,6 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 				).build());
 		}
 	}
-
-	//
-	//	private Map<String, String[]> _getParameterMap(ActionRequest actionRequest)
-	//		throws Exception {
-	//
-	//		Map<String, String[]> parameterMap = new HashMap<>(
-	//			actionRequest.getParameterMap());
-	//
-	//		parameterMap.put(
-	//			"groupId",
-	//			new String[] {
-	//				String.valueOf(_portal.getScopeGroupId(actionRequest))
-	//			});
-	//
-	//		return parameterMap;
-	//	}
 
 	private void _restoreTrashEntries(ActionRequest actionRequest)
 		throws Exception {
