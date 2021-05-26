@@ -28,9 +28,7 @@ import com.liferay.trash.service.TrashEntryService;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -73,7 +71,11 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 		}
 		catch (NoSuchTaskException | PrincipalException exception) {
 			SessionErrors.add(actionRequest, exception.getClass());
+
+			actionResponse.setRenderParameter("mvcRenderCommandName", "/view");
 		}
+
+		actionResponse.setRenderParameter("mvcRenderCommandName", "/view");
 	}
 
 	//	private void _deleteTask(
@@ -133,20 +135,21 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
 		}
 	}
 
-	private Map<String, String[]> _getParameterMap(ActionRequest actionRequest)
-		throws Exception {
-
-		Map<String, String[]> parameterMap = new HashMap<>(
-			actionRequest.getParameterMap());
-
-		parameterMap.put(
-			"groupId",
-			new String[] {
-				String.valueOf(_portal.getScopeGroupId(actionRequest))
-			});
-
-		return parameterMap;
-	}
+	//
+	//	private Map<String, String[]> _getParameterMap(ActionRequest actionRequest)
+	//		throws Exception {
+	//
+	//		Map<String, String[]> parameterMap = new HashMap<>(
+	//			actionRequest.getParameterMap());
+	//
+	//		parameterMap.put(
+	//			"groupId",
+	//			new String[] {
+	//				String.valueOf(_portal.getScopeGroupId(actionRequest))
+	//			});
+	//
+	//		return parameterMap;
+	//	}
 
 	private void _restoreTrashEntries(ActionRequest actionRequest)
 		throws Exception {
