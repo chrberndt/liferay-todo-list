@@ -4,8 +4,6 @@
 ResultRow row = (ResultRow)request.getAttribute("SEARCH_CONTAINER_RESULT_ROW");
 
 Task task = (Task)row.getObject();
-
-TrashHelper trashHelper = (TrashHelper)request.getAttribute(TrashWebKeys.TRASH_HELPER);
 %>
 
 <liferay-ui:icon-menu

@@ -8,6 +8,7 @@ taglib uri="http://liferay.com/tld/frontend" prefix="liferay-frontend" %><%@
 taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %><%@
 taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
+taglib uri="http://liferay.com/tld/trash" prefix="liferay-trash" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="com.chberndt.liferay.todo.list.exception.NoSuchTaskException" %><%@
@@ -34,9 +35,7 @@ page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %><%@
 page import="com.liferay.taglib.search.ResultRow" %><%@
-page import="com.liferay.taglib.util.LexiconUtil" %><%@
-page import="com.liferay.trash.TrashHelper" %><%@
-page import="com.liferay.trash.util.TrashWebKeys" %>
+page import="com.liferay.taglib.util.LexiconUtil" %>
 
 <%@ page import="java.util.Date" %><%@
 page import="java.util.HashMap" %><%@
@@ -47,6 +46,8 @@ page import="java.util.Map" %>
 <liferay-frontend:defineObjects />
 
 <liferay-theme:defineObjects />
+
+<liferay-trash:defineObjects />
 
 <portlet:defineObjects />
 

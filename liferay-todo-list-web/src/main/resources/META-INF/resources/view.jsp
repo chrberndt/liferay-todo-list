@@ -10,8 +10,6 @@ SearchContainer<Task> tasksSearchContainer = (SearchContainer<Task>)tasksDisplay
 
 PortletURL portletURL = tasksSearchContainer.getIteratorURL();
 
-TrashHelper trashHelper = (TrashHelper)request.getAttribute(TrashWebKeys.TRASH_HELPER);
-
 TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new TasksManagementToolbarDisplayContext(liferayPortletRequest, liferayPortletResponse, request, tasksSearchContainer, trashHelper, displayStyle);
 %>
 
