@@ -1,0 +1,4 @@
+Bundle-Name: liferay-todo-list-lang
+Bundle-SymbolicName: com.chberndt.liferay.todo.list.lang
+Bundle-Version: 1.0.0
+Export-Package: com.chberndt.liferay.todo.list.lang.api
