@@ -238,6 +238,13 @@ public class TasksManagementToolbarDisplayContext
 	}
 
 	@Override
+	public Boolean isSelectable() {
+		return false;
+	}
+
+	// TODO: fix deprecated methods
+
+	@Override
 	protected List<DropdownItem> getOrderByDropdownItems() {
 		return DropdownItemListBuilder.add(
 			dropdownItem -> {
@@ -265,8 +272,6 @@ public class TasksManagementToolbarDisplayContext
 			}
 		).build();
 	}
-
-	// TODO: fix deprecated methods
 
 	private PortletURL _getCurrentSortingURL() {
 		PortletURL sortingURL = getPortletURL();

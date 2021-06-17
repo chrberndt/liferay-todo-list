@@ -52,7 +52,7 @@
 				actionJspServletContext="<%= application %>"
 				icon="check-circle"
 				resultRow="<%= row %>"
-				rowChecker="<%= new EmptyOnClickRowChecker(renderResponse) %>"
+				rowChecker="<%= new TaskRowChecker(renderResponse) %>"
 				title="<%= task.getTitle() %>"
 				url="<%= (rowURL != null) ? rowURL.toString() : null %>"
 			>
