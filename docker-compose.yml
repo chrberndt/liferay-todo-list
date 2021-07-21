@@ -12,6 +12,8 @@ services:
       MYSQL_ROOT_HOST: '%'
     networks:
       - network-liferay-dev
+    volumes:
+      - mysql:/var/lib/mysql
 #  sonarqube:
 #    image: sonarqube:7.9.6-community
 #    container_name: sonarqube
