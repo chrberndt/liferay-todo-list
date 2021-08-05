@@ -1,7 +1,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-	TasksDisplayContext tasksDisplayContext = (TasksDisplayContext)request.getAttribute(ToDoListWebKeys.TASKS_DISPLAY_CONTEXT);
+TasksDisplayContext tasksDisplayContext = (TasksDisplayContext)request.getAttribute(ToDoListWebKeys.TASKS_DISPLAY_CONTEXT);
 
 String displayStyle = tasksDisplayContext.getDisplayStyle();
 
@@ -63,9 +63,7 @@ TasksManagementToolbarDisplayContext tasksManagementToolbarDisplayContext = new 
 				rowURL.setParameter("redirect", currentURL);
 				rowURL.setParameter("portletResource", portletDisplay.getId());
 				rowURL.setParameter("taskId", String.valueOf(task.getTaskId()));
-				%>
 
-				<%
 				Map<String, Object> rowData = new HashMap<>();
 
 				// TODO
