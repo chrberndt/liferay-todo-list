@@ -1,6 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.trash;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListPortletKeys;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
 
@@ -112,7 +112,7 @@ public class TaskTrashHandler extends BaseTrashHandler {
 			PortletRequest portletRequest, long classPK, boolean containerModel)
 		throws PortalException {
 		
-		String portletId = ToDoListPortletKeys.TODO_LIST;
+		String portletId = TodoListPortletKeys.TODO_LIST;
 			
 		PortletURL portletURL = PortletURLFactoryUtil.create(portletRequest, portletId, PortletRequest.RENDER_PHASE); 
 

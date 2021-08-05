@@ -1,6 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.portlet;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListPortletKeys;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
@@ -20,7 +20,7 @@ import org.osgi.service.component.annotations.Component;
 		"javax.portlet.display-name=ToDoList",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",
-		"javax.portlet.name=" + ToDoListPortletKeys.TODO_LIST,
+		"javax.portlet.name=" + TodoListPortletKeys.TODO_LIST,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},

@@ -1,6 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.portlet;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListPortletKeys;
 
 import com.liferay.portal.kernel.portlet.BasePortletLayoutFinder;
 import com.liferay.portal.kernel.portlet.PortletLayoutFinder;
@@ -23,7 +23,7 @@ public class ToDoListPortletLayoutFinder extends BasePortletLayoutFinder {
 	}
 
 	private static final String[] _PORTLET_IDS = {
-		ToDoListPortletKeys.TODO_LIST
+		TodoListPortletKeys.TODO_LIST
 	};
 
 }

@@ -1,8 +1,8 @@
 
 package com.chberndt.liferay.todo.list.internal.security.permission.resource;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListConstants;
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListConstants;
+import com.chberndt.liferay.todo.list.constants.TodoListPortletKeys;
 
 import com.liferay.exportimport.kernel.staging.permission.StagingPermission;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
@@ -29,14 +29,14 @@ public class ToDoListPortletResourcePermissionRegistrar {
 	public void activate(BundleContext bundleContext) {
 		Dictionary<String, Object> properties = new HashMapDictionary<>();
 
-		properties.put("resource.name", ToDoListConstants.RESOURCE_NAME);
+		properties.put("resource.name", TodoListConstants.RESOURCE_NAME);
 
 		_serviceRegistration = bundleContext.registerService(
 			PortletResourcePermission.class,
 			PortletResourcePermissionFactory.create(
-				ToDoListConstants.RESOURCE_NAME,
+				TodoListConstants.RESOURCE_NAME,
 				new StagedPortletPermissionLogic(
-					_stagingPermission, ToDoListPortletKeys.TODO_LIST)),
+					_stagingPermission, TodoListPortletKeys.TODO_LIST)),
 			properties);
 	}
 

@@ -1,7 +1,7 @@
 package com.chberndt.liferay.todo.list.internal.security.permission.resource;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListConstants;
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListConstants;
+import com.chberndt.liferay.todo.list.constants.TodoListPortletKeys;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
 
@@ -44,7 +44,7 @@ public class TaskModelResourcePermissionRegistrar {
 				(modelResourcePermission, consumer) -> {
 					consumer.accept(
 						new StagedModelPermissionLogic<>(
-							_stagingPermission, ToDoListPortletKeys.TODO_LIST,
+							_stagingPermission, TodoListPortletKeys.TODO_LIST,
 							Task::getTaskId));
 					consumer.accept(
 						new WorkflowedModelPermissionLogic<>(
@@ -63,7 +63,7 @@ public class TaskModelResourcePermissionRegistrar {
 	private GroupLocalService _groupLocalService;
 
 	@Reference(
-		target = "(resource.name=" + ToDoListConstants.RESOURCE_NAME + ")"
+		target = "(resource.name=" + TodoListConstants.RESOURCE_NAME + ")"
 	)
 	private PortletResourcePermission _portletResourcePermission;
 

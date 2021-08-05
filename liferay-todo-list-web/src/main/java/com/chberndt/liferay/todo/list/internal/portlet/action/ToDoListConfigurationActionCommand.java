@@ -1,6 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.portlet.action;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListPortletKeys;
 
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
 import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
@@ -16,7 +16,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = "javax.portlet.name=" + ToDoListPortletKeys.TODO_LIST,
+	property = "javax.portlet.name=" + TodoListPortletKeys.TODO_LIST,
 	service = ConfigurationAction.class
 )
 public class ToDoListConfigurationActionCommand

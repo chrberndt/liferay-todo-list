@@ -1,6 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.security.permission.resource;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListConstants;
+import com.chberndt.liferay.todo.list.constants.TodoListConstants;
 
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
@@ -22,7 +22,7 @@ public class ToDoListPermission {
 	}
 
 	@Reference(
-		target = "(resource.name=" + ToDoListConstants.RESOURCE_NAME + ")",
+		target = "(resource.name=" + TodoListConstants.RESOURCE_NAME + ")",
 		unbind = "-"
 	)
 	protected void setPortletResourcePermission(

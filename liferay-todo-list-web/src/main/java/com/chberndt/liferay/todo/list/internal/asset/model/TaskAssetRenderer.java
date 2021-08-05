@@ -1,6 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.asset.model;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListPortletKeys;
 import com.chberndt.liferay.todo.list.internal.security.permission.resource.TaskPermission;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.web.constants.ToDoListWebKeys;
@@ -144,7 +144,7 @@ public class TaskAssetRenderer
 		}
 
 		PortletURL portletURL = PortalUtil.getControlPanelPortletURL(
-			httpServletRequest, group, ToDoListPortletKeys.TODO_LIST, 0, 0,
+			httpServletRequest, group, TodoListPortletKeys.TODO_LIST, 0, 0,
 			PortletRequest.RENDER_PHASE);
 
 		portletURL.setParameter("mvcRenderCommandName", "/edit_task");

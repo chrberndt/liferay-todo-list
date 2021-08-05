@@ -1,8 +1,8 @@
 package com.chberndt.liferay.todo.list.internal.asset.model;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListActionKeys;
-import com.chberndt.liferay.todo.list.constants.ToDoListConstants;
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListActionKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListConstants;
+import com.chberndt.liferay.todo.list.constants.TodoListPortletKeys;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.TaskLocalService;
 
@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = "javax.portlet.name=" + ToDoListPortletKeys.TODO_LIST,
+	property = "javax.portlet.name=" + TodoListPortletKeys.TODO_LIST,
 	service = AssetRendererFactory.class
 )
 public class TaskAssetRendererFactory extends BaseAssetRendererFactory<Task> {
@@ -45,7 +45,7 @@ public class TaskAssetRendererFactory extends BaseAssetRendererFactory<Task> {
 	public TaskAssetRendererFactory() {
 		setClassName(Task.class.getName());
 		setLinkable(true);
-		setPortletId(ToDoListPortletKeys.TODO_LIST);
+		setPortletId(TodoListPortletKeys.TODO_LIST);
 		setSearchable(true);
 	}
 
@@ -89,7 +89,7 @@ public class TaskAssetRendererFactory extends BaseAssetRendererFactory<Task> {
 
 		PortletURL portletURL = _portal.getControlPanelPortletURL(
 			liferayPortletRequest, getGroup(liferayPortletRequest),
-			ToDoListPortletKeys.TODO_LIST, 0, 0, PortletRequest.RENDER_PHASE);
+			TodoListPortletKeys.TODO_LIST, 0, 0, PortletRequest.RENDER_PHASE);
 
 		portletURL.setParameter("mvcRenderCommandName", "/edit_task");
 
@@ -103,7 +103,7 @@ public class TaskAssetRendererFactory extends BaseAssetRendererFactory<Task> {
 
 		LiferayPortletURL liferayPortletURL =
 			liferayPortletResponse.createLiferayPortletURL(
-				ToDoListPortletKeys.TODO_LIST, PortletRequest.RENDER_PHASE);
+				TodoListPortletKeys.TODO_LIST, PortletRequest.RENDER_PHASE);
 
 		try {
 			liferayPortletURL.setWindowState(windowState);
@@ -119,7 +119,7 @@ public class TaskAssetRendererFactory extends BaseAssetRendererFactory<Task> {
 		PermissionChecker permissionChecker, long groupId, long classTypeId) {
 
 		return _portletResourcePermission.contains(
-			permissionChecker, groupId, ToDoListActionKeys.ADD_TASK);
+			permissionChecker, groupId, TodoListActionKeys.ADD_TASK);
 	}
 
 	@Override
@@ -139,7 +139,7 @@ public class TaskAssetRendererFactory extends BaseAssetRendererFactory<Task> {
 	private Portal _portal;
 
 	@Reference(
-		target = "(resource.name=" + ToDoListConstants.RESOURCE_NAME + ")"
+		target = "(resource.name=" + TodoListConstants.RESOURCE_NAME + ")"
 	)
 	private PortletResourcePermission _portletResourcePermission;
 

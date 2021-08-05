@@ -1,6 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.display.context;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListActionKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListActionKeys;
 import com.chberndt.liferay.todo.list.internal.security.permission.resource.ToDoListPermission;
 import com.chberndt.liferay.todo.list.model.Task;
 
@@ -119,7 +119,7 @@ public class TasksManagementToolbarDisplayContext
 	public CreationMenu getCreationMenu() {
 		if (!ToDoListPermission.contains(
 				_themeDisplay.getPermissionChecker(),
-				_themeDisplay.getScopeGroupId(), ToDoListActionKeys.ADD_TASK)) {
+				_themeDisplay.getScopeGroupId(), TodoListActionKeys.ADD_TASK)) {
 
 			return null;
 		}

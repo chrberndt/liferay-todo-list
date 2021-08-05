@@ -1,6 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.application.list;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListPortletKeys;
 
 import com.liferay.application.list.BasePanelApp;
 import com.liferay.application.list.PanelApp;
@@ -23,7 +23,7 @@ public class ToDoListPanelApp extends BasePanelApp {
 
 	@Override
 	public String getPortletId() {
-		return ToDoListPortletKeys.TODO_LIST;
+		return TodoListPortletKeys.TODO_LIST;
 	}
 
 }

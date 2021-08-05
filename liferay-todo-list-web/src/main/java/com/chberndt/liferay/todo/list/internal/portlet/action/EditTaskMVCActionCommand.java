@@ -1,6 +1,6 @@
 package com.chberndt.liferay.todo.list.internal.portlet.action;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListPortletKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListPortletKeys;
 import com.chberndt.liferay.todo.list.exception.NoSuchTaskException;
 import com.chberndt.liferay.todo.list.exception.TaskDueDateException;
 import com.chberndt.liferay.todo.list.internal.bulk.selection.TaskBulkSelectionFactory;
@@ -41,7 +41,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	property = {
-		"javax.portlet.name=" + ToDoListPortletKeys.TODO_LIST,
+		"javax.portlet.name=" + TodoListPortletKeys.TODO_LIST,
 		"mvc.command.name=/edit_task"
 	},
 	service = MVCActionCommand.class
