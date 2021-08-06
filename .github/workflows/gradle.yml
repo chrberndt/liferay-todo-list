@@ -29,7 +29,7 @@ jobs:
       run: sudo jpm install -f https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/blade/com.liferay.blade.cli//4.0.8/com.liferay.blade.cli-4.0.8.jar
     - name: Create an empty Liferay workspace
       working-directory: /opt/
-      run: blade init -v portal-7.3-ga6 liferay-workspace
+      run: blade init -v portal-7.3-ga8 liferay-workspace
     - name: Copy sources
       working-directory: /opt/liferay-workspace/modules
       run: cp -r /home/runner/work/liferay-todo-list/liferay-todo-list .
