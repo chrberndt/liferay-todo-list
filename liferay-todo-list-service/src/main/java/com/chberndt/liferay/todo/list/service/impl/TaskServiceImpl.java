@@ -1,8 +1,8 @@
 
 package com.chberndt.liferay.todo.list.service.impl;
 
-import com.chberndt.liferay.todo.list.constants.ToDoListActionKeys;
-import com.chberndt.liferay.todo.list.constants.ToDoListConstants;
+import com.chberndt.liferay.todo.list.constants.TodoListActionKeys;
+import com.chberndt.liferay.todo.list.constants.TodoListConstants;
 import com.chberndt.liferay.todo.list.model.Task;
 import com.chberndt.liferay.todo.list.service.base.TaskServiceBaseImpl;
 
@@ -63,7 +63,7 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 
 		_portletResourcePermission.check(
 			getPermissionChecker(), serviceContext.getScopeGroupId(),
-			ToDoListActionKeys.ADD_TASK);
+			TodoListActionKeys.ADD_TASK);
 
 		return taskLocalService.addTask(
 			getUserId(), title, description, completed, dueDate,
@@ -170,7 +170,7 @@ public class TaskServiceImpl extends TaskServiceBaseImpl {
 	@Reference(
 		policy = ReferencePolicy.DYNAMIC,
 		policyOption = ReferencePolicyOption.GREEDY,
-		target = "(resource.name=" + ToDoListConstants.RESOURCE_NAME + ")"
+		target = "(resource.name=" + TodoListConstants.RESOURCE_NAME + ")"
 	)
 	private volatile PortletResourcePermission _portletResourcePermission;
 
