@@ -4,8 +4,6 @@ install: skip
 os: linux
 dist: trusty
 jdk: openjdk11
-# jdk: openjdk8
-# jdk: oraclejdk8
 
 script:
     # Download and install JPM
@@ -15,7 +13,7 @@ script:
     - sudo jpm install -f https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/blade/com.liferay.blade.cli//4.0.8/com.liferay.blade.cli-4.0.8.jar
     # Create an empty Liferay workspace
     - cd ..
-    - blade init -v portal-7.3-ga6 liferay-workspace
+    - blade init -v portal-7.3-ga8 liferay-workspace
     # Copy sources to modules directory
     - cd liferay-workspace
     - cp -r /home/travis/build/chrberndt/liferay-todo-list modules
